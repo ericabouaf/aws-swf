@@ -1,0 +1,21 @@
+{
+    "name": "aws-swf",
+    "version": "0.1.0",
+    "description": "Node.js helpers to access the Amazon SWF API",
+    "author": "Eric Abouaf <eric.abouaf@gmail.com>",
+    "engines": {
+        "node" : ">=0.6.0"
+    },
+    "main" : "index.js",
+    "directories" : { "lib" : "./lib" },
+    "repository": {
+        "type":"git",
+        "url":"http://github.com/neyric/aws-swf.git"
+    }, 
+    "licenses" : [ 
+        { 
+            "type" : "MIT", 
+            "url" : "http://github.com/ciaranj/node-oauth/raw/master/LICENSE"
+        }
+    ]
+}
