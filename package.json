@@ -1,6 +1,6 @@
 {
     "name": "aws-swf",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Node.js helpers to access the Amazon SWF API",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
     "engines": {
