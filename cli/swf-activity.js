@@ -46,7 +46,7 @@ if(argv._.length === 0) {
 var swf = require('../index');
 var swfClient = swf.createClient( config );
 
-// TODO: sometimes, I got "Error: socket hang up" => we should re-poll ? (todo in aws-swf)
+// TODO: sometimes, I got "Error: socket hang up" => we should re-poll ?
 
 var activityPoller = new swf.ActivityPoller(swfClient, {
    "domain": argv.d,

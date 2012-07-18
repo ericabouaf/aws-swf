@@ -34,7 +34,9 @@ The installation process will ask you for your AWS credentials, and store them i
 
 You can change the credentials by calling :
 
-    $ [sudo] swf-set-credentials
+````sh
+$ [sudo] swf-set-credentials
+````
 
 
 ## Command-line usage & Beginners' Guide
@@ -44,31 +46,42 @@ You can change the credentials by calling :
 
 First we need to register a domain :
 
-    $ swf-register -k domain aws-swf-test-domain
+````sh
+$ swf-register -k domain aws-swf-test-domain
+````
 
 We then register a new workflow :
 
-    $ swf-register -k workflow hello-workflow
+````sh
+$ swf-register -k workflow hello-workflow
+````
 
 Finally, we register a new activity type :
 
-    $ swf-register -k activity hello-activity
+````sh
+$ swf-register -k activity hello-activity
+````
 
 
 ### Step2: run the decider, and the activity poller
 
 Launch a decider Poller:
 
-    $ swf-decider examples/two-step-decider.js
+````sh
+$ swf-decider examples/two-step-decider.js
+````
 
 Launch an Activity Poller:
 
-    $ swf-activity examples/dummy-echo-worker.js
+````sh
+$ swf-activity examples/dummy-echo-worker.js
+````
 
 ### Step3: Start the workflow !
 
-    $ swf-start hello-workflow
-
+````sh
+$ swf-start hello-workflow
+````
 
 
 ## Command-line arguments
@@ -199,7 +212,7 @@ var myDecider = new swf.Decider(swfClient, {
    
 }, function(decisionTask, cb) {
     
-    // do tomething and send a TODO
+    // do something here and send decisions...
     
     decisionTask.CompleteWorkflowExecution("details of ending here ?");
     
@@ -230,23 +243,6 @@ workflowHistory = {
 */
 ````
 
-### Register(Domain|ActivityType|WorkflowType)
-
-    swfClient.RegisterDomain({...}, function(err, result) { ... });
-    swfClient.RegisterActivityType({...}, function(err, result) { ... });
-    swfClient.RegisterWorkflowType({...}, function(err, result) { ... });
-
-
-### Generic SWF call (RAW call to the API)
-
-````javascript
-swfClient.DescribeDomain({"name": "test-my-swf"}, function(err, result) {
-    
-    if(err) console.log("error", err);
-    
-    console.log("result", JSON.stringify(result));
-});
-````
 
 
 ### Starting a Workflow
@@ -270,14 +266,6 @@ var workflow = new swf.Workflow(swfClient, {
 });
 ````
 
-TODO registerType
-
-Registers a new workflow type and its configuration settings in the specified domain
-* Important: If the type already exists, then a TypeAlreadyExists fault is returned. You cannot change the configuration settings of a workflow type once it is registered and it must be registered as a new version.
-
-
-
-
 To start a new *workflowExecution* :
 
 ````javascript
@@ -292,6 +280,27 @@ var workflowExecution = workflow.start({ input: "{}"}, function(err, runId) {
 
 });
 ````
+
+
+
+### Register(Domain|ActivityType|WorkflowType)
+
+    swfClient.RegisterDomain({...}, function(err, result) { ... });
+    swfClient.RegisterActivityType({...}, function(err, result) { ... });
+    swfClient.RegisterWorkflowType({...}, function(err, result) { ... });
+
+
+### Generic SWF call (RAW call to the API)
+
+````javascript
+swfClient.DescribeDomain({"name": "test-my-swf"}, function(err, result) {
+    
+    if(err) console.log("error", err);
+    
+    console.log("result", JSON.stringify(result));
+});
+````
+
 
 ### Raw Methods
 
