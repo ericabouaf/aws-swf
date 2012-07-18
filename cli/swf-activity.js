@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
+// Start a ActivityPoller which spawns the given activity worker file
+
 var colors = require('colors'),
     optimist = require('optimist'),
     spawn = require('child_process').spawn,
     os = require('os'),
     path = require('path');
     
+
 var config, configFilePath = path.join(__dirname, '..', 'config.js');
 try {
    config = require(configFilePath);
@@ -14,9 +17,8 @@ try {
    process.exit(1);
 }
 
-
 var argv = optimist
-   .usage('Start a decider-poller for AWS SWF.\nUsage: $0 decider-file.js')
+   .usage('Start an activity-poller for AWS SWF.\nUsage: $0 worker-file.js')
    .options('d', {
       'alias' : 'domain',
       'default' : config.domain,
@@ -29,14 +31,14 @@ var argv = optimist
    })
    .options('i', {
       'alias' : 'identity',
-      'default' : 'Decider-'+os.hostname()+'-'+process.pid,
+      'default' : 'ActivityPoller-'+os.hostname()+'-'+process.pid,
       'describe': 'identity of the poller'
    })
    .argv;
 
 
 if(argv._.length === 0) {
-   console.error("Error: Missing decider file !".red);
+   console.error("Error: Missing worker file !".red);
    optimist.showHelp();
    process.exit(1);
 }
@@ -44,50 +46,39 @@ if(argv._.length === 0) {
 var swf = require('../index');
 var swfClient = swf.createClient( config );
 
+// TODO: sometimes, I got "Error: socket hang up" => we should re-poll ? (todo in aws-swf)
 
-var myDecider = new swf.Decider(swfClient, {
+var activityPoller = new swf.ActivityPoller(swfClient, {
    "domain": argv.d,
    "taskList": {"name": argv.t},
-   "identity": argv.i,
-   "maximumPageSize": 500,
-   "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
-}, function(decisionTask, cb) {
+   "identity": argv.i
+}, function(activityTask, cb) {
    
-   // If we receive an event "ScheduleActivityTaskFailed", we should fail the workflow and display why...
-   var failedEvent = decisionTask.has_ScheduleActivityTaskFailed();
-   if( failedEvent ) {
-      var failedAttrs = failedEvent.scheduleActivityTaskFailedEventAttributes;
-      console.error( ("Received a ScheduleActivityTaskFailed: "+failedAttrs.cause+"  "+JSON.stringify(failedAttrs)).red );
-      decisionTask.FailWorkflowExecution(failedAttrs.cause, JSON.stringify(failedAttrs), function(err, results) {
-          if(err) { console.log(err, results); return; }
-          console.error("Workflow marked as failed !".red);
-      });
-      cb(true); // to continue polling
-      return;
-   }
-   
-   var p = spawn('node', [ argv._[0], JSON.stringify(decisionTask.config) ]);
+   var p = spawn('node', [ argv._[0], JSON.stringify(activityTask.config) ]);
    
    p.stdout.on('data', function (data) {
      console.log( data.toString().blue );
    });
-
+   
    p.stderr.on('data', function (data) {
      console.log( data.toString().red );
    });
-
+   
    p.on('exit', function (code) {
      console.log( ('child process exited with code ' + code) );
-     cb(true); // to continue polling
+     cb(true); // continue polling  
    });
    
 });
+
+activityPoller.start();
 
 // on SIGINT event, close the poller properly
 process.on('SIGINT', function () {
    
-  console.log('Got SIGINT ! Stopping decider poller...');
+  console.log('Got SIGINT ! Stopping activity poller...');
   
-  myDecider.stop();
+  activityPoller.stop();
   process.exit(0);
 });
+

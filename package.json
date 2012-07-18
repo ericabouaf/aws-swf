@@ -1,6 +1,6 @@
 {
     "name": "aws-swf",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "Node.js helpers to access the Amazon SWF API",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
     "engines": {
@@ -12,6 +12,20 @@
         "type":"git",
         "url":"http://github.com/neyric/aws-swf.git"
     }, 
+    "bin": {
+        "swf-activity": "./cli/swf-activity.js",
+        "swf-decider": "./cli/swf-decider.js",
+        "swf-register": "./cli/swf-register.js",
+        "swf-set-credentials": "./cli/swf-set-credentials.js",
+        "swf-start": "./cli/swf-start.js"
+    },
+    "scripts": {
+        "install": "./cli/swf-set-credentials.js"
+    },
+    "dependencies": {
+            "optimist": "0.3.4",
+            "colors": "0.6.0-1"
+    },
     "licenses" : [ 
         { 
             "type" : "MIT", 

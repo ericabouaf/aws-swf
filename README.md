@@ -1,19 +1,126 @@
-# Amazon SWF (Simple WorkFlow) library for Node.js
+# Amazon SWF (Simple WorkFlow) toolkit for Node.js
 
-This library provides classes to wrap the common concepts of the Amazon SWF API :
+This toolkit provides :
 
- * ActivityPoller
- * ActivityTask
- * Decider
- * DecisionTask
- * Workflow
- * WorkflowExecution
+ * Command-line tools to interact with AWS SWF :
+   * swf-activity
+   * swf-decider
+   * swf-register
+   * swf-start
 
-## Install
+ * classes to wrap the common concepts of the AWS SWF API :
+   * ActivityPoller
+   * ActivityTask
+   * Decider
+   * DecisionTask
+   * Workflow
+   * WorkflowExecution
 
-    npm install aws-swf
 
-## Usage
+## Requirements
+
+ * NodeJS & npm
+ * An active Amazon Webservice account and API credentials
+ * Some understanding of the AWS SWF service : http://aws.amazon.com/en/documentation/swf/
+
+
+## Installation
+
+    $ [sudo] npm install aws-swf -g
+
+The installation process will ask you for your AWS credentials, and store them in a config file.
+
+You can change the credentials by calling :
+
+    $ [sudo] swf-set-credentials
+
+
+## Command-line usage & Beginners' Guide
+
+
+### Step1: register all components
+
+First we need to register a domain :
+
+    $ swf-register -k domain aws-swf-test-domain
+
+We then register a new workflow :
+
+    $ swf-register -k workflow hello-workflow
+
+Finally, we register a new activity type :
+
+    $ swf-register -k activity hello-activity
+
+
+### Step2: run the decider, and the activity poller
+
+Launch a decider Poller:
+
+    $ swf-decider examples/two-step-decider.js
+
+Launch an Activity Poller:
+
+    $ swf-activity examples/dummy-echo-worker.js
+
+### Step3: Start the workflow !
+
+    $ swf-start hello-workflow
+
+
+
+## Command-line arguments
+
+The command line tools use the credentials given to *swf-set-credentials* or at installation.
+
+*swf-set-credentials* also stores a default SWF domain and tasklist, which are used as the default values for all swf-* commands.
+
+### swf-register
+
+Register a new activity-type, workflow or domain on AWS SWF.
+Usage: swf-register -k resource-kind resource-name
+
+Options:
+  -k, --kind     Kind of resource to register. "activity", "workflow", or "domain"  [default: "activity"]
+  -d, --domain   SWF domain of the activity-type or workflow to register            [default: "aws-swf-test-domain"]
+  -v, --version  version of the activity-type or workflow to register               [default: "1.0"]
+
+
+### swf-activity
+
+Start an activity-poller for AWS SWF.
+Usage: swf-activity worker-file.js
+
+Options:
+  -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
+  -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
+  -i, --identity  identity of the poller  [default: "ActivityPoller-hostname-PID"]
+
+
+### swf-decider
+
+Start a decider-poller for AWS SWF.
+Usage: swf-decider decider-file.js
+
+Options:
+  -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
+  -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
+  -i, --identity  identity of the poller  [default: "Decider-hostname-PID"]
+
+
+### swf-start
+
+Start a workflow on AWS SWF.
+Usage: swf-start workflow-name
+
+Options:
+  -d, --domain    SWF domain                        [default: "aws-swf-test-domain"]
+  -t, --tasklist  tasklist                          [default: "aws-swf-tasklist"]
+  -v, --version   version of the workflow to start  [default: "1.0"]
+
+
+## Library Usage
+
 
 ### Creating an SWF client object
 
@@ -147,7 +254,7 @@ A *Workflow*
           "name": name,
           "version": version
        },
-       "taskList": { "name": "QUICKFLOW_DECIDER" },
+       "taskList": { "name": "my-workflow-tasklist" },
    
        "executionStartToCloseTimeout": "1800",
        "taskStartToCloseTimeout": "1800",
