@@ -26,7 +26,9 @@ This toolkit provides :
 
 ## Installation
 
-    $ [sudo] npm install aws-swf -g
+````sh
+$ [sudo] npm install aws-swf -g
+````
 
 The installation process will ask you for your AWS credentials, and store them in a config file.
 
@@ -226,7 +228,7 @@ workflowHistory = {
     ]
 }
 */
-````javascript
+````
 
 ### Register(Domain|ActivityType|WorkflowType)
 
