@@ -3,10 +3,10 @@
 This toolkit provides :
 
  * Command-line tools to interact with AWS SWF :
-   * swf-activity
-   * swf-decider
-   * swf-register
-   * swf-start
+   * [swf-activity](#swf-activity)
+   * [swf-decider](#swf-decider)
+   * [swf-register](#swf-register)
+   * [swf-start](#swf-start)
 
  * classes to wrap the common concepts of the AWS SWF API :
    * ActivityPoller
@@ -20,8 +20,8 @@ This toolkit provides :
 ## Requirements
 
  * NodeJS & npm
- * An active Amazon Webservice account and API credentials
- * Some understanding of the AWS SWF service : http://aws.amazon.com/en/documentation/swf/
+ * An active AWS account and API credentials
+ * Some understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/)
 
 
 ## Installation
@@ -77,46 +77,46 @@ The command line tools use the credentials given to *swf-set-credentials* or at 
 
 ### swf-register
 
-Register a new activity-type, workflow or domain on AWS SWF.
-Usage: swf-register -k resource-kind resource-name
-
-Options:
-  -k, --kind     Kind of resource to register. "activity", "workflow", or "domain"  [default: "activity"]
-  -d, --domain   SWF domain of the activity-type or workflow to register            [default: "aws-swf-test-domain"]
-  -v, --version  version of the activity-type or workflow to register               [default: "1.0"]
+    Register a new activity-type, workflow or domain on AWS SWF.
+    Usage: swf-register -k resource-kind resource-name
+    
+    Options:
+      -k, --kind     Kind of resource to register. "activity", "workflow", or "domain"  [default: "activity"]
+      -d, --domain   SWF domain of the activity-type or workflow to register            [default: "aws-swf-test-domain"]
+      -v, --version  version of the activity-type or workflow to register               [default: "1.0"]
 
 
 ### swf-activity
 
-Start an activity-poller for AWS SWF.
-Usage: swf-activity worker-file.js
-
-Options:
-  -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
-  -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
-  -i, --identity  identity of the poller  [default: "ActivityPoller-hostname-PID"]
+    Start an activity-poller for AWS SWF.
+    Usage: swf-activity worker-file.js
+    
+    Options:
+      -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
+      -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
+      -i, --identity  identity of the poller  [default: "ActivityPoller-hostname-PID"]
 
 
 ### swf-decider
 
-Start a decider-poller for AWS SWF.
-Usage: swf-decider decider-file.js
-
-Options:
-  -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
-  -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
-  -i, --identity  identity of the poller  [default: "Decider-hostname-PID"]
+    Start a decider-poller for AWS SWF.
+    Usage: swf-decider decider-file.js
+    
+    Options:
+      -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
+      -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
+      -i, --identity  identity of the poller  [default: "Decider-hostname-PID"]
 
 
 ### swf-start
 
-Start a workflow on AWS SWF.
-Usage: swf-start workflow-name
-
-Options:
-  -d, --domain    SWF domain                        [default: "aws-swf-test-domain"]
-  -t, --tasklist  tasklist                          [default: "aws-swf-tasklist"]
-  -v, --version   version of the workflow to start  [default: "1.0"]
+    Start a workflow on AWS SWF.
+    Usage: swf-start workflow-name
+    
+    Options:
+      -d, --domain    SWF domain                        [default: "aws-swf-test-domain"]
+      -t, --tasklist  tasklist                          [default: "aws-swf-tasklist"]
+      -v, --version   version of the workflow to start  [default: "1.0"]
 
 
 ## Library Usage
@@ -124,13 +124,13 @@ Options:
 
 ### Creating an SWF client object
 
-    
-    var swf = require("aws-swf");
-    var swfClient = swf.createClient({
-        accessKeyId: "... access key id here ...",
-        secretAccessKey: "... secret key here ..."
-    });
-
+````javascript
+var swf = require("aws-swf");
+var swfClient = swf.createClient({
+    accessKeyId: "... access key id here ...",
+    secretAccessKey: "... secret key here ..."
+});
+````
 
 
 ### Creating an ActivityPoller
@@ -143,39 +143,39 @@ It is passed to your callback and adds the respondCompleted() and respondFailed(
 
 Example :
 
+
+````javascript
+var activityPoller = new ActivityPoller(swfClient, {
     
-    
-    var activityPoller = new ActivityPoller(swfClient, {
-        
-       "domain": "test-domain",
-       "taskList": { "name": "test-taskList" },
-       "identity": "ActivityPoller-1"
-       
-    }, function(activityTask, cb) {
-       
-       console.log('A new task is available !');
-       // Do something here...
-       
-       // sends "RespondActivityTaskCompleted" to SWF
-       // result: Maximum length of 32768.
-       activityTask.respondCompleted(result, function(err) {
-          cb(true); // free the poller for new activities
-       }); 
-       
-       // or :
-       
-       // sends "RespondActivityTaskFailed" to SWF
-       // parameters: 
-       // reason (string or undefined): Maximum length of 256
-       // details (string or undefined): Maximum length of 32768
-       activityTask.respondFailed(reason, details, function(err) {
-           cb(true); // free the poller for new activities
-       });
-       
-    });
-    
-    activityPoller.start();
-    
+   "domain": "test-domain",
+   "taskList": { "name": "test-taskList" },
+   "identity": "ActivityPoller-1"
+   
+}, function(activityTask, cb) {
+   
+   console.log('A new task is available !');
+   // Do something here...
+   
+   // sends "RespondActivityTaskCompleted" to SWF
+   // result: Maximum length of 32768.
+   activityTask.respondCompleted(result, function(err) {
+      cb(true); // free the poller for new activities
+   }); 
+   
+   // or :
+   
+   // sends "RespondActivityTaskFailed" to SWF
+   // parameters: 
+   // reason (string or undefined): Maximum length of 256
+   // details (string or undefined): Maximum length of 32768
+   activityTask.respondFailed(reason, details, function(err) {
+       cb(true); // free the poller for new activities
+   });
+   
+});
+
+activityPoller.start();
+````
 
 
 
@@ -184,25 +184,26 @@ Example :
 A *Decider* will poll Amazon SWF for new decision tasks.
 
 A *DecisionTask* is instantiated by a *Decider* when it receives a decision task from SWF.
+
+````javascript
+var myDecider = new swf.Decider(swfClient, {
     
-    var myDecider = new swf.Decider(swfClient, {
-        
-       "domain": "test-domain",
-       "taskList": {"name": "my-workflow-tasklist"},
-       "identity": "Decider-01",
-       
-       "maximumPageSize": 500,
-       "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
-       
-    }, function(decisionTask, cb) {
-        
-        // do tomething and send a TODO
-        
-        decisionTask.CompleteWorkflowExecution("details of ending here ?");
-        
-        cb(true); // to continue polling
-    });
+   "domain": "test-domain",
+   "taskList": {"name": "my-workflow-tasklist"},
+   "identity": "Decider-01",
+   
+   "maximumPageSize": 500,
+   "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
+   
+}, function(decisionTask, cb) {
     
+    // do tomething and send a TODO
+    
+    decisionTask.CompleteWorkflowExecution("details of ending here ?");
+    
+    cb(true); // to continue polling
+});
+````
 
 
 
@@ -210,21 +211,22 @@ A *DecisionTask* is instantiated by a *Decider* when it receives a decision task
 
 A *getSimpleWorkflowHistory* is available on the *decisionTask* instance, which gives a simpler way to write deciders...
 
-    var workflowHistory = decisionTask.getSimpleWorkflowHistory();
-    /*
-    workflowHistory = {
-        input: "...workflow input data...",
-        activities: [
-            {
-                input: "...activity input data...",
-                activityId: "theActivityId",
-                lastEvent: "..."
-                result: "..."
-            }
-        ]
-    }
-    */
-
+````javascript
+var workflowHistory = decisionTask.getSimpleWorkflowHistory();
+/*
+workflowHistory = {
+    input: "...workflow input data...",
+    activities: [
+        {
+            input: "...activity input data...",
+            activityId: "theActivityId",
+            lastEvent: "..."
+            result: "..."
+        }
+    ]
+}
+*/
+````javascript
 
 ### Register(Domain|ActivityType|WorkflowType)
 
@@ -235,34 +237,36 @@ A *getSimpleWorkflowHistory* is available on the *decisionTask* instance, which 
 
 ### Generic SWF call (RAW call to the API)
 
-    swfClient.DescribeDomain({"name": "test-my-swf"}, function(err, result) {
-        
-        if(err) console.log("error", err);
-        
-        console.log("result", JSON.stringify(result));
-    });
-
+````javascript
+swfClient.DescribeDomain({"name": "test-my-swf"}, function(err, result) {
+    
+    if(err) console.log("error", err);
+    
+    console.log("result", JSON.stringify(result));
+});
+````
 
 
 ### Starting a Workflow
 
 A *Workflow* 
 
-    var workflow = new swf.Workflow(swfClient, {
-       "domain": "test-domain",
-       "workflowType": {
-          "name": name,
-          "version": version
-       },
-       "taskList": { "name": "my-workflow-tasklist" },
-   
-       "executionStartToCloseTimeout": "1800",
-       "taskStartToCloseTimeout": "1800",
-   
-       "tagList": ["music purchase", "digital", "ricoh-the-dog"],
-       "childPolicy": "TERMINATE"
-    });
+````javascript
+var workflow = new swf.Workflow(swfClient, {
+   "domain": "test-domain",
+   "workflowType": {
+      "name": name,
+      "version": version
+   },
+   "taskList": { "name": "my-workflow-tasklist" },
 
+   "executionStartToCloseTimeout": "1800",
+   "taskStartToCloseTimeout": "1800",
+
+   "tagList": ["music purchase", "digital", "ricoh-the-dog"],
+   "childPolicy": "TERMINATE"
+});
+````
 
 TODO registerType
 
@@ -274,17 +278,18 @@ Registers a new workflow type and its configuration settings in the specified do
 
 To start a new *workflowExecution* :
 
-    var workflowExecution = workflow.start({ input: "{}"}, function(err, runId) {
-   
-       if(err) {
-          console.log("Cannot start workflow : ", err);
-          return;
-       }
-   
-       console.log("Workflow started, runId: "+runId);
-   
-    });
+````javascript
+var workflowExecution = workflow.start({ input: "{}"}, function(err, runId) {
 
+   if(err) {
+      console.log("Cannot start workflow : ", err);
+      return;
+   }
+
+   console.log("Workflow started, runId: "+runId);
+
+});
+````
 
 ### Raw Methods
 
@@ -321,13 +326,5 @@ The detailed API documentation http://docs.amazonwebservices.com/amazonswf/lates
  * SignalWorkflowExecution
  * StartWorkflowExecution
  * TerminateWorkflowExecution
-
-
-
-## Running the examples
-
- * Copy examples/config.example.js to examples/config.js and edit  your AWS credentials
- * run the examples :)
-
 
 
