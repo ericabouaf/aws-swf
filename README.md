@@ -123,15 +123,56 @@ The command line tools use the credentials given to *swf-set-credentials* or at 
       -i, --identity  identity of the poller  [default: "Decider-hostname-PID"]
 
 
+What does swf-decider do :
+
+ * Create a Decider, which polls SWF for new decision tasks
+ * For each new decision task received, spawn a node process. The decision task is passed as an argument in JSON.
+ * When the spawed process exits, polls for new decision tasks
+
+Advantages of spawning the decider in a new process :
+
+ * When a decider crashes, the poller still continues to poll for new decision tasks
+ * In development mode, you don't need to restart the poller to change the decider
+
+
+Below is a typical decider file, and a description of the DecisionTask API :
+
+````javascript
+
+var swf = require('swf'),
+    swfClient = swf.createClient();
+
+// Instantiate the decisionTask. The task is transmitted by swf-decider (argv[2]) as JSON
+var dt = new swf.DecisionTask(swfClient, JSON.parse(process.argv[2]) );
+ 
+// dt.has_workflow_just_started()
+
+// dt.schedule({...}
+// dt.has_activity_completed('step1')
+// dt.is_activity_scheduled('step2')
+
+// dt.complete_workflow_execution()
+// dt.fail_workflow_execution()
+
+// TODO: full list of decisionTask methods
+
+````javascript
+
+
 ### swf-start
 
-    Start a workflow on AWS SWF.
-    Usage: swf-start workflow-name
+    Start a workflow execution on AWS SWF.
+    Usage: swf-start workflow-name [input data]
     
     Options:
-      -d, --domain    SWF domain                        [default: "aws-swf-test-domain"]
-      -t, --tasklist  tasklist                          [default: "aws-swf-tasklist"]
-      -v, --version   version of the workflow to start  [default: "1.0"]
+      -d, --domain                    SWF domain                                                      [default: "aws-swf-test-domain"]
+      -t, --tasklist                  tasklist                                                        [default: "aws-swf-tasklist"]
+      -v, --version                   version of the workflow to start                                [default: "1.0"]
+      -i, --workflowId                user defined identifier associated with the workflow execution
+      --executionStartToCloseTimeout  executionStartToCloseTimeout in seconds                         [default: "1800"]
+      --taskStartToCloseTimeout       taskStartToCloseTimeout in seconds                              [default: "1800"]
+      --childPolicy                   childPolicy                                                     [default: "TERMINATE"]
+      --tag                           tag to add to this workflow execution. Can have multiple.     
 
 
 ## Library Usage
@@ -145,6 +186,13 @@ var swfClient = swf.createClient({
     accessKeyId: "... access key id here ...",
     secretAccessKey: "... secret key here ..."
 });
+````
+
+If no config is passed to createClient, we'll use the config.js file written by swf-set-credentials.
+
+````javascript
+var swf = require("aws-swf"),
+    swfClient = swf.createClient();
 ````
 
 
@@ -214,7 +262,9 @@ var myDecider = new swf.Decider(swfClient, {
     
     // do something here and send decisions...
     
-    decisionTask.CompleteWorkflowExecution("details of ending here ?");
+    decisionTask.complete_workflow_execution("details of ending here ?", function(err) {
+        
+    });
     
     cb(true); // to continue polling
 });
@@ -261,7 +311,7 @@ var workflow = new swf.Workflow(swfClient, {
    "executionStartToCloseTimeout": "1800",
    "taskStartToCloseTimeout": "1800",
 
-   "tagList": ["music purchase", "digital", "ricoh-the-dog"],
+   "tagList": ["music purchase", "digital"],
    "childPolicy": "TERMINATE"
 });
 ````

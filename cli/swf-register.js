@@ -14,7 +14,7 @@ try {
 }
 
 var argv = optimist
-   .usage('Register a new activity-type, workflow or domain on AWS SWF.\nUsage: $0 resource-name')
+   .usage('Register a new activity-type, workflow or domain on AWS SWF.\nUsage: swf-register resource-name')
    .options('k', {
       'alias' : 'kind',
       'default' : 'activity',

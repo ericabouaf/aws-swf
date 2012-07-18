@@ -1,89 +1,62 @@
 var swf = require("../index");
+var swfClient = swf.createClient();
 
-var awsCredentials = require("./config");
-var swfClient = swf.createClient( awsCredentials );
-
-
+/* Start the ActivityPoller */
 var helloActivityPoller = new swf.ActivityPoller(swfClient, {
-   
    "domain": "node-swf-examples",
    "taskList": { "name": "helloTasks" },
    "identity": "helloActivityPoller-01"
-   
 }, function(activityTask, cb) {
    
-   console.log("Hello world !");
-   
-   activityTask.respondCompleted("this is hello world results", function() {
-      // optional callback
+   activityTask.respondCompleted("this is hello world results", function(err, result) {
       console.log("results sent !");
    });
    
    cb(true);
-   
 });
 
 helloActivityPoller.start();
 
-
-
-
+/* Start the Decider */
 var helloDecider = new swf.Decider(swfClient, {
    "domain": "node-swf-examples",
-   "taskList": {
-      "name": "helloTasks"
-   },
+   "taskList": { "name": "helloTasks" },
    "identity": "Decider01",
    "maximumPageSize": 500,
    "reverseOrder": true
 }, function(decisionTask, cb) {
    
    if(decisionTask.config.events.length > 20) {
-      decisionTask.CompleteWorkflowExecution();
+      decisionTask.complete_workflow_execution("results here...", function(err, result) {
+         cb(true);
+      });
    }
    else {
-      // Return decisions
-   
-      decisionTask.respondCompleted([
-            {
-                "decisionType":"ScheduleActivityTask",
-                "scheduleActivityTaskDecisionAttributes":{
-                    "control":"OPTIONAL_DATA_FOR_DECIDER",
-                    "activityType":{
-                        "name":"hello-activity",
-                        "version":"1.0"
-                    },
-                    "activityId": (Math.random()+"").substr(2),
-                    "scheduleToCloseTimeout":"360",
-                    "taskList":{
-                        "name":"helloTasks"
-                    },
-                    "scheduleToStartTimeout":"60",
-                    "startToCloseTimeout":"300",
-                    "heartbeatTimeout":"60",
-                    "input": "hello-activity"
-                }
-            }
-        ]);
-     }
-   
-   cb(true);
+      decisionTask.schedule({
+         "activityId": (Math.random()+"").substr(2),
+         "activityType":{
+            "name":"hello-activity",
+            "version":"1.0"
+         },
+         "taskList":{ "name":"helloTasks" },
+         "input": "hello-activity",
+                    
+         "scheduleToCloseTimeout":"360",
+         "scheduleToStartTimeout":"60",
+         "startToCloseTimeout":"300",
+         "heartbeatTimeout":"60"
+      });
+  }
    
 });
 
-
+/* Start the Workflow */
 var helloWorldWorkflow = new swf.Workflow(swfClient, {
    "domain": "node-swf-examples",
-   "workflowType": {
-      "name": "hello-workflow",
-      "version": "1.0"
-   },
+   "workflowType": { "name": "hello-workflow", "version": "1.0" },
    "taskList": { "name": "helloTasks" },
-   
    "executionStartToCloseTimeout": "1800",
    "taskStartToCloseTimeout": "1800",
-   
-   "tagList": ["music purchase", "digital", "ricoh-the-dog"],
    "childPolicy": "TERMINATE"
 });
 
@@ -92,7 +65,7 @@ helloWorldWorkflow.start({
 }, function(err, runId) {
    
    if(err) {
-      console.log("Cannot start workflow : ", err);
+      console.error("Cannot start workflow : ", err);
       return;
    }
    

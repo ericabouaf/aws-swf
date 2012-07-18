@@ -18,7 +18,7 @@ try {
 }
 
 var argv = optimist
-   .usage('Start an activity-poller for AWS SWF.\nUsage: $0 worker-file.js')
+   .usage('Start an activity-poller for AWS SWF.\nUsage: swf-activity worker-file.js')
    .options('d', {
       'alias' : 'domain',
       'default' : config.domain,
@@ -45,8 +45,6 @@ if(argv._.length === 0) {
 
 var swf = require('../index');
 var swfClient = swf.createClient( config );
-
-// TODO: sometimes, I got "Error: socket hang up" => we should re-poll ?
 
 var activityPoller = new swf.ActivityPoller(swfClient, {
    "domain": argv.d,

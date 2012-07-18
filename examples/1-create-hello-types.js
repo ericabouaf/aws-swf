@@ -1,7 +1,5 @@
 var swf = require("../index");
-
-var awsCredentials = require("./config");
-var swfClient = swf.createClient( awsCredentials );
+var swfClient = swf.createClient();
 
 // Register Domain
 swfClient.RegisterDomain({

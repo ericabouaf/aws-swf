@@ -1,6 +1,6 @@
 {
     "name": "aws-swf",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "description": "Node.js toolkit for the Amazon SWF API",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
     "engines": {

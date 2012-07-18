@@ -16,7 +16,7 @@ try {
 
 
 var argv = optimist
-   .usage('Start a decider-poller for AWS SWF.\nUsage: $0 decider-file.js')
+   .usage('Start a decider-poller for AWS SWF.\nUsage: swf-decider decider-file.js')
    .options('d', {
       'alias' : 'domain',
       'default' : config.domain,
@@ -54,11 +54,11 @@ var myDecider = new swf.Decider(swfClient, {
 }, function(decisionTask, cb) {
    
    // If we receive an event "ScheduleActivityTaskFailed", we should fail the workflow and display why...
-   var failedEvent = decisionTask.has_ScheduleActivityTaskFailed();
+   var failedEvent = decisionTask.has_schedule_activity_task_failed(); 
    if( failedEvent ) {
       var failedAttrs = failedEvent.scheduleActivityTaskFailedEventAttributes;
       console.error( ("Received a ScheduleActivityTaskFailed: "+failedAttrs.cause+"  "+JSON.stringify(failedAttrs)).red );
-      decisionTask.FailWorkflowExecution(failedAttrs.cause, JSON.stringify(failedAttrs), function(err, results) {
+      decisionTask.fail_workflow_execution(failedAttrs.cause, JSON.stringify(failedAttrs), function(err, results) {
           if(err) { console.log(err, results); return; }
           console.error("Workflow marked as failed !".red);
       });

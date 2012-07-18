@@ -13,7 +13,7 @@ try {
 }
 
 var argv = optimist
-   .usage('Start a workflow on AWS SWF.\nUsage: $0 workflow-name')
+   .usage('Start a workflow execution on AWS SWF.\nUsage: swf-start workflow-name [input data]')
    .options('d', {
       'alias' : 'domain',
       'default' : config.domain,
@@ -28,6 +28,25 @@ var argv = optimist
       'alias' : 'version',
       'default' : '1.0',
       'describe': 'version of the workflow to start'
+   })
+   .options('i', {
+      'alias' : 'workflowId',
+      'describe': 'user defined identifier associated with the workflow execution'
+   })
+   .options('executionStartToCloseTimeout', {
+      'default' : '1800', // 30 minutes
+      'describe': 'executionStartToCloseTimeout in seconds'
+   })
+   .options('taskStartToCloseTimeout', {
+      'default' : '1800', // 30 minutes
+      'describe': 'taskStartToCloseTimeout in seconds'
+   })
+   .options('childPolicy', {
+      'default' : 'TERMINATE',
+      'describe': 'childPolicy'
+   })
+   .options('tag', {
+      'describe': 'tag to add to this workflow execution. Can have multiple.'
    })
    .argv;
 
@@ -48,17 +67,17 @@ var workflow = new swf.Workflow(swfClient, {
    },
    "taskList": { "name": argv.t },
    
+   "executionStartToCloseTimeout": argv.executionStartToCloseTimeout,
+   "taskStartToCloseTimeout": argv.taskStartToCloseTimeout,
+   "childPolicy": argv.childPolicy,
    
-   // TODO: provide optional value for these:
-   "executionStartToCloseTimeout": "1800",
-   "taskStartToCloseTimeout": "1800",
+   "workflowId": argv.workflowId,
    
-   //"tagList": ["music purchase", "digital", "ricoh-the-dog"],
-   "childPolicy": "TERMINATE"
+   "tagList": argv.tag ? ( Array.isArray(argv.tag) ? argv.tag : [argv.tag] ) : undefined
 });
 
 
-var workflowExecution = workflow.start({ input: "{}"}, function(err, runId) { // TODO: configurable input !
+var workflowExecution = workflow.start({ input: (argv._.length > 1) ? argv._[1] : "" }, function(err, runId) {
    
    if(err) {
       console.error( ("Error starting workflow '"+argv._[0]+"'").red );

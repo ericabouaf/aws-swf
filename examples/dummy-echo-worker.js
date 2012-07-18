@@ -1,21 +1,15 @@
 
-// Simple worker example : echo every task input as result (do nothing except passing the arguments)
+// Dummy worker example : echo the task input as task result
 
-var swf = require('../../index'),
-    config = require(__dirname + '/../../config'),
-    swfClient = swf.createClient( config ),
+var swf = require('../index'),
+    swfClient = swf.createClient(),
     task = new swf.ActivityTask(swfClient, JSON.parse(process.argv[2]) );
 
-console.log("Received new task: "+task.config.activityType.name+' version '+task.config.activityType.version);
+console.log("Starting dummy-echo-task: "+task.config.activityType.name+' version '+task.config.activityType.version);
 
 var result = task.input;
 
 task.respondCompleted(result, function(err) {
-   
-   if(err) {
-      console.log(err);
-      return;
-   }
-   
-   console.log("Sent results ");
+   if(err) { console.error(err); return; }
+   console.log("dummy-echo-task: result sent");
 });
