@@ -1,64 +1,52 @@
 // sum, sleep -> echo -> terminate
 
-exports.workflow = function(dt) {
+exports.workflow = function(w) {
 
-   if( dt.has_workflow_just_started() ) {
-   
+   if( w.just_started() ) {
+      
       // schedule step1(sum) and step2(sleep) in parallel
-      dt.schedule([
-         {
-            "activityId": "step1",
-            "activityType":{ "name":"sleep", "version":"1.0" },
-            "input": "",
-            "taskList":{ "name":"today19-tl" }
+      
+      w.schedule('step1', {
+         activityType: 'sleep',
+         taskList: 'today19-tl'
+      });
+      
+      // TODO: don't schedule the activity yet wait for the end of the process (in decider-worker) to see if there are multiple activities to send
+      
+      w.schedule('step2', {
+         activityType: 'sum',
+         input: {
+            a: 4, 
+            b: 6
          },
-         {
-            "activityId": "step2",
-            "activityType":{ "name":"sum", "version":"1.0" },
-            "input": JSON.stringify({a: 4, b: 6}),
-            "taskList":{ "name":"today19-tl" }
-         }
-      ], function(err, results) {
-         if(err) { console.error(err, results); return; }
-         console.log("Step1 and Step2 scheduled !");
+         taskList: 'today19-tl'
       });
+      
+   }
+   else if( !w.completed('step1') || !w.completed('step2') ) {
+      
+      w.waiting_for('step1','step2'); // TODO: should throw an exception if any step cannot complete anywhere, and fail the workflow
+      
+   }
    
-   }
-   else if( !dt.has_activity_completed('step1') || !dt.has_activity_completed('step2') ) {
-      dt.respondCompleted([], function(err, results) {
-          if(err) { console.error(err, results); return; }
-          console.log("No decision taken... waiting for step1 AND step2 to complete...");
-      });
-   }
    // When both step have completed, schedule step3
-   else if( dt.has_activity_completed('step1') && dt.has_activity_completed('step2') && !dt.is_activity_scheduled('step3')  ) {
    
-      dt.schedule({
-         "activityId": "step3",
-         "activityType":{ "name":"echo", "version":"1.0" },
-         "input": "this will be echoed...",
-         "taskList":{ "name":"today19-tl" }
-      }, function(err, results) {
-          if(err) { console.error(err, results); return; }
-          console.log("Step 3 scheduled !");
+   else if( w.completed('step1', 'step2') && !w.scheduled('step3') ) {
+      
+      w.schedule('step3', {
+         activityType: 'echo',
+         input: 'this will be echoed...',
+         taskList: 'today19-tl'
       });
-   
+      
    }
-   else if( dt.has_activity_completed('step3')  ) {
-   
-      dt.complete_workflow_execution("finished !", function(err, result) {
-         if(err) { console.error(err); return; }
-         console.log("Workflow marked as finished !");
-      });
-   
+   else if( w.completed('step3')  ) {
+      
+      w.stop("All done !");
+      
    }
    else {
-
-      dt.fail_workflow_execution("Don't know what to do...", "more debug infos....", function(err) {
-         if(err) { console.error(err); return; }
-         console.log("Workflow marked as failed !");
-      });
-
+      w.fail("Don't know what to do...");
    }
 
 };
