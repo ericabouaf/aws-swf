@@ -83,27 +83,23 @@ function startWorkflowExecution() {
       if(err) {
          console.error( ("Error starting workflow '"+argv._[0]+"'").red );
          console.error(err);
-      
+         
          // Auto-registration of workflows
          var unknowType = 'Unknown type';
          if(err.__type == 'com.amazonaws.swf.base.model#UnknownResourceFault' &&  err.message.substr(0,unknowType.length) == unknowType) {
             
             console.log("Workflow not registered ! Registering...");
-            swfClient.RegisterWorkflowType({
-                 "name": argv._[0],
-                 "domain": argv.d,
-                 "version": argv.v
-              }, function(err, results) {
+            workflow.register(function(err, results) {
               
                if(err) {
                   console.error( ("Error registering the workflow !").red );
                   console.error(err);
                   process.exit(1);
                }
-            
+               
                console.log("Workflow registered ! Starting...");
                startWorkflowExecution();
-            
+               
             });
          
          }
@@ -114,7 +110,7 @@ function startWorkflowExecution() {
       }
       
       console.log("Workflow started, runId: "+runId);
-   
+      
    });
 
 }
