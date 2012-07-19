@@ -156,7 +156,7 @@ var dt = new swf.DecisionTask(swfClient, JSON.parse(process.argv[2]) );
 
 // TODO: full list of decisionTask methods
 
-````javascript
+````
 
 
 ### swf-start

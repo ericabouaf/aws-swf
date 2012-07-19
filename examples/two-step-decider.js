@@ -11,7 +11,13 @@ if( dt.has_workflow_just_started() ) {
    dt.schedule({
       "activityId": "step1",
       "activityType":{ "name":"hello-activity", "version":"1.0" },
-      "input": "hello-activity",
+      "input": JSON.stringify({
+          from: "Eric Abouaf <eric.abouaf@gmail.com>",
+          to: "Eric Abouaf <eric.abouaf@gmail.com>",
+          subject: "two-step decider",
+          text: "",
+          html: "<b>Super !</b>"
+      }),
       "taskList":{ "name":"aws-swf-tasklist" }
    }, function(err, results) {
       if(err) { console.error(err, results); return; }
@@ -23,8 +29,8 @@ else if( dt.has_activity_completed('step1') && !dt.is_activity_scheduled('step2'
    
    dt.schedule({
       "activityId": "step2",
-      "activityType":{ "name":"hello-activity", "version":"1.0" },
-      "input": "hello-activity",
+      "activityType":{ "name":"sum", "version":"1.0" },
+      "input": JSON.stringify({a: 4, b: 6}),
       "taskList":{ "name":"aws-swf-tasklist" }
    }, function(err, results) {
        if(err) { console.error(err, results); return; }

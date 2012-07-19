@@ -19,6 +19,11 @@ try {
 
 var argv = optimist
    .usage('Start an activity-poller for AWS SWF.\nUsage: swf-activity worker-file.js')
+   .options('f', {
+      'alias' : 'file',
+      'default' : path.join(__dirname, 'activity-worker.js'),
+      'describe': 'file to execute in a node spawed process'
+   })
    .options('d', {
       'alias' : 'domain',
       'default' : config.domain,
@@ -36,13 +41,6 @@ var argv = optimist
    })
    .argv;
 
-
-if(argv._.length === 0) {
-   console.error("Error: Missing worker file !".red);
-   optimist.showHelp();
-   process.exit(1);
-}
-
 var swf = require('../index');
 var swfClient = swf.createClient( config );
 
@@ -52,7 +50,8 @@ var activityPoller = new swf.ActivityPoller(swfClient, {
    "identity": argv.i
 }, function(activityTask, cb) {
    
-   var p = spawn('node', [ argv._[0], JSON.stringify(activityTask.config) ]);
+   // TODO: try/catch spawning...
+   var p = spawn('node', [ argv.f, JSON.stringify(activityTask.config) ]);
    
    p.stdout.on('data', function (data) {
      console.log( data.toString().blue );
