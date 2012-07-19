@@ -76,16 +76,47 @@ var workflow = new swf.Workflow(swfClient, {
    "tagList": argv.tag ? ( Array.isArray(argv.tag) ? argv.tag : [argv.tag] ) : undefined
 });
 
+function startWorkflowExecution() {
 
-var workflowExecution = workflow.start({ input: (argv._.length > 1) ? argv._[1] : "" }, function(err, runId) {
+   workflow.start({ input: (argv._.length > 1) ? argv._[1] : "" }, function(err, runId) {
    
-   if(err) {
-      console.error( ("Error starting workflow '"+argv._[0]+"'").red );
-      console.error(err);
-      process.exit(1);
-   }
+      if(err) {
+         console.error( ("Error starting workflow '"+argv._[0]+"'").red );
+         console.error(err);
+      
+         // Auto-registration of workflows
+         var unknowType = 'Unknown type';
+         if(err.__type == 'com.amazonaws.swf.base.model#UnknownResourceFault' &&  err.message.substr(0,unknowType.length) == unknowType) {
+            
+            console.log("Workflow not registered ! Registering...");
+            swfClient.RegisterWorkflowType({
+                 "name": argv._[0],
+                 "domain": argv.d,
+                 "version": argv.v
+              }, function(err, results) {
+              
+               if(err) {
+                  console.error( ("Error registering the workflow !").red );
+                  console.error(err);
+                  process.exit(1);
+               }
+            
+               console.log("Workflow registered ! Starting...");
+               startWorkflowExecution();
+            
+            });
+         
+         }
+         else {
+            process.exit(1);
+         }
+         return;
+      }
+      
+      console.log("Workflow started, runId: "+runId);
    
-   console.log("Workflow started, runId: "+runId);
-   
-});
+   });
 
+}
+
+startWorkflowExecution();
