@@ -1,19 +1,16 @@
-var nodemailer = require("nodemailer");
 
-exports.worker = function(taskConfig) {
+exports.worker = function(task) {
    
-   var input = JSON.parse(taskConfig.input);
+   var input = JSON.parse(task.config.input);
    
-   var swf = require('../../../index'),
-       swfClient = swf.createClient(),
-       task = new swf.ActivityTask(swfClient, taskConfig );
+   var result = input.a+input.b;
    
-   console.log("Return"+(input.a+input.b));
+   console.log("sum Returning result : "+result);
    
-    task.respondCompleted(input.a+input.b, function(err) {
-       if(err) { console.error(err); return; }
-       console.log("hello: respondComplete");
-    });
-    
+   task.respondCompleted(result, function(err) {
+      if(err) { console.error(err); return; }
+      console.log("sum: respondComplete");
+   });
+   
 };
 

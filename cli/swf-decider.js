@@ -17,6 +17,11 @@ try {
 
 var argv = optimist
    .usage('Start a decider-poller for AWS SWF.\nUsage: swf-decider decider-file.js')
+   .options('f', {
+      'alias' : 'file',
+      'default' : path.join(__dirname, 'decider-worker.js'),
+      'describe': 'file to execute in a node spawed process'
+   })
    .options('d', {
       'alias' : 'domain',
       'default' : config.domain,
@@ -33,13 +38,6 @@ var argv = optimist
       'describe': 'identity of the poller'
    })
    .argv;
-
-
-if(argv._.length === 0) {
-   console.error("Error: Missing decider file !".red);
-   optimist.showHelp();
-   process.exit(1);
-}
 
 var swf = require('../index');
 var swfClient = swf.createClient( config );
@@ -66,7 +64,8 @@ var myDecider = new swf.Decider(swfClient, {
       return;
    }
    
-   var p = spawn('node', [ argv._[0], JSON.stringify(decisionTask.config) ]);
+   // TODO: try/catch spawning...
+   var p = spawn('node', [ argv.f, JSON.stringify(decisionTask.config) ]);
    
    p.stdout.on('data', function (data) {
      console.log( data.toString().blue );

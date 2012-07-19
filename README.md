@@ -137,6 +137,9 @@ Advantages of spawning the decider in a new process :
 
 Below is a typical decider file, and a description of the DecisionTask API :
 
+
+TODO: document swf-activity and swf-decider without process files
+
 ````javascript
 
 var swf = require('swf'),

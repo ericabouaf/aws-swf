@@ -13,6 +13,8 @@ try {
    process.exit(1);
 }
 
+// TODO: if no resource name given, register workflows and activities in the working directory
+
 var argv = optimist
    .usage('Register a new activity-type, workflow or domain on AWS SWF.\nUsage: swf-register resource-name')
    .options('k', {
