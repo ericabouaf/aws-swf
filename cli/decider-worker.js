@@ -36,6 +36,21 @@ try {
       workflowFailed("Error executing workflow decider "+workflowName, "");
    }
    
+   
+   if( !dt.responseSent ) {
+      
+      if( dt.decisions ) {
+         console.log("sending decisions...");
+         dt.respondCompleted(dt.decisions);
+      }
+      else {
+         console.log("No decision sent and no decisions scheduled !");
+         dt.fail("Don't know what to do...");
+      }
+      
+   }
+   
+   
 }
 catch(ex) {
    console.log(ex);
