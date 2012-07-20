@@ -35,8 +35,17 @@ var argv = optimist
       'default' : '1.0',
       'describe': 'version of the activity-type or workflow to register'
    })
+   .options('h', {
+      'alias' : 'help',
+      'describe': 'show this help'
+   })
    .argv;
 
+
+if(argv.help) {
+   optimist.showHelp();
+   process.exit(0);
+}
 
 var swf = require('../index');
 var swfClient = swf.createClient( config );

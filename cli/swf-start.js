@@ -48,7 +48,16 @@ var argv = optimist
    .options('tag', {
       'describe': 'tag to add to this workflow execution. Can have multiple.'
    })
+   .options('h', {
+      'alias' : 'help',
+      'describe': 'show this help'
+   })
    .argv;
+
+if(argv.help) {
+   optimist.showHelp();
+   process.exit(0);
+}
 
 if(argv._.length === 0) {
    console.error("Error: Missing workflow name !".red);

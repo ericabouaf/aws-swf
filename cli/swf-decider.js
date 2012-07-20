@@ -38,7 +38,16 @@ var argv = optimist
       'default' : 'Decider-'+os.hostname()+'-'+process.pid,
       'describe': 'identity of the poller'
    })
+   .options('h', {
+      'alias' : 'help',
+      'describe': 'show this help'
+   })
    .argv;
+
+if(argv.help) {
+   optimist.showHelp();
+   process.exit(0);
+}
 
 // check if file exists !
 if( !(process.version.substr(1,3) == "0.6" ? path : fs).existsSync(argv.f) ) {

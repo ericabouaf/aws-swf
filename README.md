@@ -3,12 +3,12 @@
 This toolkit provides :
 
  * Command-line tools to interact with AWS SWF :
-   * [swf-activity](#swf-activity)
-   * [swf-decider](#swf-decider)
-   * [swf-register](#swf-register)
-   * [swf-start](#swf-start)
+   * [swf-activity](#swf-activity): start activity pollers
+   * [swf-decider](#swf-decider): start decider pollers
+   * [swf-register](#swf-register): register SWF resources
+   * [swf-start](#swf-start): start workflow executions
 
- * classes to wrap the common concepts of the AWS SWF API :
+ * Library classes to wrap the common concepts of the AWS SWF API :
    * ActivityPoller
    * ActivityTask
    * Decider
@@ -21,7 +21,7 @@ This toolkit provides :
 
  * NodeJS & npm
  * An active AWS account and API credentials
- * Some understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/)
+ * Some understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/) concepts
 
 
 ## Installation
@@ -41,6 +41,7 @@ $ [sudo] swf-set-credentials
 
 ## Command-line usage & Beginners' Guide
 
+This small tutorial will use the examples in the *examples/* directory.
 
 ### Step1: register all components
 
@@ -50,16 +51,18 @@ First we need to register a domain :
 $ swf-register -k domain aws-swf-test-domain
 ````
 
-We then register a new workflow :
+We then register all workflows from examples/workflows :
 
 ````sh
-$ swf-register -k workflow hello-workflow
+$ cd examples/workflows
+$ swf-register
 ````
 
-Finally, we register a new activity type :
+Finally, we will register all activity types from examples/activities :
 
 ````sh
-$ swf-register -k activity hello-activity
+$ cd examples/activities
+$ swf-register
 ````
 
 
@@ -68,13 +71,15 @@ $ swf-register -k activity hello-activity
 Launch a decider Poller:
 
 ````sh
-$ swf-decider examples/two-step-decider.js
+$ cd examples/workflows
+$ swf-decider
 ````
 
 Launch an Activity Poller:
 
 ````sh
-$ swf-activity examples/dummy-echo-worker.js
+$ cd examples/activities
+$ swf-activity
 ````
 
 ### Step3: Start the workflow !
@@ -84,50 +89,174 @@ $ swf-start hello-workflow
 ````
 
 
-## Command-line arguments
 
-The command line tools use the credentials given to *swf-set-credentials* or at installation.
+## Writing deciders
+
+TODO: make a better first-time example
+
+Let's have a look at the decider :
+
+````javascript
+// sum, sleep -> echo -> terminate
+
+exports.workflow = function(dt) {
+
+   if( dt.just_started() ) {
+      
+      // schedule step1(sum) and step2(sleep) in parallel
+      
+      dt.schedule('step1', { activityType: 'sleep' });
+      
+      dt.schedule('step2', {
+         activityType: 'sum',
+         input: {
+            a: 4, 
+            b: 6
+         }
+      });
+      
+   }
+   else if( !dt.completed('step1') || !dt.completed('step2') ) {
+      
+      dt.waiting_for('step1','step2');
+      
+   }
+   
+   // When both step have completed, schedule step3
+   
+   else if( dt.completed('step1', 'step2') && !dt.scheduled('step3') ) {
+      
+      dt.schedule('step3', {
+         activityType: 'echo',
+         input: 'this will be echoed...'
+      });
+      
+   }
+   else if( dt.completed('step3')  ) {
+      
+      dt.stop("All done !");
+      
+   }
+
+};
+````
+
+
+## swf-set-credentials
+
+All swf-* command line tools use the credentials given to *swf-set-credentials* or at installation.
 
 *swf-set-credentials* also stores a default SWF domain and tasklist, which are used as the default values for all swf-* commands.
 
-### swf-register
 
-    Register a new activity-type, workflow or domain on AWS SWF.
-    Usage: swf-register -k resource-kind resource-name
-    
+## swf-register
+
+Register a new activity-type, workflow or domain on AWS SWF.
+Usage: swf-register -k resource-kind resource-name
+
     Options:
       -k, --kind     Kind of resource to register. "activity", "workflow", or "domain"  [default: "activity"]
       -d, --domain   SWF domain of the activity-type or workflow to register            [default: "aws-swf-test-domain"]
       -v, --version  version of the activity-type or workflow to register               [default: "1.0"]
+      -h, --help     show this help                                                   
 
 
-### swf-activity
+Examples :
 
-    Start an activity-poller for AWS SWF.
-    Usage: swf-activity worker-file.js
-    
+    # Register all workflows and activities in the working directory
+    $ swf-register
+
+
+    # Register a new domain
+    $ swf-register -k domain my-domain-name
+
+
+    # Register a new activity
+    $ swf-register -k activity -d my-domain-name -v 2.0
+
+
+    # Register a new workflow
+    $ swf-register -k workflow -d my-domain-name -v 1.0
+
+
+## swf-activity
+
+Start an activity-poller for AWS SWF.
+Usage: swf-activity
+
     Options:
-      -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
-      -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
-      -i, --identity  identity of the poller  [default: "ActivityPoller-hostname-PID"]
+        -f, --file      file to execute in a node spawed process  [default: "/Users/neyric/git/aws-swf/cli/activity-worker.js"]
+        -d, --domain    SWF domain                                [default: "aws-swf-test-domain"]
+        -t, --tasklist  tasklist                                  [default: "aws-swf-tasklist"]
+        -i, --identity  identity of the poller                    [default: "ActivityPoller-hostname-PID"]
+        -h, --help      show this help                          
+
+Examples :
+
+    # Start an activity poller for all activity modules in the working directory
+    $ cd examples/activities
+    $ swf-activity
 
 
-### swf-decider
+    # Same thing but on a different domain & taskList
+    $ cd examples/activities
+    $ swf-activity -t server-A-taskList -d my-domain-name
 
-    Start a decider-poller for AWS SWF.
-    Usage: swf-decider decider-file.js
-    
+
+
+What does swf-activity do :
+
+ * Creates an *ActivityPoller*, which polls SWF for new activity tasks
+ * For each new activity task received, spawns a node process (specified by -f), passing the activity task as an argument in JSON.
+ * The default process file (activity-worker.js), will look for a node.js module in the current working directory with the same name as the activity type, and call *worker(task)*
+ * When the spawed process exits, polls for new activity tasks
+
+What does swf-activity doesn't do :
+
+ * The main poller process doesn't send any result to SWF. It is up to the worker module to send the response ! ( task.respondCompleted or respondFailed )
+
+
+Check out the [aws-swf-activities](https://github.com/neyric/aws-swf-activities) project which provides some common activity workers such as :
+
+ * making an HTTP request
+ * sending an email
+ * making a SOAP request
+ * making an XMLRPC request
+ * etc...
+
+
+## swf-decider
+
+Start a decider-poller for AWS SWF.
+Usage: swf-decider
+
+
     Options:
-      -d, --domain    SWF domain              [default: "aws-swf-test-domain"]
-      -t, --tasklist  tasklist                [default: "aws-swf-tasklist"]
-      -i, --identity  identity of the poller  [default: "Decider-hostname-PID"]
+      -f, --file      file to execute in a node spawed process  [default: "/Users/neyric/git/aws-swf/cli/decider-worker.js"]
+      -d, --domain    SWF domain                                [default: "aws-swf-test-domain"]
+      -t, --tasklist  tasklist                                  [default: "aws-swf-tasklist"]
+      -i, --identity  identity of the poller                    [default: "Decider-new-host-4.home-95630"]
+      -h, --help      show this help                          
+
+Examples :
+
+      # Start an decider poller for all workflow modules in the working directory
+      $ cd examples/workflows
+      $ swf-decider
+
+
+      # Same thing but on a different domain & taskList
+      $ cd examples/workflows
+      $ swf-decider -t my-decider-taskList -d my-domain-name
 
 
 What does swf-decider do :
 
- * Create a Decider, which polls SWF for new decision tasks
- * For each new decision task received, spawn a node process. The decision task is passed as an argument in JSON.
+ * Creates a *Decider*, which polls SWF for new decision tasks
+ * For each new decision task received, spawns a node process (specified by -f), passing the decision task as an argument in JSON.
+ * The default process file (decider-worker.js), will look for a node.js module in the current working directory with the same name as the workflow, and call *workflow(decisionTask)*
  * When the spawed process exits, polls for new decision tasks
+
 
 Advantages of spawning the decider in a new process :
 
@@ -135,38 +264,31 @@ Advantages of spawning the decider in a new process :
  * In development mode, you don't need to restart the poller to change the decider
 
 
-Below is a typical decider file, and a description of the DecisionTask API :
+Here is a list of API methods available on the *decisionTask* passed to the workflow module :
 
 
-TODO: document swf-activity and swf-decider without process files
+Query the state of the workflow :
 
-````javascript
-
-var swf = require('swf'),
-    swfClient = swf.createClient();
-
-// Instantiate the decisionTask. The task is transmitted by swf-decider (argv[2]) as JSON
-var dt = new swf.DecisionTask(swfClient, JSON.parse(process.argv[2]) );
+ * dt.just_started() : returns true if no activity has been scheduled yet (workflow just started)
+ * dt.completed('step1') : returns true if the activityId 'step1' is completed
+ * dt.scheduled('step2') : returns true if the activityId 'step2' has been scheduled (event if it's completed, failed, timedout, ...)
  
-// dt.has_workflow_just_started()
+Respond some decisions :
 
-// dt.schedule({...}
-// dt.has_activity_completed('step1')
-// dt.is_activity_scheduled('step2')
+ * dt.schedule('step1', { activityType: 'hello-activity' }) : schedule a new activity task. 'step1' will be used as the activityId. The second parameter can contain any SWF property (timeouts, tasklists, etc...)
+ * dt.waiting_for('step1','step2') : respond no decision, but assert that step1 and step2 can eventually finish. If not, throws an exception, which will result in a FailWorkflowExecution.
+ 
+End workflow executions :
 
-// dt.complete_workflow_execution()
-// dt.fail_workflow_execution()
+ * dt.stop("finished !") : stops the workflow execution (CompleteWorkflowExecution)
+ * dt.fail("reason of failure") : stops the workflow execution (FailWorkflowExecution)
 
-// TODO: full list of decisionTask methods
+## swf-start
 
-````
+Start a workflow execution on AWS SWF.
+Usage: swf-start workflow-name [input data]
 
 
-### swf-start
-
-    Start a workflow execution on AWS SWF.
-    Usage: swf-start workflow-name [input data]
-    
     Options:
       -d, --domain                    SWF domain                                                      [default: "aws-swf-test-domain"]
       -t, --tasklist                  tasklist                                                        [default: "aws-swf-tasklist"]
@@ -176,6 +298,17 @@ var dt = new swf.DecisionTask(swfClient, JSON.parse(process.argv[2]) );
       --taskStartToCloseTimeout       taskStartToCloseTimeout in seconds                              [default: "1800"]
       --childPolicy                   childPolicy                                                     [default: "TERMINATE"]
       --tag                           tag to add to this workflow execution. Can have multiple.     
+
+
+Examples :
+
+    # Start a hello-workflow on the default domain and tasklist
+    $ swf-start hello-workflow
+
+
+    # Start a hello-workflow on another domain and tasklist
+    $ swf-start hello-workflow -d my-domain-name -t hello-tasklist
+
 
 
 ## Library Usage
@@ -244,6 +377,17 @@ activityPoller.start();
 ````
 
 
+It is not recommanded to stop the poller in the middle of a long-polling request, because SWF might schedule an ActivityTask to this poller anyway, which will obviously timeout.
+The .stop() method will wait for the end of the current polling request, eventually wait for a last activity execution, then stop properly :
+
+````javascript
+// on SIGINT event, close the poller properly
+process.on('SIGINT', function () {
+   console.log('Got SIGINT ! Stopping activity poller after this request...please wait...');
+   activityPoller.stop();
+});
+````
+
 
 ### Creating a Decider
 
@@ -273,6 +417,18 @@ var myDecider = new swf.Decider(swfClient, {
 });
 ````
 
+
+It is not recommanded to stop the poller in the middle of a long-polling request, because SWF might schedule an ActivityTask to this poller anyway, which will obviously timeout.
+The .stop() method will wait for the end of the current polling request, eventually wait for a last activity execution, then stop properly :
+
+
+````javascript
+// on SIGINT event, close the poller properly
+process.on('SIGINT', function () {
+   console.log('Got SIGINT ! Stopping decider poller after this request...please wait...');
+   myDecider.stop();
+});
+````
 
 
 ### Using the simplified history (experimental)
