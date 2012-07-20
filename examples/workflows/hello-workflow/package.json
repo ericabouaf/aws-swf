@@ -1,2 +1,2 @@
 { "name" : "hello-workflow",
-  "main" : "./two-step-decider.js" }
+  "main" : "./hello-workflow.js" }

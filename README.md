@@ -85,61 +85,57 @@ $ swf-activity
 ### Step3: Start the workflow !
 
 ````sh
-$ swf-start hello-workflow
+$ swf-start hello-workflow "{\"a\":4,\"b\":6}"
 ````
 
 
 
-## Writing deciders
+### Step4: How does this first example works
 
-TODO: make a better first-time example
-
-Let's have a look at the decider :
+First, let's have a look at the first decider example :
 
 ````javascript
-// sum, sleep -> echo -> terminate
+// step1 -> step2 -> terminate
 
 exports.workflow = function(dt) {
 
    if( dt.just_started() ) {
       
-      // schedule step1(sum) and step2(sleep) in parallel
+      dt.schedule('step1', {
+         activityType: 'echo',
+         input: dt.workflow_input()
+      });
       
-      dt.schedule('step1', { activityType: 'sleep' });
+   }
+   else if( dt.completed('step1') && !dt.scheduled('step2')  ) {
       
       dt.schedule('step2', {
          activityType: 'sum',
-         input: {
-            a: 4, 
-            b: 6
-         }
+         input: dt.results('step1')
       });
       
    }
-   else if( !dt.completed('step1') || !dt.completed('step2') ) {
-      
-      dt.waiting_for('step1','step2');
-      
+   else if( dt.completed('step2')  ) {
+      dt.stop("finished !");
    }
    
-   // When both step have completed, schedule step3
-   
-   else if( dt.completed('step1', 'step2') && !dt.scheduled('step3') ) {
-      
-      dt.schedule('step3', {
-         activityType: 'echo',
-         input: 'this will be echoed...'
-      });
-      
-   }
-   else if( dt.completed('step3')  ) {
-      
-      dt.stop("All done !");
-      
-   }
-
 };
 ````
+
+#### What happened ?
+
+ * The hello-workflow is started on SWF through the swf-start command, with the string "{\"a\":4,\"b\":6}" as input
+ * SWF: schedules a Decision task
+ * DECIDER: Receives the decision task. As dt.just_started() is true, the step1 is scheduled.
+ * SWF: schedules the step1 activity
+ * ACTIVITY: Receives the activity task. The echo task will return as "result" what it as been given as input (ie the "{\"a\":4,\"b\":6}" string...)
+ * SWF: receives step1 results and schedule a decision task
+ * DECIDER: receives the decision task. This time, step1 is completed, but step2 is not completed, so step2 is scheduled
+ * SWF: schedules the step2 activity
+ * ACTIVITY: Receives the activity task. The sum task will decode its input (in JSON format), and return the sum of a and b
+ * SWF: receives step2 results and schedule a decision task
+ * DECIDER: receives the decision task. step2 is completed so we send a CompleteWorkflowExecution through the stop() function
+ * SWF: mark the workflow execution as completed
 
 
 ## swf-set-credentials
@@ -152,6 +148,7 @@ All swf-* command line tools use the credentials given to *swf-set-credentials* 
 ## swf-register
 
 Register a new activity-type, workflow or domain on AWS SWF.
+
 Usage: swf-register -k resource-kind resource-name
 
     Options:
@@ -165,16 +162,13 @@ Examples :
 
     # Register all workflows and activities in the working directory
     $ swf-register
-
-
+    
     # Register a new domain
     $ swf-register -k domain my-domain-name
-
-
+    
     # Register a new activity
     $ swf-register -k activity -d my-domain-name -v 2.0
-
-
+    
     # Register a new workflow
     $ swf-register -k workflow -d my-domain-name -v 1.0
 
@@ -182,6 +176,7 @@ Examples :
 ## swf-activity
 
 Start an activity-poller for AWS SWF.
+
 Usage: swf-activity
 
     Options:
@@ -196,13 +191,13 @@ Examples :
     # Start an activity poller for all activity modules in the working directory
     $ cd examples/activities
     $ swf-activity
-
-
+    
     # Same thing but on a different domain & taskList
     $ cd examples/activities
     $ swf-activity -t server-A-taskList -d my-domain-name
 
 
+### How it works
 
 What does swf-activity do :
 
@@ -228,6 +223,7 @@ Check out the [aws-swf-activities](https://github.com/neyric/aws-swf-activities)
 ## swf-decider
 
 Start a decider-poller for AWS SWF.
+
 Usage: swf-decider
 
 
@@ -243,12 +239,12 @@ Examples :
       # Start an decider poller for all workflow modules in the working directory
       $ cd examples/workflows
       $ swf-decider
-
-
+      
       # Same thing but on a different domain & taskList
       $ cd examples/workflows
       $ swf-decider -t my-decider-taskList -d my-domain-name
 
+### How it works
 
 What does swf-decider do :
 
@@ -264,6 +260,8 @@ Advantages of spawning the decider in a new process :
  * In development mode, you don't need to restart the poller to change the decider
 
 
+### Writing deciders
+
 Here is a list of API methods available on the *decisionTask* passed to the workflow module :
 
 
@@ -277,7 +275,13 @@ Respond some decisions :
 
  * dt.schedule('step1', { activityType: 'hello-activity' }) : schedule a new activity task. 'step1' will be used as the activityId. The second parameter can contain any SWF property (timeouts, tasklists, etc...)
  * dt.waiting_for('step1','step2') : respond no decision, but assert that step1 and step2 can eventually finish. If not, throws an exception, which will result in a FailWorkflowExecution.
- 
+
+
+Get the data :
+
+ * dt.workflow_input() : returns the string passed as "input" at workflow start
+ * dt.results('step1') : returns the result value of activity 'step1'
+
 End workflow executions :
 
  * dt.stop("finished !") : stops the workflow execution (CompleteWorkflowExecution)
@@ -286,6 +290,7 @@ End workflow executions :
 ## swf-start
 
 Start a workflow execution on AWS SWF.
+
 Usage: swf-start workflow-name [input data]
 
 
@@ -304,10 +309,16 @@ Examples :
 
     # Start a hello-workflow on the default domain and tasklist
     $ swf-start hello-workflow
-
-
+    
     # Start a hello-workflow on another domain and tasklist
     $ swf-start hello-workflow -d my-domain-name -t hello-tasklist
+
+
+
+
+
+
+
 
 
 
@@ -455,8 +466,6 @@ workflowHistory = {
 
 
 ### Starting a Workflow
-
-A *Workflow* 
 
 ````javascript
 var workflow = new swf.Workflow(swfClient, {

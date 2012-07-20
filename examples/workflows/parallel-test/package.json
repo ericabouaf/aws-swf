@@ -1,2 +1,2 @@
 { "name" : "parallel-test",
-  "main" : "./run.js" }
+  "main" : "./parallel-test.js" }
