@@ -13,7 +13,6 @@ var decisionTaskConfig = JSON.parse(process.argv[2]);
 // Create the Decision task
 var dt = new swf.DecisionTask(swfClient, decisionTaskConfig);
 
-
 function workflowFailed(reason, details) {
    dt.fail_workflow_execution(reason, details, function(err) {
       if(err) { console.error(err); return; }
@@ -36,7 +35,6 @@ try {
       workflowFailed("Error executing workflow decider "+workflowName, "");
    }
    
-   
    if( !dt.responseSent ) {
       
       if( dt.decisions ) {
@@ -49,7 +47,6 @@ try {
       }
       
    }
-   
    
 }
 catch(ex) {

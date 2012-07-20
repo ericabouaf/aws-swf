@@ -10,7 +10,7 @@ exports.worker = function(task) {
          console.log("sleep: respondComplete");
       });
    
-   }, 10000);
+   }, 2000);
    
 };
 

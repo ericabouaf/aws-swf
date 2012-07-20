@@ -12,8 +12,7 @@ exports.workflow = function(dt) {
              subject: "two-step decider",
              text: "",
              html: "<b>Super !</b>"
-         },
-         taskList: 'today19-tl'
+         }
       });
    
    }
@@ -24,8 +23,7 @@ exports.workflow = function(dt) {
          input: {
             a: 4, 
             b: 6
-         },
-         taskList: 'today19-tl'
+         }
       });
    
    }

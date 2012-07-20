@@ -6,8 +6,8 @@ var colors = require('colors'),
     optimist = require('optimist'),
     spawn = require('child_process').spawn,
     os = require('os'),
-    path = require('path');
-    
+    path = require('path'),
+    fs = require('fs');
 
 var config, configFilePath = path.join(__dirname, '..', 'config.js');
 try {
@@ -41,6 +41,12 @@ var argv = optimist
    })
    .argv;
 
+// check if file exists !
+if( !(process.version.substr(1,3) == "0.6" ? path : fs).existsSync(argv.f) ) {
+   console.error( ("File does not exist : "+argv.f ).red );
+   process.exit(1);
+}
+
 var swf = require('../index');
 var swfClient = swf.createClient( config );
 
@@ -50,7 +56,7 @@ var activityPoller = new swf.ActivityPoller(swfClient, {
    "identity": argv.i
 }, function(activityTask, cb) {
    
-   // TODO: try/catch spawning...
+   // Spawn child process
    var p = spawn('node', [ argv.f, JSON.stringify(activityTask.config) ]);
    
    p.stdout.on('data', function (data) {
@@ -72,10 +78,7 @@ activityPoller.start();
 
 // on SIGINT event, close the poller properly
 process.on('SIGINT', function () {
-   
-  console.log('Got SIGINT ! Stopping activity poller...');
-  
-  activityPoller.stop();
-  process.exit(0);
+   console.log('Got SIGINT ! Stopping activity poller after this request...please wait...');
+   activityPoller.stop();
 });
 

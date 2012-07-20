@@ -24,6 +24,7 @@
     },
     "dependencies": {
             "optimist": "0.3.4",
+            "async": "0.1.22",
             "colors": "0.6.0-1"
     },
     "licenses" : [ 

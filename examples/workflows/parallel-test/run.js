@@ -6,18 +6,14 @@ exports.workflow = function(dt) {
       
       // schedule step1(sum) and step2(sleep) in parallel
       
-      dt.schedule('step1', {
-         activityType: 'sleep',
-         taskList: 'today19-tl'
-      });
+      dt.schedule('step1', { activityType: 'sleep' });
       
       dt.schedule('step2', {
          activityType: 'sum',
          input: {
             a: 4, 
             b: 6
-         },
-         taskList: 'today19-tl'
+         }
       });
       
    }
@@ -33,8 +29,7 @@ exports.workflow = function(dt) {
       
       dt.schedule('step3', {
          activityType: 'echo',
-         input: 'this will be echoed...',
-         taskList: 'today19-tl'
+         input: 'this will be echoed...'
       });
       
    }
