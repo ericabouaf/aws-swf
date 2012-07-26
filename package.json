@@ -3,9 +3,17 @@
     "version": "1.0.1",
     "description": "Node.js toolkit for the Amazon SWF API",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
+    "preferGlobal": "true",
     "engines": {
         "node" : ">=0.6.0"
     },
+    "keywords": [
+        "cli",
+        "amazon",
+        "aws",
+        "swf",
+        "workflow"
+    ],
     "main" : "index.js",
     "directories" : { "lib" : "./lib" },
     "repository": {
