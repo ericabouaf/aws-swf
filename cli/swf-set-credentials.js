@@ -26,8 +26,8 @@ ask("Enter your AWS accessKeyId", function(accessKeyId) {
         ask("default tasklist [aws-swf-tasklist]", function(tasklist) {
             
             var o = {
-               accessKeyId: "AKIAJHIFBMUWJMZ6DXPQ",
-               secretAccessKey: "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",
+               accessKeyId: accessKeyId,
+               secretAccessKey: secretAccessKey,
                domain: domain || "aws-swf-test-domain",
                tasklist: tasklist || "aws-swf-tasklist"
             };
