@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/neyric/aws-swf.png)](http://travis-ci.org/neyric/aws-swf)
 # Amazon SWF (Simple WorkFlow) toolkit for Node.js
 
 This toolkit provides :
