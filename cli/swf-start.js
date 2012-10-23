@@ -8,20 +8,19 @@ var config, configFilePath = path.join(__dirname, '..', 'config.js');
 try {
    config = require(configFilePath);
 } catch(ex) {
-   console.error(("Config file not found : "+configFilePath+"\nCall 'swf-set-credentials' first !").red);
-   process.exit(1);
+  config = {};
 }
 
 var argv = optimist
    .usage('Start a workflow execution on AWS SWF.\nUsage: swf-start workflow-name [input data]')
    .options('d', {
       'alias' : 'domain',
-      'default' : config.domain,
+      'default' : config.domain || 'aws-swf-test-domain',
       'describe': 'SWF domain'
    }) 
    .options('t', {
       'alias' : 'tasklist',
-      'default' : config.tasklist,
+      'default' : config.tasklist || 'aws-swf-tasklist',
       'describe': 'tasklist'
    })
    .options('v', {
@@ -52,12 +51,27 @@ var argv = optimist
       'alias' : 'help',
       'describe': 'show this help'
    })
+   .options('accessKeyId', {
+      'default': config.accessKeyId,
+      'describe': 'AWS accessKeyId'
+   })
+   .options('secretAccessKey', {
+      'default': config.secretAccessKey,
+      'describe': 'AWS secretAccessKey'
+   })
    .argv;
 
 if(argv.help) {
    optimist.showHelp();
    process.exit(0);
 }
+
+
+// Check presence of accessKeyId and secretAccessKey
+if( !argv.accessKeyId || !argv.secretAccessKey) {
+   console.error(("accessKeyId or secretAccessKey not configured !\nSet the --accessKeyId and --secretAccessKey parameters or call 'swf-set-credentials'.").red);
+   process.exit(1);
+ }
 
 if(argv._.length === 0) {
    console.error("Error: Missing workflow name !".red);
@@ -66,7 +80,10 @@ if(argv._.length === 0) {
 }
 
 var swf = require('../index');
-var swfClient = swf.createClient( config );
+var swfClient = swf.createClient({
+  accessKeyId: argv.accessKeyId,
+  secretAccessKey: argv.secretAccessKey
+});
 
 var workflow = new swf.Workflow(swfClient, {
    "domain": argv.d,

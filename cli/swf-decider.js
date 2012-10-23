@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// Start a DeciderPoller which spawns the given poller worker file
+
 var colors = require('colors'),
     optimist = require('optimist'),
     spawn = require('child_process').spawn,
@@ -11,10 +13,8 @@ var config, configFilePath = path.join(__dirname, '..', 'config.js');
 try {
    config = require(configFilePath);
 } catch(ex) {
-   console.error(("Config file not found : "+configFilePath+"\nCall 'swf-set-credentials' first !").red);
-   process.exit(1);
+  config = {};
 }
-
 
 var argv = optimist
    .usage('Start a decider-poller for AWS SWF.\nUsage: swf-decider decider-file.js')
@@ -25,12 +25,12 @@ var argv = optimist
    })
    .options('d', {
       'alias' : 'domain',
-      'default' : config.domain,
+      'default' : config.domain || 'aws-swf-test-domain',
       'describe': 'SWF domain'
    }) 
    .options('t', {
       'alias' : 'tasklist',
-      'default' : config.tasklist,
+      'default' : config.tasklist || 'aws-swf-tasklist',
       'describe': 'tasklist'
    })
    .options('i', {
@@ -42,12 +42,26 @@ var argv = optimist
       'alias' : 'help',
       'describe': 'show this help'
    })
+   .options('accessKeyId', {
+      'default': config.accessKeyId,
+      'describe': 'AWS accessKeyId'
+   })
+   .options('secretAccessKey', {
+      'default': config.secretAccessKey,
+      'describe': 'AWS secretAccessKey'
+   })
    .argv;
 
 if(argv.help) {
    optimist.showHelp();
    process.exit(0);
 }
+
+// Check presence of accessKeyId and secretAccessKey
+if( !argv.accessKeyId || !argv.secretAccessKey) {
+   console.error(("accessKeyId or secretAccessKey not configured !\nSet the --accessKeyId and --secretAccessKey parameters or call 'swf-set-credentials'.").red);
+   process.exit(1);
+ }
 
 // check if file exists !
 if( !(process.version.substr(1,3) == "0.6" ? path : fs).existsSync(argv.f) ) {
@@ -56,7 +70,10 @@ if( !(process.version.substr(1,3) == "0.6" ? path : fs).existsSync(argv.f) ) {
 }
 
 var swf = require('../index');
-var swfClient = swf.createClient( config );
+var swfClient = swf.createClient({
+  accessKeyId: argv.accessKeyId,
+  secretAccessKey: argv.secretAccessKey
+});
 
 var myDecider = new swf.Decider(swfClient, {
    "domain": argv.d,
@@ -80,7 +97,7 @@ var myDecider = new swf.Decider(swfClient, {
    }
    
    // Spawn child process
-   var p = spawn('node', [ argv.f, JSON.stringify(decisionTask.config) ]);
+   var p = spawn('node', [ argv.f, JSON.stringify(decisionTask.config), argv.accessKeyId, argv.secretAccessKey ]);
    
    p.stdout.on('data', function (data) {
      console.log( data.toString().blue );

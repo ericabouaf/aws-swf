@@ -4,11 +4,18 @@
  * It will look in the working directory for a Node.JS module that has the same name as the workflow
  */
 var path = require('path'),
-    swf = require('../index'),
-    swfClient = swf.createClient();
+    swf = require('../index');
 
 // The task is given to this process as a command line argument in JSON format :
 var decisionTaskConfig = JSON.parse(process.argv[2]);
+
+var accessKeyId = process.argv[3];
+var secretAccessKey = process.argv[4];
+
+var swfClient = swf.createClient({
+  accessKeyId: accessKeyId,
+  secretAccessKey: secretAccessKey
+});
 
 // Create the Decision task
 var dt = new swf.DecisionTask(swfClient, decisionTaskConfig);
