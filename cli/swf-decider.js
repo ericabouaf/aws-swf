@@ -42,6 +42,11 @@ var argv = optimist
       'alias' : 'help',
       'describe': 'show this help'
    })
+   .options('c', {
+      'alias' : 'fetchcodefile',
+      'default' : path.join(__dirname, 'fetch_code_file.js'),
+      'describe': 'js file which exports the fetch_code method'
+   })
    .options('accessKeyId', {
       'default': config.accessKeyId,
       'describe': 'AWS accessKeyId'
@@ -97,7 +102,7 @@ var myDecider = new swf.Decider(swfClient, {
    }
    
    // Spawn child process
-   var p = spawn('node', [ argv.f, JSON.stringify(decisionTask.config), argv.accessKeyId, argv.secretAccessKey ]);
+   var p = spawn('node', [ argv.f, JSON.stringify(decisionTask.config), argv.accessKeyId, argv.secretAccessKey, argv.c ]);
    
    p.stdout.on('data', function (data) {
      console.log( data.toString().blue );
