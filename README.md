@@ -30,9 +30,8 @@ This toolkit provides :
 $ [sudo] npm install aws-swf -g
 ````
 
-The installation process will ask you for your AWS credentials, and store them in a config file.
-
-You can change the credentials by calling :
+It is then recommended to call the *swf-set-credentials* command, which will ask you for your AWS credentials, and store them in a config file.
+Those credentials will then be used by all others swf-* commands.
 
 ````sh
 $ [sudo] swf-set-credentials

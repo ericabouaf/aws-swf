@@ -1,6 +1,6 @@
 {
     "name": "aws-swf",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Node.js toolkit for the Amazon SWF API",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
     "preferGlobal": "true",
@@ -19,7 +19,7 @@
     "repository": {
         "type":"git",
         "url":"http://github.com/neyric/aws-swf.git"
-    }, 
+    },
     "bin": {
         "swf-activity": "./cli/swf-activity.js",
         "swf-decider": "./cli/swf-decider.js",
@@ -27,17 +27,14 @@
         "swf-set-credentials": "./cli/swf-set-credentials.js",
         "swf-start": "./cli/swf-start.js"
     },
-    "scripts": {
-        "install": "./cli/swf-set-credentials.js"
-    },
     "dependencies": {
             "optimist": "0.3.4",
             "async": "0.1.22",
             "colors": "0.6.0-1"
     },
-    "licenses" : [ 
-        { 
-            "type" : "MIT", 
+    "licenses" : [
+        {
+            "type" : "MIT",
             "url" : "https://raw.github.com/neyric/aws-swf/master/LICENSE.txt"
         }
     ]
