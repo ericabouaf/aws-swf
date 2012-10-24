@@ -25,7 +25,7 @@ var argv = optimist
     })
     .options('d', {
         'alias' : 'domain',
-        'default' : config.domain,
+        'default' : config.domain || 'aws-swf-test-domain',
         'describe': 'SWF domain of the activity-type or workflow to register'
     })
     .options('v', {

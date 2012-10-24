@@ -20,13 +20,7 @@ if (just_started) {
 
     schedule('step3', {
         activityType: 'hello-activity',
-        input: {
-            from: "Eric Abouaf <eric.abouaf@gmail.com>", // sender address
-            to: "eric.abouaf@gmail.com", // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world ✔", // plaintext body
-            html: "<b>Hello world : </b>" + results('step2') // html body
-        }
+        input: {}
     });
 
 } else if (completed('step3')) {

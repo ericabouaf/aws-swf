@@ -37,6 +37,12 @@ Those credentials will then be used by all others swf-* commands.
 $ [sudo] swf-set-credentials
 ````
 
+If you don't call set your credentials, you will have to call the commands with the credentials passed as options :
+
+
+````sh
+$ swf-register --accessKeyId "... your accessKeyId ..." --secretAccessKey "... your secret key id..." ...
+````
 
 ## Command-line usage & Beginners' Guide
 
@@ -96,36 +102,31 @@ First, let's have a look at the first decider example :
 ````javascript
 // step1 -> step2 -> terminate
 
-exports.workflow = function (dt) {
+if (just_started) {
 
-   if ( dt.just_started() ) {
-      
-      dt.schedule('step1', {
-         activityType: 'echo',
-         input: dt.workflow_input()
-      });
-      
-   }
-   else if ( dt.completed('step1') && !dt.scheduled('step2')  ) {
-      
-      dt.schedule('step2', {
-         activityType: 'sum',
-         input: dt.results('step1')
-      });
-      
-   }
-   else if ( dt.completed('step2')  ) {
-      dt.stop("finished !");
-   }
-   
-};
+    schedule('step1', {
+        activityType: 'echo',
+        input: workflow_input()
+    });
+
+} else if (completed('step1') && !scheduled('step2')) {
+
+    schedule('step2', {
+        activityType: 'sum',
+        input: results('step1')
+    });
+
+} else if (completed('step2')) {
+    stop("finished !");
+}
+
 ````
 
 #### What happened ?
 
  * The hello-workflow is started on SWF through the swf-start command, with the string "{\"a\":4,\"b\":6}" as input
  * SWF: schedules a Decision task
- * DECIDER: Receives the decision task. As dt.just_started() is true, the step1 is scheduled.
+ * DECIDER: Receives the decision task. As just_started is true, the step1 is scheduled.
  * SWF: schedules the step1 activity
  * ACTIVITY: Receives the activity task. The echo task will return as "result" what it as been given as input (ie the "{\"a\":4,\"b\":6}" string...)
  * SWF: receives step1 results and schedule a decision task
@@ -184,6 +185,9 @@ Usage: swf-activity
         -t, --tasklist  tasklist                                  [default: "aws-swf-tasklist"]
         -i, --identity  identity of the poller                    [default: "ActivityPoller-hostname-PID"]
         -h, --help      show this help                          
+        -c, --fetchconfigfile  js file which exports the fetch_config method  [default: "/Users/neyric/git/aws-swf/cli/fetch_config_file.js"]
+        --accessKeyId          AWS accessKeyId                              
+        --secretAccessKey      AWS secretAccessKey 
 
 Examples :
 
@@ -202,7 +206,8 @@ What does swf-activity do :
 
  * Creates an *ActivityPoller*, which polls SWF for new activity tasks
  * For each new activity task received, spawns a node process (specified by -f), passing the activity task as an argument in JSON.
- * The default process file (activity-worker.js), will look for a node.js module in the current working directory with the same name as the activity type, and call *worker(task)*
+ * The default process file (activity-worker.js), will use the 'fetchconfigfile' to retreive the global configuration for this activity (such as credentials). The default fetchconfigfile will look for a file named config.json in the activity directory.
+ * Then, it will look for a node.js module in the current working directory with the same name as the activity type, and call *worker(task, config)*
  * When the spawed process exits, polls for new activity tasks
 
 What does swf-activity doesn't do :
@@ -232,6 +237,10 @@ Usage: swf-decider
       -t, --tasklist  tasklist                                  [default: "aws-swf-tasklist"]
       -i, --identity  identity of the poller                    [default: "Decider-new-host-4.home-95630"]
       -h, --help      show this help                          
+      -c, --fetchcodefile  js file which exports the fetch_code method  [default: "/Users/neyric/git/aws-swf/cli/fetch_code_file.js"]
+      --accessKeyId        AWS accessKeyId                            
+      --secretAccessKey    AWS secretAccessKey                        
+
 
 Examples :
 
@@ -249,7 +258,7 @@ What does swf-decider do :
 
  * Creates a *Decider*, which polls SWF for new decision tasks
  * For each new decision task received, spawns a node process (specified by -f), passing the decision task as an argument in JSON.
- * The default process file (decider-worker.js), will look for a node.js module in the current working directory with the same name as the workflow, and call *workflow(decisionTask)*
+ * The default process file (decider-worker.js), will use the 'fetchcodefile' to retreive the code for the decider. (by default, it looks for a node.js module in the current working directory with the same name as the workflow) and call *workflow(decisionTask)*
  * When the spawed process exits, polls for new decision tasks
 
 
@@ -266,25 +275,25 @@ Here is a list of API methods available on the *decisionTask* passed to the work
 
 Query the state of the workflow :
 
- * dt.just_started() : returns true if no activity has been scheduled yet (workflow just started)
- * dt.completed('step1') : returns true if the activityId 'step1' is completed
- * dt.scheduled('step2') : returns true if the activityId 'step2' has been scheduled (event if it's completed, failed, timedout, ...)
+ * just_started : true if no activity has been scheduled yet (workflow just started)
+ * completed('step1') : returns true if the activityId 'step1' is completed
+ * scheduled('step2') : returns true if the activityId 'step2' has been scheduled (event if it's completed, failed, timedout, ...)
  
 Respond some decisions :
 
- * dt.schedule('step1', { activityType: 'hello-activity' }) : schedule a new activity task. 'step1' will be used as the activityId. The second parameter can contain any SWF property (timeouts, tasklists, etc...)
- * dt.waiting_for('step1','step2') : respond no decision, but assert that step1 and step2 can eventually finish. If not, throws an exception, which will result in a FailWorkflowExecution.
+ * schedule('step1', { activityType: 'hello-activity' }) : schedule a new activity task. 'step1' will be used as the activityId. The second parameter can contain any SWF property (timeouts, tasklists, etc...)
+ * waiting_for('step1','step2') : respond no decision, but assert that step1 and step2 can eventually finish. If not, throws an exception, which will result in a FailWorkflowExecution.
 
 
 Get the data :
 
- * dt.workflow_input() : returns the string passed as "input" at workflow start
- * dt.results('step1') : returns the result value of activity 'step1'
+ * workflow_input() : returns the string passed as "input" at workflow start
+ * results('step1') : returns the result value of activity 'step1'
 
 End workflow executions :
 
- * dt.stop("finished !") : stops the workflow execution (CompleteWorkflowExecution)
- * dt.fail("reason of failure") : stops the workflow execution (FailWorkflowExecution)
+ * stop("finished !") : stops the workflow execution (CompleteWorkflowExecution)
+ * fail("reason of failure") : stops the workflow execution (FailWorkflowExecution)
 
 ## swf-start
 
@@ -302,6 +311,8 @@ Usage: swf-start workflow-name [input data]
       --taskStartToCloseTimeout       taskStartToCloseTimeout in seconds                              [default: "1800"]
       --childPolicy                   childPolicy                                                     [default: "TERMINATE"]
       --tag                           tag to add to this workflow execution. Can have multiple.     
+      --accessKeyId        AWS accessKeyId                            
+      --secretAccessKey    AWS secretAccessKey       
 
 
 Examples :

@@ -1,7 +1,7 @@
 {
     "name": "aws-swf",
-    "version": "1.0.4",
-    "description": "Node.js toolkit for the Amazon SWF API",
+    "version": "1.1.0",
+    "description": "Command line tools and Node.js library for Amazon SWF",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
     "preferGlobal": "true",
     "engines": {
