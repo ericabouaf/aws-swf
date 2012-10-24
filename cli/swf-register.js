@@ -10,8 +10,7 @@ var config, configFilePath = path.join(__dirname, '..', 'config.js');
 try {
     config = require(configFilePath);
 } catch (ex) {
-    console.error(("Config file not found : " + configFilePath + "\nCall 'swf-set-credentials' first !").red);
-    process.exit(1);
+    config = {};
 }
 
 var argv = optimist
@@ -38,11 +37,25 @@ var argv = optimist
         'alias' : 'help',
         'describe': 'show this help'
     })
+    .options('accessKeyId', {
+        'default': config.accessKeyId,
+        'describe': 'AWS accessKeyId'
+    })
+    .options('secretAccessKey', {
+        'default': config.secretAccessKey,
+        'describe': 'AWS secretAccessKey'
+    })
     .argv;
 
 if (argv.help) {
     optimist.showHelp();
     process.exit(0);
+}
+
+// Check presence of accessKeyId and secretAccessKey
+if (!argv.accessKeyId || !argv.secretAccessKey) {
+    console.error(("accessKeyId or secretAccessKey not configured !\nSet the --accessKeyId and --secretAccessKey parameters or call 'swf-set-credentials'.").red);
+    process.exit(1);
 }
 
 var swf = require('../index');
