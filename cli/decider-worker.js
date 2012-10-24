@@ -14,8 +14,8 @@ var accessKeyId = process.argv[3];
 var secretAccessKey = process.argv[4];
 
 var swfClient = swf.createClient({
-  accessKeyId: accessKeyId,
-  secretAccessKey: secretAccessKey
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey
 });
 
 
@@ -27,96 +27,84 @@ var fetch_code = require(fetch_code_file).fetch_code;
 var dt = new swf.DecisionTask(swfClient, decisionTaskConfig);
 
 function workflowFailed(reason, details) {
-   dt.fail_workflow_execution(reason, details, function(err) {
-      if(err) { console.error(err); return; }
-      console.log("Workflow marked as failed !");
-   });
+    dt.fail_workflow_execution(reason, details, function (err) {
+        if (err) { console.error(err); return; }
+        console.log("Workflow marked as failed !");
+    });
 }
 
 var workflowName = decisionTaskConfig.workflowType.name;
 
-fetch_code(workflowName, function(err, deciderCode) {
+fetch_code(workflowName, function (err, deciderCode) {
 
+    try {
 
-  try {
-     //console.log("Trying to load workflow : "+workflowName);
-     //var workflow = require( path.join( process.cwd() , workflowName ) ).workflow;
-     //console.log("workflow module loaded !");
-     
-     // TODO
-     //var deciderCode;
+        var sandbox = {
 
-     var sandbox = {
-     
-       just_started: dt.just_started(),
-       
-       schedule: function() {
-         dt.schedule.apply(dt, arguments);
-       },
-       scheduled: function() {
-         return dt.scheduled.apply(dt, arguments);
-       },
-       waiting_for: function() {
-        dt.waiting_for.apply(dt, arguments);
-       },
-       completed: function() {
-         return dt.completed.apply(dt, arguments);
-       },
-       stop: function() {
-         dt.stop.apply(dt, arguments);
-       },
-       results: function() {
-        var resultData = dt.results.apply(dt, arguments);
+            just_started: dt.just_started(),
+
+            schedule: function () {
+                dt.schedule.apply(dt, arguments);
+            },
+            scheduled: function () {
+                return dt.scheduled.apply(dt, arguments);
+            },
+            waiting_for: function () {
+                dt.waiting_for.apply(dt, arguments);
+            },
+            completed: function () {
+                return dt.completed.apply(dt, arguments);
+            },
+            stop: function () {
+                dt.stop.apply(dt, arguments);
+            },
+            results: function () {
+                var resultData = dt.results.apply(dt, arguments);
+                try {
+                    var d = JSON.parse(resultData);
+                    return d;
+                } catch (ex) {
+                    return resultData;
+                }
+            },
+            workflow_input: function () {
+                var wfInput = dt.workflow_input.apply(dt, arguments);
+                try {
+                    var d = JSON.parse(wfInput);
+                    return d;
+                } catch (ex) {
+                    return wfInput;
+                }
+            },
+            log: function () {
+                console.log.apply(console, ["DECIDER LOG : "].concat(arguments));
+            }
+        };
+
         try {
-         var d = JSON.parse(resultData);
-         return d;
-        }
-        catch(ex) {
-          return resultData;
-        }
-       },
-      workflow_input: function() {
-        var wfInput = dt.workflow_input.apply(dt, arguments);
-        try {
-          var d = JSON.parse(wfInput);
-          return d;
-        }
-        catch(ex) {
-          return wfInput;
-        }
-      },
-      log: function() {
-        console.log.apply(console, ["DECIDER LOG : "].concat(arguments) );
-      }
-     };
 
-     try {
+            vm.runInNewContext(deciderCode, sandbox, workflowName + '.vm');
 
-        vm.runInNewContext(deciderCode, sandbox, workflowName+'.vm');
+        } catch (ex) {
+            console.log(ex);
+            workflowFailed("Error executing workflow decider " + workflowName, "");
+        }
 
-     }
-     catch(ex) {
+        if (!dt.responseSent) {
+
+            if (dt.decisions) {
+                console.log("sending decisions...");
+                dt.respondCompleted(dt.decisions);
+            } else {
+                console.log("No decision sent and no decisions scheduled !");
+                dt.fail("Don't know what to do...");
+            }
+
+        }
+
+    } catch (ex) {
         console.log(ex);
-        workflowFailed("Error executing workflow decider "+workflowName, "");
-     }
-     
-     if( !dt.responseSent ) {
-        
-        if( dt.decisions ) {
-           console.log("sending decisions...");
-           dt.respondCompleted(dt.decisions);
-        }
-        else {
-           console.log("No decision sent and no decisions scheduled !");
-           dt.fail("Don't know what to do...");
-        }
-        
-     }
-     
-  }
-  catch(ex) {
-     console.log(ex);
-     workflowFailed("Unable to load workflow module "+workflowName, "");
-  }
+        workflowFailed("Unable to load workflow module " + workflowName, "");
+    }
 
 });

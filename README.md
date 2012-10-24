@@ -96,9 +96,9 @@ First, let's have a look at the first decider example :
 ````javascript
 // step1 -> step2 -> terminate
 
-exports.workflow = function(dt) {
+exports.workflow = function (dt) {
 
-   if( dt.just_started() ) {
+   if ( dt.just_started() ) {
       
       dt.schedule('step1', {
          activityType: 'echo',
@@ -106,7 +106,7 @@ exports.workflow = function(dt) {
       });
       
    }
-   else if( dt.completed('step1') && !dt.scheduled('step2')  ) {
+   else if ( dt.completed('step1') && !dt.scheduled('step2')  ) {
       
       dt.schedule('step2', {
          activityType: 'sum',
@@ -114,7 +114,7 @@ exports.workflow = function(dt) {
       });
       
    }
-   else if( dt.completed('step2')  ) {
+   else if ( dt.completed('step2')  ) {
       dt.stop("finished !");
    }
    
@@ -360,14 +360,14 @@ var activityPoller = new ActivityPoller(swfClient, {
    "taskList": { "name": "test-taskList" },
    "identity": "ActivityPoller-1"
    
-}, function(activityTask, cb) {
+}, function (activityTask, cb) {
    
    console.log('A new task is available !');
    // Do something here...
    
    // sends "RespondActivityTaskCompleted" to SWF
    // result: Maximum length of 32768.
-   activityTask.respondCompleted(result, function(err) {
+   activityTask.respondCompleted(result, function (err) {
       cb(true); // free the poller for new activities
    }); 
    
@@ -377,7 +377,7 @@ var activityPoller = new ActivityPoller(swfClient, {
    // parameters: 
    // reason (string or undefined): Maximum length of 256
    // details (string or undefined): Maximum length of 32768
-   activityTask.respondFailed(reason, details, function(err) {
+   activityTask.respondFailed(reason, details, function (err) {
        cb(true); // free the poller for new activities
    });
    
@@ -415,11 +415,11 @@ var myDecider = new swf.Decider(swfClient, {
    "maximumPageSize": 500,
    "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
    
-}, function(decisionTask, cb) {
+}, function (decisionTask, cb) {
     
     // do something here and send decisions...
     
-    decisionTask.complete_workflow_execution("details of ending here ?", function(err) {
+    decisionTask.complete_workflow_execution("details of ending here ?", function (err) {
         
     });
     
@@ -486,14 +486,14 @@ var workflow = new swf.Workflow(swfClient, {
 To start a new *workflowExecution* :
 
 ````javascript
-var workflowExecution = workflow.start({ input: "{}"}, function(err, runId) {
+var workflowExecution = workflow.start({ input: "{}"}, function (err, runId) {
 
-   if(err) {
+   if (err) {
       console.log("Cannot start workflow : ", err);
       return;
    }
 
-   console.log("Workflow started, runId: "+runId);
+   console.log("Workflow started, runId: " +runId);
 
 });
 ````
@@ -502,17 +502,17 @@ var workflowExecution = workflow.start({ input: "{}"}, function(err, runId) {
 
 ### Register(Domain|ActivityType|WorkflowType)
 
-    swfClient.RegisterDomain({...}, function(err, result) { ... });
-    swfClient.RegisterActivityType({...}, function(err, result) { ... });
-    swfClient.RegisterWorkflowType({...}, function(err, result) { ... });
+    swfClient.RegisterDomain({...}, function (err, result) { ... });
+    swfClient.RegisterActivityType({...}, function (err, result) { ... });
+    swfClient.RegisterWorkflowType({...}, function (err, result) { ... });
 
 
 ### Generic SWF call (RAW call to the API)
 
 ````javascript
-swfClient.DescribeDomain({"name": "test-my-swf"}, function(err, result) {
+swfClient.DescribeDomain({"name": "test-my-swf"}, function (err, result) {
     
-    if(err) console.log("error", err);
+    if (err) console.log("error", err);
     
     console.log("result", JSON.stringify(result));
 });
