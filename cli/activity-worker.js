@@ -9,15 +9,17 @@ var path = require('path'),
 // The task is given to this process as a command line argument in JSON format :
 var taskConfig = JSON.parse(process.argv[2]);
 
-var accessKeyId = process.argv[3];
-var secretAccessKey = process.argv[4];
+// AWS credentials
+var accessKeyId = process.argv[3],
+    secretAccessKey = process.argv[4];
 
 var swfClient = swf.createClient({
     accessKeyId: accessKeyId,
     secretAccessKey: secretAccessKey
 });
 
-var fetchconfigfile = process.argv[5];
+// Optional fetchConfigData
+var fetchConfigData = (process.argv.length >= 5) ? process.argv[5] : null;
 
 // Create the ActivityTask
 var task = new swf.ActivityTask(swfClient, taskConfig);
@@ -29,9 +31,21 @@ function activityFailed(reason, details) {
     });
 }
 
+// Fetchconfigfile must be a js file exporting the 'fetch_config' method
+// signature: function(workerName, fetchConfigData, function (err, config) {...})
+var fetchconfigfile = process.argv[5],
+    fetch_config;
+
+try {
+    fetch_config = require(fetchconfigfile).fetch_config;
+} catch (ex) {
+    console.log(ex);
+    activityFailed("Unable to load for fetchconfigfile, or does not export fetch_config : " + fetchconfigfile, ex.message);
+}
+
+
 var workerName = taskConfig.activityType.name;
 
-var fetch_config = require(fetchconfigfile).fetch_config;
 
 try {
     console.log("Trying to load worker : " + workerName);
@@ -39,7 +53,7 @@ try {
     console.log("module loaded !");
 
     // Use the asynchronous method to get the config for this module
-    fetch_config(workerName, function (err, config) {
+    fetch_config(workerName, fetchConfigData, function (err, config) {
 
         if (err) {
             console.log(err);

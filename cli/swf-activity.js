@@ -55,6 +55,9 @@ var argv = optimist
         'default': config.secretAccessKey,
         'describe': 'AWS secretAccessKey'
     })
+    .options('fetchConfigData', {
+        'describe': 'Data passed to fetch_config'
+    })
     .argv;
 
 if (argv.help) {
@@ -87,7 +90,7 @@ var activityPoller = new swf.ActivityPoller(swfClient, {
 }, function (activityTask, cb) {
 
     // Spawn child process
-    var p = spawn('node', [ argv.f, JSON.stringify(activityTask.config), argv.accessKeyId, argv.secretAccessKey, argv.c ]);
+    var p = spawn('node', [ argv.f, JSON.stringify(activityTask.config), argv.accessKeyId, argv.secretAccessKey, argv.c, argv.fetchConfigData]);
 
     p.stdout.on('data', function (data) {
         console.log(data.toString().blue);
