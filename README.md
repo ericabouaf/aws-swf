@@ -17,6 +17,11 @@ This toolkit provides :
    * WorkflowExecution
 
 
+## Overview
+
+![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
+
+
 ## Requirements
 
  * NodeJS & npm
