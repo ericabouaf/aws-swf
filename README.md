@@ -1,32 +1,24 @@
 # Amazon SWF (Simple WorkFlow) toolkit for Node.js
 
-This toolkit provides :
+This toolkit provides command-line tools to interact with AWS SWF :
 
- * Command-line tools to interact with AWS SWF :
-   * [swf-activity](#swf-activity): start activity pollers
-   * [swf-decider](#swf-decider): start decider pollers
-   * [swf-register](#swf-register): register SWF resources
-   * [swf-start](#swf-start): start workflow executions
+* [swf-activity](#swf-activity): start activity pollers which spawn activity workers
+* [swf-decider](#swf-decider): start decider pollers which spawn decider workers
+* [swf-register](#swf-register): register SWF resources
+* [swf-start](#swf-start): start workflow executions
 
- * Library classes to wrap the common concepts of the AWS SWF API :
-   * ActivityPoller
-   * ActivityTask
-   * Decider
-   * DecisionTask
-   * Workflow
-   * WorkflowExecution
+You can also use [aws-swf as a library](#library-usage) for any Node.js app.
 
-
-## Overview
+Here is an overview of the interactions between Amazon SWF and the aws-swf pollers :
 
 ![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
 
 
 ## Requirements
 
- * NodeJS & npm
- * An active AWS account and API credentials
- * Some understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/) concepts
+ * NodeJS >= 0.8
+ * An active [AWS account](http://aws.amazon.com/) with [Access Keys](http://docs.amazonwebservices.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#AccessKeys)
+ * Basic understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/) concepts
 
 
 ## Installation
@@ -336,6 +328,15 @@ Examples :
 
 
 ## Library Usage
+
+The aws-swf library provide classes to wrap the common concepts of the AWS SWF API :
+
+* ActivityPoller
+* ActivityTask
+* Decider
+* DecisionTask
+* Workflow
+* WorkflowExecution
 
 
 ### Creating an SWF client object
