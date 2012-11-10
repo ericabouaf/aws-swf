@@ -7,6 +7,8 @@ This toolkit provides command-line tools to interact with AWS SWF :
 * [swf-register](#swf-register): register SWF resources
 * [swf-start](#swf-start): start workflow executions
 
+The [aws-swf-activities](https://github.com/neyric/aws-swf-activities) repository contains a collection of activities that can be used with the swf-activity command.
+
 You can also use [aws-swf as a library](#library-usage) for any Node.js app.
 
 Here is an overview of the interactions between Amazon SWF and the aws-swf pollers :
