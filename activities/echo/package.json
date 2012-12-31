@@ -1,0 +1,6 @@
+{
+    "name" : "echo",
+    "main" : "./echo.js",
+    "version": "0.0.1",
+    "description": "Most basic Activity. Output is the same as input."
+}

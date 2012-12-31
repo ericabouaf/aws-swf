@@ -1,0 +1,9 @@
+{
+    "name" : "google-analytics",
+    "main" : "./google-analytics.js",
+    "version": "0.0.1",
+    "description": "Basic Anayltics query",
+    "dependencies": {
+        "oauth": "0.9.8"
+    }
+}

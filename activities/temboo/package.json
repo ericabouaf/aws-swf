@@ -1,0 +1,8 @@
+{
+    "name" : "temboo",
+    "main" : "./temboo.js",
+    "dependencies": {
+        "xml2js-expat": "0.2.2",
+        "request": "2.9.202"
+    }
+}

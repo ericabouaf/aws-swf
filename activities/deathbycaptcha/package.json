@@ -1,0 +1,7 @@
+{
+    "name" : "deathbycaptcha",
+    "main" : "./deathbycaptcha.js",
+    "dependencies": {
+        "request": "2.9.202"
+    }
+}

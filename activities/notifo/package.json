@@ -1,0 +1,9 @@
+{
+    "name" : "notifo",
+    "main" : "./notifo.js",
+    "description": "Sends a Notifo notification",
+    "version": "0.0.1",
+    "dependencies": {
+        "request": ">=2.9.0"
+    }
+}

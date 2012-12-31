@@ -1,0 +1,9 @@
+{
+    "name" : "salesforce-query",
+    "main" : "./salesforce-query.js",
+    "description": "Login and perform a query on salesforce. Input is just the query string (no JSON...)",
+    "version": "0.0.1",
+    "dependencies": {
+            "node-salesforce": "0.3.1"
+    }
+}

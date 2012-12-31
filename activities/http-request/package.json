@@ -1,0 +1,9 @@
+{
+    "name" : "http-request",
+    "main" : "./http-request.js",
+    "description": "Performs a HTTP or HTTPS request",
+    "version": "0.0.1",
+    "dependencies": {
+        "xml2js-expat": "0.2.2"
+    }
+}

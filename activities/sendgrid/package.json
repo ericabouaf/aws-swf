@@ -1,0 +1,9 @@
+{
+    "name" : "sendgrid",
+    "main" : "./sendgrid.js",
+    "description": "Sends an email using Sendgrid.",
+    "version": "0.0.1",
+    "dependencies": {
+        "sendgrid": "0.2.5"
+    }
+}
