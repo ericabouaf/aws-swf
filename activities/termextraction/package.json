@@ -1,0 +1,8 @@
+{
+    "name" : "termextraction",
+    "main" : "./termextraction.js",
+    "version": "0.0.1",
+    "description": "termextraction module",
+    "dependencies": {
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name" : "feedautodiscovery",
+    "main" : "./feedautodiscovery.js",
+    "version": "0.0.1",
+    "description": "feedautodiscovery module",
+    "dependencies": {
+        "xml2js-expat": "0.2.2",
+        "request": "2.11.4",
+        "async": "0.1.22",
+        "htmlparser": "1.7.6"
+    }
+}

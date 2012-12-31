@@ -1,0 +1,9 @@
+{
+    "name" : "xpathfetchpage",
+    "main" : "./xpathfetchpage.js",
+    "version": "0.0.1",
+    "description": "xpathfetchpage module",
+    "dependencies": {
+        "jsdom": "0.2.19"
+    }
+}

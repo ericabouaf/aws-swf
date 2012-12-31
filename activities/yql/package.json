@@ -1,0 +1,9 @@
+{
+    "name" : "yql",
+    "main" : "./yql.js",
+    "version": "0.0.1",
+    "description": "YQL module",
+    "dependencies": {
+        "request": "2.11.4"
+    }
+}
