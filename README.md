@@ -345,8 +345,6 @@ The aws-swf library provide classes to wrap the common concepts of the AWS SWF A
 
 ### Creating an SWF client object
 
-TODO: here use the aws-sdk !
-
 ````javascript
 var swf = require("aws-swf");
 var swfClient = swf.createClient({

@@ -66,7 +66,8 @@ var registerWorkflows = function (toRegister) {
 
     var registerAT = function (a, callback) {
         console.log("registering Workflow : ", a, argv.version);
-        swfClient.call("RegisterWorkflowType",  {
+
+        swfClient.client.registerWorkflowType({
             domain: argv.domain,
             name: a,
             version: argv.version
@@ -88,7 +89,7 @@ var registerWorkflows = function (toRegister) {
 
 var registerMissingWorkflows = function (workflowsToRegister) {
 
-    swfClient.call("ListWorkflowTypes",  {
+    swfClient.client.listWorkflowTypes({
         domain: argv.domain,
         registrationStatus: "REGISTERED",
         maximumPageSize: 500
@@ -126,7 +127,7 @@ var registerActivityTypes = function (toRegister) {
 
     var registerAT = function (a, callback) {
         console.log("registering ActivityType : ", a, argv.version);
-        swfClient.call("RegisterActivityType",  {
+        swfClient.client.registerActivityType({
             domain: argv.domain,
             name: a,
             version: argv.version
@@ -147,7 +148,7 @@ var registerActivityTypes = function (toRegister) {
 
 var registerMissingActivityTypes = function (activityTypesToRegister) {
 
-    swfClient.call("ListActivityTypes",  {
+    swfClient.client.listActivityTypes({
         domain: argv.domain,
         registrationStatus: "REGISTERED",
         maximumPageSize: 500
@@ -214,21 +215,21 @@ if (argv._.length === 0) {
     var action, params;
 
     if (argv.k === "activity") {
-        action = "RegisterActivityType";
+        action = "registerActivityType";
         params = {
             name: argv._[0],
             domain: argv.d,
             version: argv.v
         };
     } else if (argv.k === "workflow") {
-        action = "RegisterWorkflowType";
+        action = "registerWorkflowType";
         params = {
             name: argv._[0],
             domain: argv.d,
             version: argv.v
         };
     } else if (argv.k === "domain") {
-        action = "RegisterDomain";
+        action = "registerDomain";
         params = {
             name: argv._[0],
             description: "no description",
@@ -236,7 +237,7 @@ if (argv._.length === 0) {
         };
     }
 
-    swfClient.call(action,  params, function (err, results) {
+    swfClient.client[action](params, function (err, results) {
 
         if (err) {
             console.error(("Error in " + action).red);
