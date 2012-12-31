@@ -1,0 +1,33 @@
+QuestionForm(xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd")
+  Overview
+    Title Extract Information from a Receipt
+    Text If the receipt is absolutely unreadable do mark it as unreadable. We will inform the user that he needs to take a better picture./Text
+    Binary
+      MimeType
+        Type image
+        SubType= receipt.imageSubType
+      DataURL= receipt.imageURL
+      AltText Receipt image
+
+  // Amount
+  Question
+    QuestionIdentifier amount
+    DisplayName Total Amount
+    IsRequired true
+    QuestionContent
+      Text Total amount for the receipt, tax and tip included:
+    AnswerSpecification
+      FreeTextAnswer
+        Constraints
+          IsNumeric
+        NumberOfLinesSuggestion 1
+
+  // Comments
+  Question
+    QuestionIdentifier comments
+    DisplayName Comments
+    IsRequired false
+    QuestionContent
+      Text Please provide any comments you may have below, we appreciate your input!
+    AnswerSpecification
+      FreeTextAnswer
