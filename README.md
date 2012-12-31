@@ -11,6 +11,8 @@ The [aws-swf-activities](https://github.com/neyric/aws-swf-activities) repositor
 
 You can also use [aws-swf as a library](#library-usage) for any Node.js app.
 
+AWS SWF uses [the official JavaScript implementation of the AWS SDK for Node.js](http://aws.amazon.com/documentation/sdkfornodejs/) for the low-level API calls.
+
 Here is an overview of the interactions between Amazon SWF and the aws-swf pollers :
 
 ![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
@@ -343,6 +345,8 @@ The aws-swf library provide classes to wrap the common concepts of the AWS SWF A
 
 ### Creating an SWF client object
 
+TODO: here use the aws-sdk !
+
 ````javascript
 var swf = require("aws-swf");
 var swfClient = swf.createClient({
@@ -371,7 +375,10 @@ Example :
 
 
 ````javascript
-var activityPoller = new ActivityPoller(swfClient, {
+
+var swf = require("aws-swf");
+
+var activityPoller = new swf.ActivityPoller(swfClient, {
     
    "domain": "test-domain",
    "taskList": { "name": "test-taskList" },
@@ -423,6 +430,8 @@ A *Decider* will poll Amazon SWF for new decision tasks.
 A *DecisionTask* is instantiated by a *Decider* when it receives a decision task from SWF.
 
 ````javascript
+var swf = require("aws-swf");
+
 var myDecider = new swf.Decider(swfClient, {
     
    "domain": "test-domain",
@@ -484,6 +493,9 @@ workflowHistory = {
 ### Starting a Workflow
 
 ````javascript
+
+var swf = require("aws-swf");
+
 var workflow = new swf.Workflow(swfClient, {
    "domain": "test-domain",
    "workflowType": {
@@ -514,62 +526,4 @@ var workflowExecution = workflow.start({ input: "{}"}, function (err, runId) {
 
 });
 ````
-
-
-
-### Register(Domain|ActivityType|WorkflowType)
-
-    swfClient.RegisterDomain({...}, function (err, result) { ... });
-    swfClient.RegisterActivityType({...}, function (err, result) { ... });
-    swfClient.RegisterWorkflowType({...}, function (err, result) { ... });
-
-
-### Generic SWF call (RAW call to the API)
-
-````javascript
-swfClient.DescribeDomain({"name": "test-my-swf"}, function (err, result) {
-    
-    if (err) console.log("error", err);
-    
-    console.log("result", JSON.stringify(result));
-});
-````
-
-
-### Raw Methods
-
-The detailed API documentation http://docs.amazonwebservices.com/amazonswf/latest/apireference/Welcome.html
-
- * CountClosedWorkflowExecutions
- * CountOpenWorkflowExecutions
- * CountPendingActivityTasks
- * CountPendingDecisionTasks
- * DeprecateActivityType
- * DeprecateDomain
- * DeprecateWorkflowType
- * DescribeActivityType
- * DescribeDomain
- * DescribeWorkflowExecution
- * DescribeWorkflowType
- * GetWorkflowExecutionHistory
- * ListActivityTypes
- * ListClosedWorkflowExecutions
- * ListDomains
- * ListOpenWorkflowExecutions
- * ListWorkflowTypes
- * PollForActivityTask
- * PollForDecisionTask
- * RecordActivityTaskHeartbeat
- * RegisterActivityType
- * RegisterDomain
- * RegisterWorkflowType
- * RequestCancelWorkflowExecution
- * RespondActivityTaskCanceled
- * RespondActivityTaskCompleted
- * RespondActivityTaskFailed
- * RespondDecisionTaskCompleted
- * SignalWorkflowExecution
- * StartWorkflowExecution
- * TerminateWorkflowExecution
-
 
