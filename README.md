@@ -1,19 +1,18 @@
 # Amazon SWF (Simple WorkFlow) toolkit for Node.js
 
-This toolkit provides command-line tools to interact with the AWS SWF service :
+This toolkit provides a collection of [command-line tools](https://github.com/neyric/aws-swf/wiki/Command-Line-Tools) to interact with the AWS SWF service.
 
-* [swf-activity](https://github.com/neyric/aws-swf/wiki/swf-activity-command): start activity pollers which spawn activity workers
-* [swf-decider](https://github.com/neyric/aws-swf/wiki/swf-decider): start decider pollers which spawn decider workers
-* [swf-register](https://github.com/neyric/aws-swf/wiki/swf-register): register SWF resources
-* [swf-start](https://github.com/neyric/aws-swf/wiki/swf-start): start workflow executions
+* [Write SWF deciders in javascript](https://github.com/neyric/aws-swf/wiki/Writing-deciders)
+* [Write SWF activities in javascript](https://github.com/neyric/aws-swf/wiki/Create-new-activities)
 
-The [activities/ directory](https://github.com/neyric/aws-swf/tree/master/activities) contains a collection of activities that can be used with the swf-activity command.
+The [activities/ directory](https://github.com/neyric/aws-swf/tree/master/activities) contains a collection of ready-to-use activities. You can of course [create your own activities](https://github.com/neyric/aws-swf/wiki/Create-new-activities).
 
 You can also use [aws-swf as a library](https://github.com/neyric/aws-swf/wiki/Library-Usage) for any Node.js app.
 
-AWS SWF uses [the official JavaScript implementation of the AWS SDK for Node.js](http://aws.amazon.com/documentation/sdkfornodejs/) for the low-level API calls.
 
-Here is an overview of the interactions between Amazon SWF and the aws-swf pollers :
+## Getting Started
+
+Please check the [Quickstart Guide](https://github.com/neyric/aws-swf/wiki/Quickstart-Guide).
 
 ![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
 
