@@ -15,6 +15,7 @@ exports.worker = function (task, config) {
                               "/oauth2/auth",
                               "/oauth2/token");
 
+    // TODO: in task input !
     var q = {
         "ids": "ga:24583775",
         "start-date": "2011-01-01",

@@ -1,0 +1,7 @@
+{ 
+    "name" : "google-search",
+    "main" : "./google-search.js",
+    "dependencies": {
+        "request": "2.9.202"
+    }
+}
