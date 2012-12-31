@@ -8,7 +8,7 @@ This toolkit provides a collection of [command-line tools](https://github.com/ne
 * [The Wiki](https://github.com/neyric/aws-swf/wiki) contains links to all the documentation
 * [Write SWF deciders in javascript](https://github.com/neyric/aws-swf/wiki/Writing-deciders)
 * [Write SWF activities in javascript](https://github.com/neyric/aws-swf/wiki/Create-new-activities)
-* [A collection of ready-to-use activities](https://github.com/neyric/aws-swf/tree/master/activities). You can of course [create your own activities](https://github.com/neyric/aws-swf/wiki/Create-new-activities).
+* [A collection of ready-to-use activities](https://github.com/neyric/aws-swf/tree/master/activities)
 * High-level classes to use [aws-swf as a library](https://github.com/neyric/aws-swf/wiki/Library-Usage) from any Node.js application.
 
 ## Requirements
@@ -25,7 +25,7 @@ $ [sudo] npm install -g aws-swf
 
 For more detailed installation instructions, check the [Installation Wiki Page](https://github.com/neyric/aws-swf/wiki/Installation)
 
-
+## Overview
 
 ![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
 
