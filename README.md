@@ -1,20 +1,13 @@
 # Amazon SWF (Simple WorkFlow) toolkit for Node.js
 
-This toolkit provides a collection of [command-line tools](https://github.com/neyric/aws-swf/wiki/Command-Line-Tools) to interact with the AWS SWF service.
+This toolkit provides a collection of [command-line tools](https://github.com/neyric/aws-swf/wiki/Command-Line-Tools) to interact with the Amazon Simple Workflow (SWF) service.
+
+## Features
 
 * [Write SWF deciders in javascript](https://github.com/neyric/aws-swf/wiki/Writing-deciders)
 * [Write SWF activities in javascript](https://github.com/neyric/aws-swf/wiki/Create-new-activities)
-
-The [activities/ directory](https://github.com/neyric/aws-swf/tree/master/activities) contains a collection of ready-to-use activities. You can of course [create your own activities](https://github.com/neyric/aws-swf/wiki/Create-new-activities).
-
-You can also use [aws-swf as a library](https://github.com/neyric/aws-swf/wiki/Library-Usage) for any Node.js app.
-
-
-## Getting Started
-
-Please check the [Quickstart Guide](https://github.com/neyric/aws-swf/wiki/Quickstart-Guide).
-
-![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
+* [A collection of ready-to-use activities](https://github.com/neyric/aws-swf/tree/master/activities). You can of course [create your own activities](https://github.com/neyric/aws-swf/wiki/Create-new-activities).
+* High-level classes to use [aws-swf as a library](https://github.com/neyric/aws-swf/wiki/Library-Usage) from any Node.js application.
 
 
 ## Requirements
@@ -23,11 +16,24 @@ Please check the [Quickstart Guide](https://github.com/neyric/aws-swf/wiki/Quick
  * An active [AWS account](http://aws.amazon.com/) with [Access Keys](http://docs.amazonwebservices.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#AccessKeys)
  * Basic understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/) concepts
 
-
-Install with :
+## Installation
 
 ````sh
 $ [sudo] npm install -g aws-swf
 ````
 
 For more detailed installation instructions, check the [Installation Wiki Page](https://github.com/neyric/aws-swf/wiki/Installation)
+
+
+## Documentation
+
+ * Run the demo with the [Quickstart Guide](https://github.com/neyric/aws-swf/wiki/Quickstart-Guide)
+ * [The Wiki](https://github.com/neyric/aws-swf/wiki) contains links to all the documentation
+
+
+![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
+
+
+## License
+
+[MIT License](https://raw.github.com/neyric/aws-swf/master/LICENSE.txt)
