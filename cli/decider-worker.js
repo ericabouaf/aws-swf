@@ -23,6 +23,10 @@ var fetch_code_file = process.argv[5];
 var fetch_code = require(fetch_code_file).fetch_code;
 
 
+var encodedActivityNames = process.argv[6];
+var activityNames = JSON.parse(encodedActivityNames);
+
+
 // Create the Decision task
 var dt = new swf.DecisionTask(swfClient, decisionTaskConfig);
 
@@ -55,9 +59,37 @@ fetch_code(workflowName, function (err, deciderCode) {
             completed: function () {
                 return dt.completed.apply(dt, arguments);
             },
-            stop: function () {
-                dt.stop.apply(dt, arguments);
+            
+            stop: function (deciderParams, val) {
+
+               var canStop = true;
+
+               // TODO: check all conditions are met !
+               if (deciderParams.after) {
+                  
+                  for(var cdtName in deciderParams.after) {
+                     var condition = deciderParams.after[cdtName];
+
+                     if(condition === 1 /*COMPLETED*/ && !dt.completed(cdtName) ) {
+                        canStop = false;
+                        if (!dt.decisions) {
+                           dt.decisions = []; // so we don't stop...
+                        }
+                     }
+                     // TODO: handle other conditions
+                  }
+
+               }
+
+               // TODO: check deciderParams
+               if(canStop) {
+                dt.stop(val);
+               }
             },
+            COMPLETED: 1,
+            FAILED: 2,
+            TIMEDOUT: 4,
+
             results: function () {
                 var resultData = dt.results.apply(dt, arguments);
                 try {
@@ -81,6 +113,57 @@ fetch_code(workflowName, function (err, deciderCode) {
             }
         };
 
+
+
+         activityNames.forEach(function(activityName) {
+
+            sandbox[activityName] = function(deciderParams, swfParams) {
+                  var stepName = deciderParams.name;
+
+                  if( !dt.scheduled(stepName) ) {
+
+                     console.log(stepName+ " is not scheduled yet !");
+
+                     var canSchedule = true;
+
+                     // TODO: check all conditions are met !
+                     if (deciderParams.after) {
+                        
+                        for(var cdtName in deciderParams.after) {
+                           var condition = deciderParams.after[cdtName];
+
+                           if(condition === 1 /*COMPLETED*/ && !dt.completed(cdtName) ) {
+                              canSchedule = false;
+                              if (!dt.decisions) {
+                                 dt.decisions = []; // so we don't stop...
+                              }
+                           }
+                           // TODO: handle other conditions
+                        }
+
+                     }
+
+                     if(canSchedule) {
+                        // if swfParams.input is a function, evaluate it before !
+                        if (typeof swfParams.input == "function") {
+                           swfParams.input = swfParams.input();
+                        }
+
+                        if (!swfParams.activityType) {
+                           swfParams.activityType = activityName;
+                        }
+
+                        dt.schedule(stepName, swfParams);
+                     }
+
+                  }
+
+            };
+
+         });
+
+
+
         try {
 
             vm.runInNewContext(deciderCode, sandbox, workflowName + '.vm');
@@ -101,6 +184,7 @@ fetch_code(workflowName, function (err, deciderCode) {
             }
 
         }
+
 
     } catch (ex) {
         console.log(ex);
