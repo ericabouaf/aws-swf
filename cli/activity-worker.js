@@ -66,7 +66,7 @@ try {
     console.log("module loaded !");
 
     // Use the asynchronous method to get the config for this module
-    fetch_config(workerName, fetchConfigData, function (err, config) {
+    fetch_config(packageName, fetchConfigData, function (err, config) {
 
         if (err) {
             console.log(err);
