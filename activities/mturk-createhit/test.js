@@ -12,16 +12,24 @@ var task = {
     config: {
         input: JSON.stringify({
             title : 'Extract Information from a Receipt',
-            desc : 'If the receipt is absolutely unreadable do mark it as unreadable. We will inform the user that he needs to take a better picture./Text',
+            description : 'If the receipt is absolutely unreadable do mark it as unreadable. We will inform the user that he needs to take a better picture./Text',
             reward : 0.02,
-            alloted: 3600, /* 1 hour*/
+            duration: 3600, /* 1 hour*/
+
+            options: {
+              keywords: "fitness, health",
+              autoApprovalDelayInSeconds: 3600
+            }
+
+            /*,
 
             questionData: {
                receipt: {
                   imageURL: 'http://www.act1.net/screens/ReceiptPage.gif',
                   imageSubType: 'gif'
                }
-            }
+            }*/
+            
         })
     },
 

@@ -1,6 +1,6 @@
 /**
  * MTurk
- * https://github.com/pgte/mturk
+ * https://github.com/jefftimesten/mturk
  *  BUT requires neyric's branch : https://github.com/neyric/mturk
  **/
 
@@ -9,41 +9,37 @@ var fs = require('fs');
 
 exports.worker = function (task, config) {
 
+
    var input = JSON.parse(task.config.input);
-    
-   var mturk = require('mturk')({
-       url: config.url,
-       accessKeyId: config.accessKeyId,
-       secretAccessKey: config.secretAccessKey
-   });
+
+   var mturk = require('mturk')(config);
 
 
-   // Create Hittype
-   mturk.HITType.create(input.title, 
-                        input.desc, 
-                        { Amount: String(input.reward), CurrencyCode: 'USD', FormattedPrice: '$'+String(input.reward) }, 
-                        input.alloted, 
-                        {}, 
-                        function(err, hittype) {
-         if(err) {
-            console.log("error", err);
-            return;
-         }
-         console.log("Hittype added ! ");
+
+   var price = new mturk.Price( String(input.reward), "USD");
 
 
-         var question = new mturk.Question(__dirname+'/questionform.xml.jade', input.questionData);
+   // 1. Create the HITType
+   mturk.HITType.create(input.title, input.description, price, input.duration, /*input.options*/ {
+      requesterAnnotation: JSON.stringify({taskToken: shortToken })
 
-         var shortToken = task.taskToken.substr(0,200);
+   }, function(err, hitType) {
 
-         console.log("MTURK creating hit...");
+      if(err) {
+         console.log("error", err);
+         // TODO: task failed
+         return;
+      }
+
+      console.log("Created HITType "+hitType.id);
+
+      var shortToken = task.taskToken.substr(0,200);
+
+      // 3. Create a HIT
+      var options = {maxAssignments: 1};
+      var lifeTimeInSeconds = 3600; // 1 hour
+      HIT.create(hitType.id, questionXML, lifeTimeInSeconds, {}, function(err, hit) {
          
-         // Create the hit
-         mturk.HIT.create(hittype.id, question, input.alloted, {
-            requesterAnnotation: JSON.stringify({taskToken: shortToken })
-
-         }, function(err, hit) {
-
             if(err) { 
                // TODO: TASK FAILED
                console.log(err);
@@ -73,13 +69,12 @@ exports.worker = function (task, config) {
                });
                
             });
-
-         });
+      });
 
 
    });
 
-   
+
    
    
 };

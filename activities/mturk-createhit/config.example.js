@@ -5,3 +5,6 @@ exports.accessKeyId = "XXXX";
 
 exports.secretAccessKey = "XXXX";
 
+exports.poller = {
+   frequency_ms: 10000
+};

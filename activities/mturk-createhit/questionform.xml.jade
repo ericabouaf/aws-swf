@@ -1,21 +1,24 @@
-QuestionForm(xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd")
-  Overview
-    Title Extract Information from a Receipt
-    Text If the receipt is absolutely unreadable do mark it as unreadable. We will inform the user that he needs to take a better picture./Text
-    Binary
-      MimeType
-        Type image
-        SubType= receipt.imageSubType
-      DataURL= receipt.imageURL
-      AltText Receipt image
+<QuestionForm xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd">
+  <Overview>
+    <Title>Extract Information from a Receipt</Title>
+    <Text>If the receipt is absolutely unreadable do mark it as unreadable. We will inform the user that he needs to take a better picture.</Text>
+    <Binary>
+      <MimeType>
+        <Type>image</Type>
+        <SubType>gif</SubType>
+        <DataURL>http://www.act1.net/screens/ReceiptPage.gif</DataURL>
+      </MimeType>
+      <AltText>Receipt image</AltText>
+    </Binary>
+  </Overview>
 
-  // Amount
-  Question
-    QuestionIdentifier amount
-    DisplayName Total Amount
-    IsRequired true
-    QuestionContent
-      Text Total amount for the receipt, tax and tip included:
+  <Question>
+    <QuestionIdentifier>amount</QuestionIdentifier>
+    <DisplayName>Total Amount</DisplayName>
+    <IsRequired>true</IsRequired>
+    <QuestionContent>
+      <Text>Total amount for the receipt, tax and tip included:</Text>
+    </QuestionContent>
     AnswerSpecification
       FreeTextAnswer
         Constraints
