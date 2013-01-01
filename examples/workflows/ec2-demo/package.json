@@ -1,0 +1,5 @@
+{
+   "name" : "ec2-demo",
+   "private": true,
+   "main" : "./ec2-demo"
+}
