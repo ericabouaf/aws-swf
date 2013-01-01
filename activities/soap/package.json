@@ -3,6 +3,7 @@
     "main" : "./soap.js",
     "description": "Performs a SOAP request given the WSDL file, the action, and the action parameters.",
     "version": "0.0.1",
+    "private": true,
     "dependencies": {
         "soap": "0.2.4"
     }

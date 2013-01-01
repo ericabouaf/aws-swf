@@ -3,6 +3,7 @@
     "main" : "./locationbuilder.js",
     "version": "0.0.1",
     "description": "locationbuilder module",
+    "private": true,
     "dependencies": {
         "request": "2.11.4"
     }

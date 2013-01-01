@@ -1,2 +1,5 @@
-{ "name" : "sum",
-  "main" : "./sum.js" }
+{
+   "name" : "sum",
+   "private": true,
+   "main" : "./sum.js"
+}

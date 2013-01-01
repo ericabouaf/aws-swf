@@ -3,6 +3,7 @@
     "main" : "./nodemailer.js",
     "description": "Send an email using the nodemailer module.",
     "version": "0.0.1",
+    "private": true,
     "dependencies": {
         "nodemailer": "0.3.20"
     }

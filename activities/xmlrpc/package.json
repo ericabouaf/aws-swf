@@ -3,6 +3,7 @@
     "main" : "./xmlrpc.js",
     "version": "0.0.1",
     "description": "Performs a XML remote procedure call",
+    "private": true,
     "dependencies": {
         "xmlrpc": "1.0.1"
     }

@@ -3,6 +3,7 @@
     "main" : "./sendgrid.js",
     "description": "Sends an email using Sendgrid.",
     "version": "0.0.1",
+    "private": true,
     "dependencies": {
         "sendgrid": "0.2.5"
     }

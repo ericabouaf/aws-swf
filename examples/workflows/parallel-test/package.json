@@ -1,2 +1,5 @@
-{ "name" : "parallel-test",
-  "main" : "./parallel-test.js" }
+{
+   "name" : "parallel-test",
+   "private": true,
+   "main" : "./parallel-test.js"
+}

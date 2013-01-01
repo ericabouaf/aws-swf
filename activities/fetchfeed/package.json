@@ -3,6 +3,7 @@
     "main" : "./fetchfeed.js",
     "version": "0.0.1",
     "description": "Fetch feed module",
+    "private": true,
     "dependencies": {
         "async": "0.1.22",
         "xml2js-expat": "0.2.2",

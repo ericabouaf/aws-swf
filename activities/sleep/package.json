@@ -1,2 +1,5 @@
-{ "name" : "sleep",
-  "main" : "./sleep.js" }
+{
+   "name" : "sleep",
+   "private": true,
+   "main" : "./sleep.js"
+}

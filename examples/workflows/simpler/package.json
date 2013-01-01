@@ -1,2 +1,5 @@
-{ "name" : "simpler",
-  "main" : "./simpler" }
+{
+   "name" : "simpler",
+   "private": true,
+   "main" : "./simpler"
+}

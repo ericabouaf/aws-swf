@@ -3,6 +3,7 @@
     "main" : "./yql.js",
     "version": "0.0.1",
     "description": "YQL module",
+    "private": true,
     "dependencies": {
         "request": "2.11.4"
     }

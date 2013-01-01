@@ -1,2 +1,5 @@
-{ "name" : "hello-workflow",
-  "main" : "./hello-workflow.js" }
+{
+   "name" : "hello-workflow",
+   "private": true,
+   "main" : "./hello-workflow.js"
+}

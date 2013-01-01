@@ -2,6 +2,7 @@
     "name" : "mturk-createhit",
     "main" : "./mturk-createhit.js",
     "version": "0.0.1",
+    "private": true,
     "dependencies": {
         "async": "0.1.22",
         "mturk": "git://github.com/neyric/mturk.git"
