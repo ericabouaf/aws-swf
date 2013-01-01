@@ -71,18 +71,20 @@ if (!argv.accessKeyId || !argv.secretAccessKey) {
     process.exit(1);
 }
 
-// check if file exists !
+// check that the activity-worker file exists
 if (!(process.version.substr(1, 3) === "0.6" ? path : fs).existsSync(argv.f)) {
     console.error(("File does not exist : " + argv.f).red);
     process.exit(1);
 }
 
+// Create SWF client
 var swf = require('../index');
 var swfClient = swf.createClient({
     accessKeyId: argv.accessKeyId,
     secretAccessKey: argv.secretAccessKey
 });
 
+// Start the activity poller
 var activityPoller = new swf.ActivityPoller(swfClient, {
     domain: argv.d,
     taskList: {name: argv.t},

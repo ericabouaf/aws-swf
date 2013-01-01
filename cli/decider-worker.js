@@ -3,8 +3,7 @@
  * This process is spawned for each new decision task received.
  * It will look in the working directory for a Node.JS module that has the same name as the workflow
  */
-var path = require('path'),
-    vm = require('vm'),
+var vm = require('vm'),
     swf = require('../index');
 
 // The task is given to this process as a command line argument in JSON format :
@@ -117,12 +116,14 @@ fetch_code(workflowName, function (err, deciderCode) {
 
          activityNames.forEach(function(activityName) {
 
-            sandbox[activityName] = function(deciderParams, swfParams) {
+
+
+            var schedule_method = function(deciderParams, swfParams) {
                   var stepName = deciderParams.name;
 
                   if( !dt.scheduled(stepName) ) {
 
-                     console.log(stepName+ " is not scheduled yet !");
+                     //console.log(stepName+ " is not scheduled yet !");
 
                      var canSchedule = true;
 
@@ -159,6 +160,22 @@ fetch_code(workflowName, function (err, deciderCode) {
                   }
 
             };
+
+            var split = activityName.split('_');
+
+            if(split.length === 2) {
+                var namespace = split[0],
+                    methodName = split[1];
+
+                if(!sandbox[namespace]) {
+                    sandbox[namespace] = {};
+                }
+                sandbox[namespace][methodName] = schedule_method;
+            }
+            else {
+                sandbox[activityName] = schedule_method;
+            }
+
 
          });
 

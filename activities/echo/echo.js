@@ -1,9 +1,9 @@
 
 exports.worker = function (task, config) {
 
-	var result = task.config.input; // yes, echo is pretty dumb....
+   var result = task.config.input; // yes, echo is pretty dumb....
 
-	task.respondCompleted(result);
+   task.respondCompleted(result);
 
 };
 

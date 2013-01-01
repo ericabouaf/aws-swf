@@ -189,13 +189,27 @@ if (argv._.length === 0) {
     // List workflows using a disk access
     var workflowsToRegister = [];
     var activityTypesToRegister = [];
+
     fs.readdirSync(process.cwd()).forEach(function (file) {
         var m;
         try {
             m = require(path.join(process.cwd(), file));
-        } catch (ex) {}
-        if (m.workflow) { workflowsToRegister.push(file); }
-        if (m.worker) { activityTypesToRegister.push(file); }
+        } catch (ex) {
+            console.log('Error loading '+file);
+            console.log(ex);
+            return;
+        }
+        if (m.workflow) {
+            workflowsToRegister.push(file);
+        }
+        else if (m.worker) {
+            activityTypesToRegister.push(file);
+        }
+        else {
+            Object.keys(m).forEach(function(fctName) {
+                activityTypesToRegister.push(file + '_' + fctName);
+            });
+        }
     });
 
     if (workflowsToRegister.length > 0) {

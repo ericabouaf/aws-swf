@@ -80,7 +80,8 @@ var swfClient = swf.createClient({
     secretAccessKey: argv.secretAccessKey
 });
 
-
+// List all registered activities on the domain.
+// This is used to make the activities available as functions in the decider code.
 swfClient.client.listActivityTypes({
     domain: argv.d,
     registrationStatus: 'REGISTERED'
@@ -92,7 +93,7 @@ swfClient.client.listActivityTypes({
 
     var encodedActivityNames = JSON.stringify(activityNames);
 
-
+    // Start a decider poller
     var myDecider = new swf.Decider(swfClient, {
         domain: argv.d,
         taskList: {"name": argv.t},

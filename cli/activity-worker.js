@@ -48,8 +48,21 @@ var workerName = taskConfig.activityType.name;
 
 
 try {
+
+    // Load the worker module 
+    //  Simple module : 'soap' -> require('soap').worker
+    //  or multiple activities package: 'ec2_runInstances' -> require('ec2').runInstances
     console.log("Trying to load worker : " + workerName);
-    var worker = require(path.join(process.cwd(), workerName)).worker;
+
+    var split = workerName.split('_');
+    var packageName = split[0],
+        workerName = "worker";
+    if(split.length > 1) {
+        workerName = split[1];
+    }
+    var worker = require(path.join(process.cwd(), packageName))[workerName];
+
+    //var worker = require(path.join(process.cwd(), workerName)).worker;
     console.log("module loaded !");
 
     // Use the asynchronous method to get the config for this module
