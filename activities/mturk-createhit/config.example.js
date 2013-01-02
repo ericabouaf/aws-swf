@@ -6,5 +6,7 @@ exports.accessKeyId = "XXXX";
 exports.secretAccessKey = "XXXX";
 
 exports.poller = {
-   frequency_ms: 10000
+   frequency_ms: 60000
 };
+
+exports.receptor = { port: 8080, host: undefined };

@@ -8,6 +8,6 @@
         "node-phantom": "0.1.2"
     },
     "scripts": {
-    	"start": "./start.js"
+        "start": "./start.js"
     }
 }

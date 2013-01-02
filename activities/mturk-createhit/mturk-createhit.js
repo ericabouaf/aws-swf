@@ -6,7 +6,6 @@
 
 var fs = require('fs');
 
-
 exports.worker = function (task, config) {
 
 
@@ -18,31 +17,31 @@ exports.worker = function (task, config) {
 
    var price = new mturk.Price( String(input.reward), "USD");
 
+   var shortToken = task.taskToken.substr(0,200);
+
 
    // 1. Create the HITType
-   mturk.HITType.create(input.title, input.description, price, input.duration, /*input.options*/ {
-      requesterAnnotation: JSON.stringify({taskToken: shortToken })
-
-   }, function(err, hitType) {
+   mturk.HITType.create(input.title, input.description, price, input.duration, input.options, function(err, hitType) {
 
       if(err) {
          console.log("error", err);
-         // TODO: task failed
+         task.respondFailed(err, "");
          return;
       }
 
       console.log("Created HITType "+hitType.id);
 
-      var shortToken = task.taskToken.substr(0,200);
 
       // 3. Create a HIT
       var options = {maxAssignments: 1};
       var lifeTimeInSeconds = 3600; // 1 hour
-      HIT.create(hitType.id, questionXML, lifeTimeInSeconds, {}, function(err, hit) {
+      mturk.HIT.create(hitType.id, input.questionXML, lifeTimeInSeconds, {
+         requesterAnnotation: JSON.stringify({taskToken: shortToken })
+      }, function(err, hit) {
          
             if(err) { 
-               // TODO: TASK FAILED
                console.log(err);
+               task.respondFailed(err, "");
                return; 
             }
 
@@ -61,8 +60,8 @@ exports.worker = function (task, config) {
                
                fs.writeFile(__dirname+'/hits.json', JSON.stringify(hits), function(err) {
                   if(err) { 
-                     //cb(err); 
                      console.log(err);
+                     task.respondFailed(err, "");
                      return; 
                   }
                   console.log("Hit written to file !");

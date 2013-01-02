@@ -6,5 +6,8 @@
     "dependencies": {
         "async": "0.1.22",
         "mturk": "git://github.com/neyric/mturk.git"
+    },
+    "scripts": {
+        "start": "./start.js"
     }
 }
