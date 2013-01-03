@@ -1,5 +1,9 @@
 /*global console,require,__dirname*/
 
+// TODO: npm install graphviz
+// + cli in scripts
+// + activityNames
+
 var vm = require('vm'),
     fs=require('fs'),
     graphviz = require('graphviz');
