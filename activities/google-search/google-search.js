@@ -40,10 +40,9 @@ formatGoogleResponse = function(dom) {
           var node = node_list[i];
              
           if(!!node.attribs && !!node.attribs.id) {
-                  if(node.attribs.id == "subform_ctrl") {
-                       //console.log(indent+JSON.stringify(node.children[1].children[0].data));
+                  if(node.attribs.id == "resultStats") {
                        try {
-                          nResults =  node.children[1].children[0].data;
+                          nResults =  node.children[0].data;
                        }catch(ex) {}
                        // TODO: get # of results
                   }
