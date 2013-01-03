@@ -7,9 +7,10 @@ var config = require('./config');
 
 var task = {
 
-   taskToken: "1A8B6I45A665V536I3J5HF65SD3F25J5H32Q3D5G9DF8H5G22AQ3XW2VCXB266",
-
     config: {
+         
+         taskToken: "1A8B6I45A665V536I3J5HF65SD3F25J5H32Q3D5G9DF8H5G22AQ3XW2VCXB266",
+         
         input: JSON.stringify({
             title : 'Extract Information from a Receipt',
             description : 'If the receipt is absolutely unreadable do mark it as unreadable. We will inform the user that he needs to take a better picture./Text',

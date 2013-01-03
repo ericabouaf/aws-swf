@@ -6,19 +6,15 @@
 
 var fs = require('fs');
 
-exports.worker = function (task, config) {
-
+exports.createHit = function (task, config) {
 
    var input = JSON.parse(task.config.input);
 
    var mturk = require('mturk')(config);
 
-
-
    var price = new mturk.Price( String(input.reward), "USD");
 
-   var shortToken = task.taskToken.substr(0,200);
-
+   var shortToken = task.config.taskToken.substr(0,200);
 
    // 1. Create the HITType
    mturk.HITType.create(input.title, input.description, price, input.duration, input.options, function(err, hitType) {
@@ -45,7 +41,7 @@ exports.worker = function (task, config) {
                return; 
             }
 
-            console.log("MTURK: Hit added !\n");
+            console.log("MTURK: Hit added : "+input.title+"\n");
 
 
             fs.readFile( __dirname+'/hits.json', function(err, data){
@@ -56,7 +52,7 @@ exports.worker = function (task, config) {
                
                var hits = JSON.parse(data);
                
-               hits[ shortToken ] = task.taskToken;
+               hits[ shortToken ] = task.config.taskToken;
                
                fs.writeFile(__dirname+'/hits.json', JSON.stringify(hits), function(err) {
                   if(err) { 

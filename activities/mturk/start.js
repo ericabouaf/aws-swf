@@ -20,12 +20,21 @@ function taskCompleted(taskToken, results, hit) {
 
    var hits = JSON.parse( fs.readFileSync( __dirname+'/hits.json') );
    
+   console.log("All hits : ", JSON.stringify(hits) );
+   console.log("shortToken", taskToken);
+   console.log("taskToken", hits[taskToken]);
+
    // Send the respond completed
    console.log("Sending task completed !");
    swfClient.client.respondActivityTaskCompleted({
       "taskToken": hits[taskToken],
       "result": JSON.stringify({ results: results })
    }, function(err, result) {
+
+
+      console.log("Task completed response :");
+      console.log(err, result);
+
 
       // remove hit from file
       console.log("remove hit from hits.json");

@@ -130,16 +130,21 @@ fetch_code(workflowName, function (err, deciderCode) {
                      // TODO: check all conditions are met !
                      if (deciderParams.after) {
                         
-                        for(var cdtName in deciderParams.after) {
-                           var condition = deciderParams.after[cdtName];
+                        if(typeof deciderParams.after === "string") {
+                           canSchedule = dt.completed(deciderParams.after)
+                        }
+                        else {
+                           for(var cdtName in deciderParams.after) {
+                              var condition = deciderParams.after[cdtName];
 
-                           if(condition === 1 /*COMPLETED*/ && !dt.completed(cdtName) ) {
-                              canSchedule = false;
-                              if (!dt.decisions) {
-                                 dt.decisions = []; // so we don't stop...
+                              if(condition === 1 /*COMPLETED*/ && !dt.completed(cdtName) ) {
+                                 canSchedule = false;
+                                 if (!dt.decisions) {
+                                    dt.decisions = []; // so we don't stop...
+                                 }
                               }
+                              // TODO: handle other conditions
                            }
-                           // TODO: handle other conditions
                         }
 
                      }
