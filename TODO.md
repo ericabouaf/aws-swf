@@ -12,6 +12,11 @@
 
 ## New Module Ideas
 
+* WebDriver instead of phantomjs:
+      https://github.com/admc/wd
+      http://ariya.ofilabs.com/2012/12/phantomjs-1-8-blue-winter-rose.html?utm_source=javascriptweekly&utm_medium=email
+      
+
 * AWS modules like EC2 for DynamoDB, S3, and SWF
 
 * ec2 startServer method which waits for it to startup.
