@@ -1,0 +1,12 @@
+{ 
+    "name" : "webdriver",
+    "main" : "./webdriver.js",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "wd": "0.0.27"
+    },
+    "scripts": {
+        "start": "phantomjs --webdriver=4444"
+    }
+}
