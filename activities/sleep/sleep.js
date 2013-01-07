@@ -1,7 +1,11 @@
 
 exports.worker = function (task) {
 
-    var params = task.config.input;
+    var params;
+    try {
+        params = JSON.stringify(task.config.input);
+    }
+    catch(ex) {}
 
     setTimeout(function () {
 
@@ -10,7 +14,7 @@ exports.worker = function (task) {
             console.log("sleep: respondComplete");
         });
 
-    }, params.delay || 2000);
+    }, params ? params.delay || 2000 : 2000);
 
 };
 

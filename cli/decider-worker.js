@@ -58,6 +58,18 @@ fetch_code(workflowName, function (err, deciderCode) {
             completed: function () {
                 return dt.completed.apply(dt, arguments);
             },
+
+            start_childworkflow: function() {
+                return dt.start_childworkflow.apply(dt, arguments);  
+            },
+
+            childworkflow_scheduled: function() {
+                return dt.childworkflow_scheduled.apply(dt, arguments);  
+            },
+
+            childworkflow_completed: function() {
+                return dt.childworkflow_completed.apply(dt, arguments);  
+            },
             
             stop: function (deciderParams, val) {
 
@@ -131,7 +143,7 @@ fetch_code(workflowName, function (err, deciderCode) {
                      if (deciderParams.after) {
                         
                         if(typeof deciderParams.after === "string") {
-                           canSchedule = dt.completed(deciderParams.after)
+                           canSchedule = dt.completed(deciderParams.after);
                         }
                         else {
                            for(var cdtName in deciderParams.after) {
