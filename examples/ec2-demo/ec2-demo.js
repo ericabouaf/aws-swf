@@ -17,7 +17,7 @@ ec2.runInstances({
    }
 });
 
-// Sleep
+// Sleep 10s
 sleep({
    name: 'step2',
    after: {

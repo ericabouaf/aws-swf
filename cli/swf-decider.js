@@ -82,6 +82,7 @@ var swfClient = swf.createClient({
 
 // List all registered activities on the domain.
 // This is used to make the activities available as functions in the decider code.
+// TODO: this should be moved in decider-worker, but causes a big overhead (that's why it is made here juste once...)
 swfClient.client.listActivityTypes({
     domain: argv.d,
     registrationStatus: 'REGISTERED'
