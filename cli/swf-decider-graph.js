@@ -1,8 +1,4 @@
-/*global console,require,__dirname*/
-
-// TODO: npm install graphviz
-// + cli in scripts
-// + activityNames
+#!/usr/bin/env node
 
 var vm = require('vm'),
     fs=require('fs'),
@@ -11,85 +7,77 @@ var vm = require('vm'),
 var deciderCode = fs.readFileSync(process.argv[2]);
 
 var g = graphviz.digraph("G");
-var nodes = {};
+var nodes = {
+   "start": g.addNode('start'),
+   "end": g.addNode('end')
+};
+
+nodes.start.set('shape', 'Mdiamond');
+nodes.end.set('shape', 'Mdiamond');
+
+function addEdgeConditions(conditions, n) {
+   // Conditions as edges
+   var after_modules = [];
+
+   if(typeof conditions === "string") {
+      after_modules.push(conditions);
+   }
+   else if(Array.isArray(conditions)) {
+      after_modules = conditions;
+   }
+   else {
+      after_modules = Object.keys(conditions);
+   }
+
+   after_modules.forEach(function(m) {
+      g.addEdge( nodes[m], n);
+   });
+};
 
 var sandbox = {
-
-   just_started: function() {
-      return true;
-   },
-
-   schedule: function () {
-       // TODO
-   },
-   scheduled: function () {
-       return false;
-   },
-   waiting_for: function () {
-   },
-   completed: function () {
-       return false;
-   },
-   
-   stop: function (deciderParams, val) {
-
-   },
    COMPLETED: 1,
    FAILED: 2,
    TIMEDOUT: 4,
 
-   results: function () {
-       return {};
+   schedule: function (scheduleParams, swfParams) {
+      
+      var n = g.addNode( scheduleParams.name+"\\n"+scheduleParams.activity);
+      n.set( "style", "filled" );
+      nodes[scheduleParams.name] = n;
+
+      if (scheduleParams.after && ( !Array.isArray(scheduleParams.after) || scheduleParams.after.length > 0 ) ) {
+         addEdgeConditions(scheduleParams.after, n);
+      }
+      else {
+         addEdgeConditions(["start"], n);
+      }
    },
-   workflow_input: function () {
-       return {};
+
+   start_childworkflow: function (scheduleParams, swfParams) {
+      
+      var n = g.addNode( scheduleParams.name+"\\n"+scheduleParams.workflow);
+      n.set( "style", "filled" );
+      n.set( "shape", "Msquare" );
+      nodes[scheduleParams.name] = n;
+
+      if (scheduleParams.after && ( !Array.isArray(scheduleParams.after) || scheduleParams.after.length > 0 ) ) {
+         addEdgeConditions(scheduleParams.after, n);
+      }
+      else {
+         addEdgeConditions(["start"], n);
+      }
    },
-   log: function () {
-       console.log.apply(console, ["DECIDER LOG : "].concat(arguments));
-   }
+
+   stop: function (stopParams, swfParams) {
+      var n = nodes.end;
+      if (stopParams.after) {
+         addEdgeConditions(stopParams.after, n);
+      }
+   },
+   results: function () { return {}; },
+   workflow_input: function () { return {}; }
 };
 
-// TODO: get from SWF...
-var activityNames = ["mturk_createHit", "sleep", "sum", "echo", "ec2_runInstances", "ec2_terminateInstances"];
-activityNames.forEach(function(activityName) {
-
-   var schedule_method = function(deciderParams, swfParams) {
-
-      var n1 = g.addNode( deciderParams.name+"\\n"+activityName);
-      n1.set( "style", "filled" );
-
-      nodes[deciderParams.name] = n1;
-
-      // Conditions as edges
-      if (deciderParams.after) {
-             if(typeof deciderParams.after === "string") {
-               g.addEdge( nodes[deciderParams.after], n1 );
-            }
-            else {
-               for(var cdtName in deciderParams.after) {
-                  g.addEdge( nodes[cdtName], n1 );
-               }
-            }
-      }
-
-   };
-
-   var split = activityName.split('_');
-
-   if(split.length === 2) {
-       var namespace = split[0],
-           methodName = split[1];
-
-       if(!sandbox[namespace]) {
-           sandbox[namespace] = {};
-       }
-       sandbox[namespace][methodName] = schedule_method;
-   }
-   else {
-       sandbox[activityName] = schedule_method;
-   }
-
-});
 
 try {
    vm.runInNewContext(deciderCode, sandbox, 'graph.vm');
@@ -100,7 +88,8 @@ try {
 //console.log( g.to_dot() ); 
 
 // Set GraphViz path (if not in your path)
-g.setGraphVizPath( "/usr/local/bin" );
+//g.setGraphVizPath( "/usr/local/bin" );
+g.setGraphVizPath( "/opt/local/bin" );
 
 // Generate a PNG output
-g.output( "png", "test01.png" );
+g.output( "png", process.argv[2]+".png" );

@@ -25,13 +25,15 @@
         "swf-decider": "./cli/swf-decider.js",
         "swf-register": "./cli/swf-register.js",
         "swf-set-credentials": "./cli/swf-set-credentials.js",
-        "swf-start": "./cli/swf-start.js"
+        "swf-start": "./cli/swf-start.js",
+        "swf-decider-graph": "./cli/swf-decider-graph.js"
     },
     "dependencies": {
             "aws-sdk": "0.9.1-pre.2",
             "optimist": "0.3.4",
             "async": "0.1.22",
-            "colors": "0.6.0-1"
+            "colors": "0.6.0-1",
+            "graphviz": "0.0.8"
     },
     "licenses" : [
         {

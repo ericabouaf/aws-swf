@@ -60,10 +60,8 @@ try {
     if(split.length > 1) {
         workerName = split[1];
     }
-    console.log(workerName);
     var worker = require(path.join(process.cwd(), packageName))[workerName];
 
-    //var worker = require(path.join(process.cwd(), workerName)).worker;
     console.log("module loaded !");
 
     // Use the asynchronous method to get the config for this module

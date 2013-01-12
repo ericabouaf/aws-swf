@@ -12,156 +12,64 @@ var decisionTaskConfig = JSON.parse(process.argv[2]);
 var accessKeyId = process.argv[3];
 var secretAccessKey = process.argv[4];
 
+// You can customize the fetch_code method (might be in DB...)
+var fetch_code_file = process.argv[5];
+var fetch_code = require(fetch_code_file).fetch_code;
+
+
+
+// Create a new swf client
 var swfClient = swf.createClient({
     accessKeyId: accessKeyId,
     secretAccessKey: secretAccessKey
 });
 
 
-var fetch_code_file = process.argv[5];
-var fetch_code = require(fetch_code_file).fetch_code;
-
-
-var encodedActivityNames = process.argv[6];
-var activityNames = JSON.parse(encodedActivityNames);
-
-
-// Create the Decision task
+// Re-Create the Decision task
 var dt = new swf.DecisionTask(swfClient, decisionTaskConfig);
 
 function workflowFailed(reason, details) {
     dt.fail_workflow_execution(reason, details, function (err) {
         if (err) { console.error(err); return; }
-        console.log("Workflow marked as failed !");
+        console.log("Workflow marked as failed ! (decider-worker)");
     });
 }
 
 var workflowName = decisionTaskConfig.workflowType.name;
 
-fetch_code(workflowName, function (err, deciderCode) {
 
-    try {
+try {
+
+    // Call the async method to retreive the decider code content
+    fetch_code(workflowName, function (err, deciderCode) {
+
+        // TODO: handle err
 
         var sandbox = {
-
-            just_started: dt.just_started(),
-
-            schedule: function () {
-                dt.schedule.apply(dt, arguments);
-            },
-            scheduled: function () {
-                return dt.scheduled.apply(dt, arguments);
-            },
-            waiting_for: function () {
-                dt.waiting_for.apply(dt, arguments);
-            },
-            completed: function () {
-                return dt.completed.apply(dt, arguments);
-            },
-
-            start_childworkflow: function() {
-                return dt.start_childworkflow.apply(dt, arguments);  
-            },
-
-            childworkflow_scheduled: function() {
-                return dt.childworkflow_scheduled.apply(dt, arguments);  
-            },
-
-            childworkflow_completed: function() {
-                return dt.childworkflow_completed.apply(dt, arguments);  
-            },
-            
-            stop: function (deciderParams, val) {
-
-               var canStop = true;
-
-               // TODO: check all conditions are met !
-               if (deciderParams.after) {
-                  
-                  for(var cdtName in deciderParams.after) {
-                     var condition = deciderParams.after[cdtName];
-
-                     if(condition === 1 /*COMPLETED*/ && !dt.completed(cdtName) ) {
-                        canStop = false;
-                        if (!dt.decisions) {
-                           dt.decisions = []; // so we don't stop...
-                        }
-                     }
-                     // TODO: handle other conditions
-                  }
-
-               }
-
-               // TODO: check deciderParams
-               if(canStop) {
-                dt.stop(val);
-               }
-            },
             COMPLETED: 1,
             FAILED: 2,
-            TIMEDOUT: 4,
-
-            results: function () {
-                var resultData = dt.results.apply(dt, arguments);
-                try {
-                    var d = JSON.parse(resultData);
-                    return d;
-                } catch (ex) {
-                    return resultData;
-                }
-            },
-            workflow_input: function () {
-                var wfInput = dt.workflow_input.apply(dt, arguments);
-                try {
-                    var d = JSON.parse(wfInput);
-                    return d;
-                } catch (ex) {
-                    return wfInput;
-                }
-            },
-            log: function () {
-                console.log.apply(console, ["DECIDER LOG : "].concat(arguments));
-            }
+            TIMEDOUT: 4
         };
 
-
-
-         activityNames.forEach(function(activityName) {
-
-
-
-            var schedule_method = function(deciderParams, swfParams) {
+        // Expose all methods available on the DecisionTask as methods in the sandbox
+        var dtFactory = function(fctName) {
+            return function () {
+                return dt[fctName].apply(dt, arguments);
+            };
+        };
+        for(var k in dt) {
+            if(typeof dt[k] === "function") {
+                sandbox[k] = dtFactory(k);
+            }
+        }
+        
+        /*var scheduleMethodFactory = function(activityName) {
+            return function(deciderParams, swfParams) {
                   var stepName = deciderParams.name;
 
                   if( !dt.scheduled(stepName) ) {
 
-                     //console.log(stepName+ " is not scheduled yet !");
-
-                     var canSchedule = true;
-
-                     // TODO: check all conditions are met !
-                     if (deciderParams.after) {
-                        
-                        if(typeof deciderParams.after === "string") {
-                           canSchedule = dt.completed(deciderParams.after);
-                        }
-                        else {
-                           for(var cdtName in deciderParams.after) {
-                              var condition = deciderParams.after[cdtName];
-
-                              if(condition === 1 /*COMPLETED*/ && !dt.completed(cdtName) ) {
-                                 canSchedule = false;
-                                 if (!dt.decisions) {
-                                    dt.decisions = []; // so we don't stop...
-                                 }
-                              }
-                              // TODO: handle other conditions
-                           }
-                        }
-
-                     }
-
-                     if(canSchedule) {
+                     if( dt.check_conditions(deciderParams) ) {
                         // if swfParams.input is a function, evaluate it before !
                         if (typeof swfParams.input == "function") {
                            swfParams.input = swfParams.input();
@@ -177,9 +85,11 @@ fetch_code(workflowName, function (err, deciderCode) {
                   }
 
             };
+        };
 
+        // Expose all activities in the same domain
+        activityNames.forEach(function(activityName) {
             var split = activityName.split('_');
-
             if(split.length === 2) {
                 var namespace = split[0],
                     methodName = split[1];
@@ -187,28 +97,24 @@ fetch_code(workflowName, function (err, deciderCode) {
                 if(!sandbox[namespace]) {
                     sandbox[namespace] = {};
                 }
-                sandbox[namespace][methodName] = schedule_method;
+                sandbox[namespace][methodName] = scheduleMethodFactory(activityName);
             }
             else {
-                sandbox[activityName] = schedule_method;
+                sandbox[activityName] = scheduleMethodFactory(activityName);
             }
+        });*/
 
 
-         });
-
-
-
+        // Run the decider code
         try {
-
             vm.runInNewContext(deciderCode, sandbox, workflowName + '.vm');
-
         } catch (ex) {
             console.log(ex);
             workflowFailed("Error executing workflow decider " + workflowName, "");
         }
 
+        // Send the decisions back to SWF
         if (!dt.responseSent) {
-
             if (dt.decisions) {
                 console.log("sending decisions...");
                 dt.respondCompleted(dt.decisions);
@@ -216,13 +122,11 @@ fetch_code(workflowName, function (err, deciderCode) {
                 console.log("No decision sent and no decisions scheduled !");
                 dt.fail("Don't know what to do...");
             }
-
         }
+    });
 
+} catch (ex) {
+    console.log(ex);
+    workflowFailed("Error running the fetch_code method for workflowName : "+workflowName, "");
+}
 
-    } catch (ex) {
-        console.log(ex);
-        workflowFailed("Unable to load workflow module " + workflowName, "");
-    }
-
-});

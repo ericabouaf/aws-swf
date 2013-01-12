@@ -1,36 +1,31 @@
-/*globals just_started,schedule,scheduled,completed,workflow_input,stop,results,waiting_for */
 
-// sum, sleep -> echo -> terminate
+schedule({
+    name: 'step1',
+    activity: 'sleep'
+});
 
-if (just_started) {
+schedule({
+    name: 'step2',
+    activity: 'sum',
+    input: {
+        a: 4,
+        b: 6
+    }
+});
 
-    // schedule step1(sum) and step2(sleep) in parallel
+schedule({
+    name: 'step3',
+    after: ['step1', 'step2'],
+    activity: 'echo',
+    input: 'this will be echoed...'
+});
 
-    schedule('step1', { activityType: 'sleep' });
+stop({
+    after: 'step3',
+    result: {
+        "step1": results('step1'),
+        "step2": results('step2'),
+        "step3": results('step3')
+    }
+});
 
-    schedule('step2', {
-        activityType: 'sum',
-        input: {
-            a: 4,
-            b: 6
-        }
-    });
-
-} else if (!completed('step1') || !completed('step2')) {
-
-    waiting_for('step1', 'step2');
-
-
-} else if (completed('step1', 'step2') && !scheduled('step3')) {
-    // When both step have completed, schedule step3
-
-    schedule('step3', {
-        activityType: 'echo',
-        input: 'this will be echoed...'
-    });
-
-} else if (completed('step3')) {
-
-    stop("All done !");
-
-}

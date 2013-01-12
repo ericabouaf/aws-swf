@@ -1,44 +1,45 @@
 
 
-sleep({
-   name: 'step1'
-}, { 
+schedule({
+   name: 'step1',
+   activity: 'sleep',
    input: {
       delay: 2000
    }
 });
 
 
-sum({
-   name: 'step2'
-}, {
-  input: {
+schedule({
+   name: 'step2',
+   activity: 'sum',
+   input: {
       a: 4,
       b: 6
-  }
+   }
 });
 
-echo({
+
+schedule({
    name: 'step3',
+   activity: 'echo',
    after: {
       step1: COMPLETED,
       step2: COMPLETED
-   }
-}, {
-  input: function() {
+   },
+   input: function() {
       var r = results('step2');
       return {
          resultat: r
       };
-  }
+   }
 });
 
 
 stop({
+   result: function() {
+      return results('step3').resultat;
+   },
    after: {
       step3: COMPLETED
    }
-}, 'Everything is good !');
-
-// TODO: send resultat as workflow results
-
+});

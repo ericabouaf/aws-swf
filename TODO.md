@@ -1,15 +1,11 @@
 
 ## TODO
 
-* DONE : sub-workflows activity
-	=> realistic example with results of the workflow...
-
-* Cleanup of the DecisionTask API
-
-
-
-
 * support SWF signals (timers ?)
+
+* use nextPageToken to get the full list of events if greater than 100
+
+* retry on activities
 
 * add default SWF options to each workflow
 
@@ -18,6 +14,7 @@
 
 * more examples (cf aws flow recipies)
 
+* multiple providers for activities (instead of single config...)
 
 ## Module fixes
 

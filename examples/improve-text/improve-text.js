@@ -117,43 +117,38 @@ function voteHit(i) {
 
 for(var i = 0 ; i < 5 ; i++) {
 
-  // Improve Hit
-  var improveHitParams = {
-     name: 'improve-hit-'+i
-  };
-  if (i > 0) {
-    improveHitParams.after = 'vote-hit-'+(i-1);
-  }
-  mturk.createHit(improveHitParams, {
-   input: improveHit(i),
+   // Improve Hit
+   schedule({
+      name: 'improve-hit-'+i,
+      activity: 'mturk_createHit',
+      after: (i > 0) ? 'vote-hit-'+(i-1) : [],
+      input: improveHit(i)
+   }, {
+      // No timeout
+      heartbeatTimeout: "NONE",
+      scheduleToCloseTimeout: "NONE",
+      scheduleToStartTimeout: "NONE",
+      startToCloseTimeout: "NONE"
+   });
 
-   // No timeout
-   heartbeatTimeout: "NONE",
-   scheduleToCloseTimeout: "NONE",
-   scheduleToStartTimeout: "NONE",
-   startToCloseTimeout: "NONE"
-  });
-
-
-  // Vote Hit
-  mturk.createHit({
-     name: 'vote-hit-'+i,
-     after: 'improve-hit-'+i
-  }, {
-    input: voteHit(i),
-
-    // No timeout
-   heartbeatTimeout: "NONE",
-   scheduleToCloseTimeout: "NONE",
-   scheduleToStartTimeout: "NONE",
-   startToCloseTimeout: "NONE"
-  });
+   // Vote Hit
+   schedule({
+      name: 'vote-hit-'+i,
+      activity: 'mturk_createHit',
+      input: voteHit(i),
+      after: 'improve-hit-'+i
+   }, {
+      // No timeout
+      heartbeatTimeout: "NONE",
+      scheduleToCloseTimeout: "NONE",
+      scheduleToStartTimeout: "NONE",
+      startToCloseTimeout: "NONE"
+   });
 
 }
 
 stop({
-   after: {
-      "vote-hit-4": COMPLETED
-   }
-}, 'Everything is good !');
+   after: 'vote-hit-4',
+   result: 'Everything is good !'
+});
 

@@ -80,64 +80,50 @@ var swfClient = swf.createClient({
     secretAccessKey: argv.secretAccessKey
 });
 
-// List all registered activities on the domain.
-// This is used to make the activities available as functions in the decider code.
-// TODO: this should be moved in decider-worker, but causes a big overhead (that's why it is made here juste once...)
-swfClient.client.listActivityTypes({
+
+// Start a decider poller
+var myDecider = new swf.Decider(swfClient, {
     domain: argv.d,
-    registrationStatus: 'REGISTERED'
-}, function(err, result) {
+    taskList: {"name": argv.t},
+    identity: argv.i,
+    maximumPageSize: 500,
+    reverseOrder: false // IMPORTANT: must replay events in the right order, ie. from the start
+}, function (decisionTask, cb) {
 
-    var activityNames = result.typeInfos.map(function(a) {
-        return a.activityType.name;
+    // If we receive an event "ScheduleActivityTaskFailed", we should fail the workflow and display why...
+    var failedEvent = decisionTask.has_schedule_activity_task_failed();
+    if (failedEvent) {
+        var failedAttrs = failedEvent.scheduleActivityTaskFailedEventAttributes;
+        console.error(("Received a ScheduleActivityTaskFailed: " + failedAttrs.cause + "  " + JSON.stringify(failedAttrs)).red);
+        decisionTask.fail_workflow_execution(failedAttrs.cause, JSON.stringify(failedAttrs), function (err, results) {
+            if (err) { console.log(err, results); return; }
+            console.error("Workflow marked as failed !".red);
+        });
+        cb(true); // to continue polling
+        return;
+    }
+
+    // Spawn child process
+    var p = spawn('node', [ argv.f, JSON.stringify(decisionTask.config), argv.accessKeyId, argv.secretAccessKey, argv.c ]);
+
+    p.stdout.on('data', function (data) {
+        console.log(data.toString().blue);
     });
 
-    var encodedActivityNames = JSON.stringify(activityNames);
-
-    // Start a decider poller
-    var myDecider = new swf.Decider(swfClient, {
-        domain: argv.d,
-        taskList: {"name": argv.t},
-        identity: argv.i,
-        maximumPageSize: 500,
-        reverseOrder: false // IMPORTANT: must replay events in the right order, ie. from the start
-    }, function (decisionTask, cb) {
-
-        // If we receive an event "ScheduleActivityTaskFailed", we should fail the workflow and display why...
-        var failedEvent = decisionTask.has_schedule_activity_task_failed();
-        if (failedEvent) {
-            var failedAttrs = failedEvent.scheduleActivityTaskFailedEventAttributes;
-            console.error(("Received a ScheduleActivityTaskFailed: " + failedAttrs.cause + "  " + JSON.stringify(failedAttrs)).red);
-            decisionTask.fail_workflow_execution(failedAttrs.cause, JSON.stringify(failedAttrs), function (err, results) {
-                if (err) { console.log(err, results); return; }
-                console.error("Workflow marked as failed !".red);
-            });
-            cb(true); // to continue polling
-            return;
-        }
-
-        // Spawn child process
-        var p = spawn('node', [ argv.f, JSON.stringify(decisionTask.config), argv.accessKeyId, argv.secretAccessKey, argv.c, encodedActivityNames ]);
-
-        p.stdout.on('data', function (data) {
-            console.log(data.toString().blue);
-        });
-
-        p.stderr.on('data', function (data) {
-            console.log(data.toString().red);
-        });
-
-        p.on('exit', function (code) {
-            console.log(('child process exited with code ' + code));
-            cb(true); // to continue polling
-        });
-
+    p.stderr.on('data', function (data) {
+        console.log(data.toString().red);
     });
 
-    // on SIGINT event, close the poller properly
-    process.on('SIGINT', function () {
-        console.log('Got SIGINT ! Stopping decider poller after this request...please wait...');
-        myDecider.stop();
+    p.on('exit', function (code) {
+        console.log(('child process exited with code ' + code));
+        cb(true); // to continue polling
     });
 
 });
+
+// on SIGINT event, close the poller properly
+process.on('SIGINT', function () {
+    console.log('Got SIGINT ! Stopping decider poller after this request...please wait...');
+    myDecider.stop();
+});
+
