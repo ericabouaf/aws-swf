@@ -20,8 +20,6 @@
 
 * merge human task and email task into one ( + provide different backends, either files or DynamoDB)
 
-* mysql module
-
 * WebDriver activity (WIP)
 
 * ec2 startServer method which waits for it to startup.

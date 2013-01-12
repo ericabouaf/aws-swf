@@ -1,0 +1,10 @@
+{
+    "name" : "mysql",
+    "main" : "./mysql.js",
+    "description": "MySQL activity",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "mysql": "2.0.0-alpha5"
+    }
+}
