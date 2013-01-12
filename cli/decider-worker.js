@@ -7,23 +7,19 @@ var vm = require('vm'),
     swf = require('../index');
 
 // The task is given to this process as a command line argument in JSON format :
-var decisionTaskConfig = JSON.parse(process.argv[2]);
-
-var accessKeyId = process.argv[3];
-var secretAccessKey = process.argv[4];
+var decisionTaskConfig = JSON.parse(process.argv[2]),
+    accessKeyId = process.argv[3],
+    secretAccessKey = process.argv[4];
 
 // You can customize the fetch_code method (might be in DB...)
-var fetch_code_file = process.argv[5];
-var fetch_code = require(fetch_code_file).fetch_code;
-
-
+var fetch_code_file = process.argv[5],
+    fetch_code = require(fetch_code_file).fetch_code;
 
 // Create a new swf client
 var swfClient = swf.createClient({
     accessKeyId: accessKeyId,
     secretAccessKey: secretAccessKey
 });
-
 
 // Re-Create the Decision task
 var dt = new swf.DecisionTask(swfClient, decisionTaskConfig);
@@ -37,13 +33,16 @@ function workflowFailed(reason, details) {
 
 var workflowName = decisionTaskConfig.workflowType.name;
 
-
 try {
 
     // Call the async method to retreive the decider code content
     fetch_code(workflowName, function (err, deciderCode) {
 
-        // TODO: handle err
+        if(err) {
+            console.log(err);
+            workflowFailed("Error in fetch_code", err);
+            return;
+        }
 
         var sandbox = {
             COMPLETED: 1,
@@ -63,48 +62,6 @@ try {
             }
         }
         
-        /*var scheduleMethodFactory = function(activityName) {
-            return function(deciderParams, swfParams) {
-                  var stepName = deciderParams.name;
-
-                  if( !dt.scheduled(stepName) ) {
-
-                     if( dt.check_conditions(deciderParams) ) {
-                        // if swfParams.input is a function, evaluate it before !
-                        if (typeof swfParams.input == "function") {
-                           swfParams.input = swfParams.input();
-                        }
-
-                        if (!swfParams.activityType) {
-                           swfParams.activityType = activityName;
-                        }
-
-                        dt.schedule(stepName, swfParams);
-                     }
-
-                  }
-
-            };
-        };
-
-        // Expose all activities in the same domain
-        activityNames.forEach(function(activityName) {
-            var split = activityName.split('_');
-            if(split.length === 2) {
-                var namespace = split[0],
-                    methodName = split[1];
-
-                if(!sandbox[namespace]) {
-                    sandbox[namespace] = {};
-                }
-                sandbox[namespace][methodName] = scheduleMethodFactory(activityName);
-            }
-            else {
-                sandbox[activityName] = scheduleMethodFactory(activityName);
-            }
-        });*/
-
-
         // Run the decider code
         try {
             vm.runInNewContext(deciderCode, sandbox, workflowName + '.vm');
@@ -129,4 +86,3 @@ try {
     console.log(ex);
     workflowFailed("Error running the fetch_code method for workflowName : "+workflowName, "");
 }
-

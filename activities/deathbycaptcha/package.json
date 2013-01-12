@@ -3,6 +3,6 @@
     "main" : "./deathbycaptcha.js",
     "private": true,
     "dependencies": {
-        "request": "2.9.202"
+        "deathbycaptcha2": "1.0.0"
     }
 }

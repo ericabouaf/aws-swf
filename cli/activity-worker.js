@@ -43,9 +43,7 @@ try {
     activityFailed("Unable to load for fetchconfigfile, or does not export fetch_config : " + fetchconfigfile, ex.message);
 }
 
-
 var workerName = taskConfig.activityType.name;
-
 
 try {
 

@@ -1,4 +1,3 @@
-
 ## TODO
 
 * support SWF signals (timers ?)
@@ -16,32 +15,26 @@
 
 * multiple providers for activities (instead of single config...)
 
-## Module fixes
-
-* deathbycaptcha: use deathbycaptcha2 npm package
-
-* google-tools
-
-* WebDriver instead of phantomjs to finish:
-      https://github.com/admc/wd
-      http://ariya.ofilabs.com/2012/12/phantomjs-1-8-blue-winter-rose.html?utm_source=javascriptweekly&utm_medium=email
-
 
 ## New Module Ideas
-
-* AWS modules like EC2 for DynamoDB, S3, and SWF
-
-* ec2 startServer method which waits for it to startup.
 
 * merge human task and email task into one ( + provide different backends, either files or DynamoDB)
 
 * mysql module
 
+* WebDriver activity (WIP)
+
+* ec2 startServer method which waits for it to startup.
+
 ## Documentation
 
-* Decision task API
+* DecisionTask API
+
+* Document that Child workflows use "control" as step name
 
 * for activities which require a deamon, use "scripts": {"start": "node server.js"} to npm start (only mturk-hit and phantom at the moment...)
+
+* Document multi-activity package: 'ec2_runInstances' -> require('ec2').runInstances
 
 * Installation instructions: needs (git install + npm link) to have access to the activities list
 
@@ -51,3 +44,4 @@
    exports.terminateInstances.description = {
       // json schema ?...
    };
+

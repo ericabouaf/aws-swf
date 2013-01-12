@@ -1,7 +1,0 @@
-{ 
-    "name" : "google-suggest",
-    "main" : "./google-suggest.js",
-    "private": true,
-    "dependencies": {
-    }
-}
