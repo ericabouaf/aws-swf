@@ -1,0 +1,26 @@
+
+<h2>Tasks</h2>
+
+<p><strong>Here is the list of pending HumanTask activities.</strong></p>
+    
+<ul>
+    <% tasks.forEach(function(task){ %>
+    <!-- TODO: mettre un lien uniquement si humantask -->
+    <li>
+    	<% if(task.activityType == "humantask") { %><a href='/activity/<%= querystring_escape(task.taskToken) %>'><% } %><%= task.activityId+' ('+task.activityType+')' %><% if(task.activityType == "humantask") { %></a><% } %></li>
+    <% }) %>
+</ul>
+
+
+<% if( tasks.length === 0) { %>
+
+<p>Nothing to do...</p>
+
+
+<script>
+setTimeout(function() {
+    window.location = window.location;
+}, 3000);
+</script>
+
+<% }  %>
