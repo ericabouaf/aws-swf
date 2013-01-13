@@ -17,3 +17,5 @@ exports.server = {
     ip: 'localhost',
     host: 'localhost'
 };
+
+exports.region = 'us-east-1';

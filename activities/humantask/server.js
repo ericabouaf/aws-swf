@@ -7,8 +7,9 @@ var express = require('express'),
     mu = require('mu2'),
     fs = require('fs'),
     ejs = require('ejs'),
-    querystring = require('querystring');
-
+    querystring = require('querystring'),
+    expressLayouts = require('express-ejs-layouts'),
+    AWS = require('aws-sdk');
 
 var app = express();
 
@@ -19,6 +20,10 @@ app.use(express.static(__dirname + '/public'));
 
 app.set('views', __dirname + '/app/views');
 app.set('view engine', 'ejs');
+
+app.set('layout', 'layout'); // defaults to 'layout'     
+
+app.use(expressLayouts);
 
 // DynamoDB connection
 var client = dynamo.createClient(app.config.awsCredentials), 
@@ -31,7 +36,7 @@ function taskFromToken(req, res, next) {
   // TODO: make task retrieve as middleware
   app.db.get("Task")
     .scan({taskToken: req.param('taskToken') })
-    .get("taskToken", "activityId", "startedEventId", "input", "workflowExecution", "activityType", "userId")
+    .get("taskToken", "activityId", "startedEventId", "input", "workflowExecution", "activityType")
     .fetch(function(err, tasks){
      
      if(err) {
@@ -111,29 +116,27 @@ app.post('/:taskToken/completed', taskFromToken, function(req, res){
   
   var activityTask = req.task;
      
-  app.User.find({
-    id: activityTask.userId
-  }, function(err, users) {
-        
-     var user = users[0];
-     var swfClient = swf.createClient({
-        accessKeyId: user.accessKeyId,
-        secretAccessKey: user.secretAccessKey
-     });
+      AWS.config.update({
+         accessKeyId: app.config.awsCredentials.accessKeyId,
+         secretAccessKey: app.config.awsCredentials.secretAccessKey,
+         region: app.config.region
+      });
         
      // send a RespondActivityTaskCompleted
-     swfClient.call("RespondActivityTaskCompleted",  {
+
+     var svc = new AWS.SimpleWorkflow();
+
+     svc.client.respondActivityTaskCompleted({
         "taskToken": req.param('taskToken'),
         "result": JSON.stringify( req.body )
-     }, function(err, result) {
-           
-        if(err) {
+     }, function (err, result) {
 
+        if(err) {
+          console.log(err);
            // TODO: delete task
            var taskItem = app.db.get("Task").get( {taskToken: req.param('taskToken') } ).destroy(function(err) {
               
-              res.render('humantasks/error', { 
-                layout: 'humantasks/task-layout', 
+              res.render('error', { 
                 locals: { 
                    error: err,
                    activityTask: null,
@@ -154,8 +157,7 @@ app.post('/:taskToken/completed', taskFromToken, function(req, res){
           res.redirect('/finished');
         });
            
-     });   
-  });
+     });
   
 });
 
