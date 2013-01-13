@@ -16,14 +16,12 @@ schedule({
    }
 });
 
-
 // Use a SWF Timer
 start_timer({
    name: 'step2',
    delay: 60,
    after: 'step1'
 });
-
 
 // Close the server
 schedule({
@@ -36,12 +34,10 @@ schedule({
    }
 });
 
-
 stop({
    after: {
       step3: COMPLETED
    },
    result: 'Everything is good !'
 });
-
 

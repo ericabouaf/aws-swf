@@ -19,10 +19,6 @@ This toolkit provides a collection of [command-line tools](https://github.com/ne
 
 ## Installation
 
-````sh
-$ [sudo] npm install -g aws-swf
-````
-
 For more detailed installation instructions, check the [Installation Wiki Page](https://github.com/neyric/aws-swf/wiki/Installation)
 
 ## Overview
