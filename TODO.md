@@ -1,6 +1,6 @@
 ## TODO
 
-* support SWF signals (timers ?)
+* support SWF signals
 
 * use nextPageToken to get the full list of events if greater than 100
 
@@ -27,6 +27,8 @@
 ## Documentation
 
 * DecisionTask API
+
+* swf-decider-graph
 
 * Document that Child workflows use "control" as step name
 

@@ -32,7 +32,18 @@ function addEdgeConditions(conditions, n) {
    after_modules.forEach(function(m) {
       g.addEdge( nodes[m], n);
    });
-};
+}
+
+function addNode(params, n) {
+   nodes[params.name] = n;
+
+   if (params.after && ( !Array.isArray(params.after) || params.after.length > 0 ) ) {
+      addEdgeConditions(params.after, n);
+   }
+   else {
+      addEdgeConditions(["start"], n);
+   }
+}
 
 var sandbox = {
    COMPLETED: 1,
@@ -43,14 +54,8 @@ var sandbox = {
       
       var n = g.addNode( scheduleParams.name+"\\n"+scheduleParams.activity);
       n.set( "style", "filled" );
-      nodes[scheduleParams.name] = n;
 
-      if (scheduleParams.after && ( !Array.isArray(scheduleParams.after) || scheduleParams.after.length > 0 ) ) {
-         addEdgeConditions(scheduleParams.after, n);
-      }
-      else {
-         addEdgeConditions(["start"], n);
-      }
+      addNode(scheduleParams, n);
    },
 
    start_childworkflow: function (scheduleParams, swfParams) {
@@ -58,14 +63,17 @@ var sandbox = {
       var n = g.addNode( scheduleParams.name+"\\n"+scheduleParams.workflow);
       n.set( "style", "filled" );
       n.set( "shape", "Msquare" );
-      nodes[scheduleParams.name] = n;
+      
+      addNode(scheduleParams, n);
+   },
 
-      if (scheduleParams.after && ( !Array.isArray(scheduleParams.after) || scheduleParams.after.length > 0 ) ) {
-         addEdgeConditions(scheduleParams.after, n);
-      }
-      else {
-         addEdgeConditions(["start"], n);
-      }
+   start_timer: function (scheduleParams, swfParams) {
+      
+      var n = g.addNode( scheduleParams.name+"\\nTimer");
+      n.set( "style", "filled" );
+      n.set( "shape", "square" );
+
+      addNode(scheduleParams, n);
    },
 
    stop: function (stopParams, swfParams) {

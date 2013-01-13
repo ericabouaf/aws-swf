@@ -17,16 +17,11 @@ schedule({
 });
 
 
-// Sleep 10s
-schedule({
+// Use a SWF Timer
+start_timer({
    name: 'step2',
-   activity: 'sleep',
-   after: {
-      step1: COMPLETED
-   },
-   input: {
-      delay: 30000
-   }
+   delay: 60,
+   after: 'step1'
 });
 
 
@@ -34,9 +29,7 @@ schedule({
 schedule({
    name: 'step3',
    activity: 'ec2_terminateInstances',
-   after: {
-      step2: COMPLETED
-   },
+   after: 'step2',
    input: function() {
       var instanceId = results('step1').instancesSet.item.instanceId;
       return { InstanceIds: [instanceId] };
