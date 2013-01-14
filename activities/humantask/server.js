@@ -55,8 +55,7 @@ function taskFromToken(req, res, next) {
 * Task finished
 */
 app.get('/finished', function(req, res) {
-  res.render('humantasks/finished', { 
-     layout: 'humantasks/task-layout',
+  res.render('finished', { 
      locals: { 
         taskToken: "",
         action: "humantasks"
@@ -83,7 +82,7 @@ app.get('/activity/:taskToken', taskFromToken, function(req, res) {
       stream.on('data', function(data) { str += data; });
       stream.on('end', function() {
             
-         fs.readFile(__dirname+'/app/views/task-layout.ejs', 'utf-8', function(error, content) {
+         fs.readFile(__dirname+'/app/views/layout.ejs', 'utf-8', function(error, content) {
             res.set('Content-Type', 'text/html');
             var body = ejs.render(content, {
                body: str,
@@ -128,17 +127,17 @@ app.post('/:taskToken/completed', taskFromToken, function(req, res){
 
      svc.client.respondActivityTaskCompleted({
         "taskToken": req.param('taskToken'),
-        "result": JSON.stringify( req.body )
-     }, function (err, result) {
+        "result": JSON.stringify( req.params )
+     }, function (awsErr, result) {
 
-        if(err) {
-          console.log(err);
+        if(awsErr) {
+          console.log("respondActivityTaskCompleted failed : ", awsErr);
            // TODO: delete task
            var taskItem = app.db.get("Task").get( {taskToken: req.param('taskToken') } ).destroy(function(err) {
               
               res.render('error', { 
                 locals: { 
-                   error: err,
+                   error: awsErr,
                    activityTask: null,
                    taskToken: "no",
                    action: "humantasks" 
