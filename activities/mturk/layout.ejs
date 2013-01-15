@@ -33,7 +33,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/lib/bootstrap/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/lib/bootstrap/ico/apple-touch-icon-57-precomposed.png"-->
     
-    <script src="/lib/jquery-1.7.2.min.js"></script>
+    <script src="/lib/jquery-1.7.2.min.js"></script><!-- TODO -->
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
     
   </head>
@@ -41,13 +41,20 @@
   <body>
 
     <div class="container">
-        
-        <form method="POST" action="/<%- taskToken %>/completed">
-        
+
+
+<form method="POST" action="https://www.mturk.com/mturk/externalSubmit" name="mturk_form" id="mturk_form">
+
+<input type="hidden" value="" name="assignmentId" id="assignmentId" />
             <%- body %>
-        
+
         </form>
         
     </div> <!-- /container -->
+
+
+<script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+<script language="Javascript">turkSetAssignmentID();</script>
+
   </body>
 </html>
