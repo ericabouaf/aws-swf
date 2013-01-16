@@ -6,15 +6,23 @@ schedule({
 
     input: {
 
-          /*title : "Vote on Text Improvement",
+          title : "Vote on Text Improvement",
           description : "Decide which two small paragraphs is closer to a goal.",
           reward : 0.01,
           duration: 3600, // 1 hour
           maxAssignments : 1,
-          questionXML : '<ExternalQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2006-07-14/ExternalQuestion.xsd">'+
+
+          /*questionXML : '<ExternalQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2006-07-14/ExternalQuestion.xsd">'+
                         '<ExternalURL>https://s3.amazonaws.com/test-aws-swf/temp.html</ExternalURL>'+
                         '<FrameHeight>500</FrameHeight>'+
                         '</ExternalQuestion>',*/
+
+            // or
+
+          /*externalURL: 'https://s3.amazonaws.com/test-aws-swf/temp.html',
+          frameHeight: 600*/
+
+          // or template
 
         "email-notification": {
             to: "eric.abouaf@gmail.com",

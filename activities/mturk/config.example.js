@@ -10,3 +10,8 @@ exports.poller = {
 };
 
 exports.receptor = { port: 8080, host: undefined };
+
+
+exports.s3 = {
+    region: 'us-east-1'
+};
