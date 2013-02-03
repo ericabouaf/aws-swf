@@ -74,6 +74,7 @@ try {
         if (!dt.responseSent) {
             if (dt.decisions) {
                 console.log("sending decisions...");
+                console.log(JSON.stringify(dt.decisions, null, 3));
                 dt.respondCompleted(dt.decisions);
             } else {
                 console.log("No decision sent and no decisions scheduled !");

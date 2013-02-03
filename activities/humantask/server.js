@@ -136,6 +136,7 @@ app.post('/:taskToken/completed', taskFromToken, function(req, res){
 
       if(awsErr) {
          console.log("respondActivityTaskCompleted failed : ", awsErr);
+         console.log("respondActivityTaskCompleted failed : ", JSON.stringify( req.body ));
          // TODO: delete task
          var taskItem = app.db.get("Task").get( {taskToken: req.param('taskToken') } ).destroy(function(err) {
            
