@@ -8,9 +8,12 @@ function sendNotification(notification, taskToken, config) {
    var smtpTransport = nodemailer.createTransport("SMTP", config.mailer_transport);
    
    var mailOptions = {
-      from: "RemixFlow <eric.abouaf@example.com>",
-      to: notification.to,
-      subject: notification.subject,
+
+      from: notification.from || config.defaultNotification.from,
+      to: notification.to || config.defaultNotification.to,
+      subject: notification.subject || config.defaultNotification.subject,
+
+
       text: "Hello world",
       html: "New task : <a href='http://" + config.server.host + ":" + config.server.port + "/activity/"+querystring.escape(taskToken)+"'>Click here to do the task !</a>"
    };
@@ -62,8 +65,8 @@ exports.worker = function (task, config) {
       }
       
       // Send email notification
-      if(input["email-notification"]) {
-         sendNotification(input["email-notification"], task.config.taskToken, config);
+      if(input["email-notification"] || config.defaultNotification) {
+         sendNotification(input["email-notification"] ||  {}, task.config.taskToken, config);
       }
       
    });

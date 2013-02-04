@@ -4,6 +4,7 @@
  * It will look in the working directory for a Node.JS module that has the same name as the workflow
  */
 var vm = require('vm'),
+    fs = require('fs'),
     swf = require('../index');
 
 // The task is given to this process as a command line argument in JSON format :
@@ -47,7 +48,12 @@ try {
         var sandbox = {
             COMPLETED: 1,
             FAILED: 2,
-            TIMEDOUT: 4
+            TIMEDOUT: 4,
+
+            // read content of a file from the decider code
+            file: function(path) {
+                return fs.readFileSync(path).toString();
+            }
         };
 
         // Expose all methods available on the DecisionTask as methods in the sandbox

@@ -18,4 +18,10 @@ exports.server = {
     host: 'localhost'
 };
 
+exports.defaultNotification = {
+    "to": "example@gmail.com",
+    "subject": "A new task is waiting to be done",
+    "from": "AWS-SWF <example@example.com>"
+};
+
 exports.region = 'us-east-1';
