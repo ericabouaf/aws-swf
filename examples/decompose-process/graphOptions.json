@@ -1,0 +1,7 @@
+{
+   "results": {
+      "splitTasks": {
+         "steps": ["subtask1", "subtask2", "..."]
+      }
+   }
+}

@@ -6,52 +6,70 @@ var vm = require('vm'),
 
 var deciderCode = fs.readFileSync(process.argv[2]);
 
+
+// Options are passed through graphOptions.json
+// use 'results' as a hash of activity results
+var graphWorkflowResults;
+if( fs.existsSync('graphOptions.json') ) {
+   var graphOptionsStr = fs.readFileSync('graphOptions.json').toString();
+   var graphOptions = JSON.parse(graphOptionsStr);
+   graphWorkflowResults = graphOptions.results;
+}
+
+
 var g = graphviz.digraph("G");
 var nodes = {
-   "start": g.addNode('start'),
-   "end": g.addNode('end')
+   "start": g.addNode('start')
 };
 
 nodes.start.set('shape', 'Mdiamond');
-nodes.end.set('shape', 'Mdiamond');
 
-function addEdgeConditions(conditions, n) {
+function addEdgeConditions(scheduleParams, n) {
+   
+   var after = scheduleParams.after;
+
    // Conditions as edges
    var after_modules = [];
 
-   if(typeof conditions === "string") {
-      after_modules.push(conditions);
+   if(typeof after === "string") {
+      after_modules.push(after);
    }
-   else if(Array.isArray(conditions)) {
-      after_modules = conditions;
+   else if(Array.isArray(after)) {
+      after_modules = after;
    }
-   else {
-      after_modules = Object.keys(conditions);
+   else if(typeof after === 'object') {
+      after_modules = Object.keys(after);
    }
 
    after_modules.forEach(function(m) {
-      g.addEdge( nodes[m], n);
+      var e = g.addEdge( nodes[m], n);
+
+      if(scheduleParams.conditionStr) {
+         e.set('label', scheduleParams.conditionStr);
+      }
+
    });
 }
 
-function addNode(params, n) {
-   nodes[params.name] = n;
+function addNode(scheduleParams, n) {
+   nodes[scheduleParams.name] = n;
 
-   if (params.after && ( !Array.isArray(params.after) || params.after.length > 0 ) ) {
-      addEdgeConditions(params.after, n);
+   if (scheduleParams.after && ( !Array.isArray(scheduleParams.after) || scheduleParams.after.length > 0 ) ) {
+      addEdgeConditions(scheduleParams, n);
    }
    else {
-      addEdgeConditions(["start"], n);
+      addEdgeConditions({after: ["start"]}, n);
    }
 }
+
+var endCount = 1; // counter for the number of 'stop()' calls
 
 var sandbox = {
    COMPLETED: 1,
    FAILED: 2,
    TIMEDOUT: 4,
 
-   schedule: function (scheduleParams, swfParams) {
-      
+   schedule: function (scheduleParams, swfParams) {      
       var n = g.addNode( scheduleParams.name+"\\n"+scheduleParams.activity);
       n.set( "style", "filled" );
 
@@ -59,7 +77,6 @@ var sandbox = {
    },
 
    start_childworkflow: function (scheduleParams, swfParams) {
-      
       var n = g.addNode( scheduleParams.name+"\\n"+scheduleParams.workflow);
       n.set( "style", "filled" );
       n.set( "shape", "Msquare" );
@@ -77,12 +94,22 @@ var sandbox = {
    },
 
    stop: function (stopParams, swfParams) {
-      var n = nodes.end;
+
+      var n = g.addNode('end'+endCount);
+      endCount += 1;
+      n.set('shape', 'Mdiamond');
+
       if (stopParams.after) {
-         addEdgeConditions(stopParams.after, n);
+         addEdgeConditions(stopParams, n);
       }
    },
-   results: function () { return {}; },
+   results: function (name) {
+      if(graphWorkflowResults) {
+         return graphWorkflowResults[name] || {};
+      }
+
+      return {};
+   },
    workflow_input: function () { return {}; }
 };
 
@@ -96,8 +123,8 @@ try {
 //console.log( g.to_dot() ); 
 
 // Set GraphViz path (if not in your path)
-//g.setGraphVizPath( "/usr/local/bin" );
-g.setGraphVizPath( "/opt/local/bin" );
+g.setGraphVizPath( "/usr/local/bin" );
+//g.setGraphVizPath( "/opt/local/bin" );
 
 // Generate a PNG output
 g.output( "png", process.argv[2]+".png" );

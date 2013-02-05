@@ -1,4 +1,4 @@
-/*global schedule,stop,file,results,workflow_input,completed,start_childworkflow*/
+/*global schedule,stop,file,results,workflow_input,start_childworkflow*/
 
 // swf-start decompose-process "{\"taskDescription\":\"Create a website\"}"
 
@@ -10,61 +10,63 @@ schedule({
     activity: 'humantask',
     input: function() {
       return {
-        "data": workflow_input().taskDescription,
-        "template": file('./decompose-process/task-identification.html')
+        data: workflow_input().taskDescription,
+        template: file('./decompose-process/task-identification.html')
       };
     }
-}, {
-  // No timeout
-  heartbeatTimeout: "NONE",
-  scheduleToCloseTimeout: "NONE",
-  scheduleToStartTimeout: "NONE",
-  startToCloseTimeout: "NONE"
 });
 
 
-// TODO: stop if not splittable !
+// exit cleanly if not splittable
+stop({
+  after: 'taskIdentification',
+  conditionStr: 'splittable != yes',
+  condition: function() {
+    return results('taskIdentification').splittable !== 'yes';
+  },
+  result: {
+      taskDescription: workflow_input().taskDescription,
+      taskIdentification: results('taskIdentification')
+  }
+});
+
 
 
 /**
  * Step 2. Partition splittable tasks
  */
-
 schedule({
-    after: 'taskIdentification',
-    name: 'split-tasks',
-    activity: 'humantask',
-    input: function() {
-      return {
-        "data": {
-          "taskDescription": workflow_input().taskDescription,
-          "taskIdentification": results("taskIdentification")
-        },
-        "template": file('./decompose-process/split-task.html')
-      };
-    }
-}, {
-  // No timeout
-  heartbeatTimeout: "NONE",
-  scheduleToCloseTimeout: "NONE",
-  scheduleToStartTimeout: "NONE",
-  startToCloseTimeout: "NONE"
+  after: 'taskIdentification',
+  name: 'splitTasks',
+  activity: 'humantask',
+  conditionStr: 'splittable == yes',
+  condition: function() {
+    return results('taskIdentification').splittable === 'yes';
+  },
+  input: function() {
+    return {
+      data: {
+        taskDescription: workflow_input().taskDescription,
+        taskIdentification: results('taskIdentification')
+      },
+      template: file('./decompose-process/split-task.html')
+    };
+  }
 });
 
 
+// recursion on the results("splitTasks") results
 
-// recursion on the results("split-tasks") results
-if( completed('split-tasks') ) {
-
-  var i = 0;
-  results('split-tasks').steps.forEach(function(step) {
+var i = 0;
+if(results('splitTasks')) {
+  results('splitTasks').steps.forEach(function(step) {
 
     i += 1;
 
     start_childworkflow({
-       name: 'sub'+i,
+       name: 'sub-process-'+i,
        workflow: 'decompose-process',
-       after: 'split-tasks'
+       after: 'splitTasks'
     }, {
        taskStartToCloseTimeout: "3600",
        executionStartToCloseTimeout: "3600",
@@ -78,16 +80,14 @@ if( completed('split-tasks') ) {
     });
 
   });
-
-
-  stop({
-      after: i > 0 ? 'sub'+i : 'split-tasks',
-      result: {
-        "taskDescription": workflow_input().taskDescription,
-        "taskIdentification": results("taskIdentification"),
-        "split-tasks": results("split-tasks")
-      }
-  });
-
-
 }
+
+
+stop({
+    after: i > 0 ? (function() { var a=[]; for(var l=0;l<i;l++) { a.push("sub-process-"+(l+1)); } return a; })() : 'splitTasks',
+    result: {
+      taskDescription: workflow_input().taskDescription,
+      taskIdentification: results('taskIdentification'),
+      splitTasks: i > 0 ? {steps: (function() { var a=[]; for(var l=0;l<i;l++) { a.push(childworkflow_results("sub-process-"+(l+1))); } return a; })() } : results('splitTasks')
+    }
+});

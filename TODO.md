@@ -1,6 +1,18 @@
 ## TODO
 
 
+* DONE adding default results values for the swf-graph into graphOptions.json
+
+* DONE in decompose-process: add a "condition" method in step configuration
+
+
+* Activity-Type-Configuration-Details when registering a new ActivityType ( using activityTypeOptions.json, if exists )
+
+* options for default workflow parameters (workflowOptions.json, if exists) => no need to set them in start_childworkflow
+
+
+
+
 ## New Module Ideas
 
 * merge human task and email task into one ( + provide different backends, either files or DynamoDB)
