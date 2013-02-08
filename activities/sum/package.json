@@ -1,5 +1,0 @@
-{
-   "name" : "sum",
-   "private": true,
-   "main" : "./sum.js"
-}

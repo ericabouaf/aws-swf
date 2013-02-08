@@ -1,5 +1,0 @@
-{
-   "name" : "hello-activity",
-   "private": true,
-   "main" : "./hello.js"
-}

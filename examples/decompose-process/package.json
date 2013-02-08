@@ -1,5 +1,0 @@
-{
-   "name" : "decompose-process",
-   "private": true,
-   "main" : "./decompose-process.js"
-}

@@ -1,5 +1,0 @@
-{
-   "name" : "parallel-test",
-   "private": true,
-   "main" : "./parallel-test.js"
-}

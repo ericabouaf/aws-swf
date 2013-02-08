@@ -1,14 +1,12 @@
 {
     "name": "aws-swf",
-    "version": "2.0.0",
-    "description": "Command line tools and Node.js library for Amazon SWF",
+    "version": "3.0.0",
+    "description": "A Node.js library for accessing Amazon SWF",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
-    "preferGlobal": "true",
     "engines": {
-        "node" : ">=0.6.0"
+        "node" : ">=0.8.0"
     },
     "keywords": [
-        "cli",
         "amazon",
         "aws",
         "swf",
@@ -20,24 +18,12 @@
         "type":"git",
         "url":"http://github.com/neyric/aws-swf.git"
     },
-    "bin": {
-        "swf-activity": "./cli/swf-activity.js",
-        "swf-decider": "./cli/swf-decider.js",
-        "swf-register": "./cli/swf-register.js",
-        "swf-set-credentials": "./cli/swf-set-credentials.js",
-        "swf-start": "./cli/swf-start.js",
-        "swf-decider-graph": "./cli/swf-decider-graph.js"
-    },
     "dependencies": {
-            "aws-sdk": "0.9.1-pre.2",
-            "optimist": "0.3.4",
-            "async": "0.1.22",
-            "colors": "0.6.0-1",
-            "graphviz": "0.0.8"
+        "aws-sdk": "0.9.1-pre.3"
     },
     "licenses" : [
         {
-            "type" : "MIT",
+            "type" : "GPL",
             "url" : "https://raw.github.com/neyric/aws-swf/master/LICENSE.txt"
         }
     ]

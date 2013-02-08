@@ -1,15 +1,8 @@
-# Amazon SWF (Simple WorkFlow) toolkit for Node.js
+# aws-swf - A Node.js library for accessing Amazon Simple Workflow (SWF)
 
-This toolkit provides a collection of [command-line tools](https://github.com/neyric/aws-swf/wiki/Command-Line-Tools) to interact with the Amazon Simple Workflow (SWF) service.
+nice & clean library to access the Amazon SWF API = exposing a nice object interface (just map swf concepts +  etc...)
 
-## Documentation
-
-* Run the demo with the [Quickstart Guide](https://github.com/neyric/aws-swf/wiki/Quickstart-Guide)
-* [The Wiki](https://github.com/neyric/aws-swf/wiki) contains links to all the documentation
-* [Write SWF deciders in javascript](https://github.com/neyric/aws-swf/wiki/Writing-deciders)
-* [Write SWF activities in javascript](https://github.com/neyric/aws-swf/wiki/Create-new-activities)
-* [A collection of ready-to-use activities](https://github.com/neyric/aws-swf/tree/master/activities)
-* High-level classes to use [aws-swf as a library](https://github.com/neyric/aws-swf/wiki/Library-Usage) from any Node.js application.
+High-level classes to use [aws-swf as a library](https://github.com/neyric/aws-swf/wiki/Library-Usage) from any Node.js application.
 
 ## Requirements
 
@@ -17,15 +10,61 @@ This toolkit provides a collection of [command-line tools](https://github.com/ne
  * An active [AWS account](http://aws.amazon.com/) with [Access Keys](http://docs.amazonwebservices.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#AccessKeys)
  * Basic understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/) concepts
 
-## Installation
 
-For more detailed installation instructions, check the [Installation Wiki Page](https://github.com/neyric/aws-swf/wiki/Installation)
+## Features:
 
-## Overview
+* auto-reconnect option for pollers
 
-![AWS-SWF Overview](/neyric/aws-swf/raw/master/diagram.png "AWS-SWF Overview")
+* auto-registration
+
+
+* TODO: decider helper methods to make it easier to query the event history (dt.completed('step1'), dt.failed('step1'), dt.results('step1'))
+
+  if (dt.failed()) {
+    ...
+    dt.scheduled()
+  }
+
+* ... to schedule tasks/timer/workflows etc...
+  dt.schedule({
+  ...
+  })
+* to stop, or signal, or ...
+
+
+## examples
+
+  - simple-poller which executes 3 lines of JS
+
+    var activityPoller = new swf.ActivityPoller(swfClient, {
+        domain: 'my-domain',
+        taskList: { name: 'task-list' },
+        identity: 'simple poller ' + process.pid
+    }, function (task, cb) {
+        task.respondCompleted({captcha_text: 'data'}, function (err) {});
+    });
+    activityPoller.start();
+
+
+  - poller which spawn another process (ex which calls the 'dot' cli ?)
+  - swf-start from any Node.js project
+  - express-form-server : simple express app which serves a form and start a workflow with a transformated value (Note: also works for any POST request => REST API calls)
+  - registering workflows
+
+
+## Documentation
+
+* Child workflows use "control" as step name
+
+
+## TODO
+
+* Document Decider API
+
+* 500 events only ! => TODO: add a method to get more events from the history (slows down the decision process, create child workflows if possible)
 
 
 ## License
 
-[MIT License](https://raw.github.com/neyric/aws-swf/master/LICENSE.txt)
+[GPL License](https://raw.github.com/neyric/aws-swf/master/LICENSE.txt)
+
