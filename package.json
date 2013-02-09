@@ -23,7 +23,7 @@
     },
     "licenses" : [
         {
-            "type" : "GPL",
+            "type" : "MIT",
             "url" : "https://raw.github.com/neyric/aws-swf/master/LICENSE.txt"
         }
     ]
