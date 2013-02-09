@@ -1,31 +1,48 @@
-var swf = require("aws-swf");
+var swf = require('../index');
 
-var myDecider = new swf.Decider(swfClient, {
-    
+var myDecider = new swf.Decider({
    "domain": "test-domain",
    "taskList": {"name": "my-workflow-tasklist"},
-   "identity": "Decider-01",
-   
+   "identity": "Decider-01",   
    "maximumPageSize": 500,
    "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
-   
-}, function (decisionTask, cb) {
-    
-    // do something here and send decisions...
+});
 
-    if(!dt.scheduled('step1')) {
+myDecider.on('decisionTask', function (decisionTask) {
 
-        dt.schedule({
+    console.log("Got a new decision task !");
+
+    if(!decisionTask.scheduled('step1')) {
+        decisionTask.schedule({
             name: 'step1',
             activity: 'simple-activity'
         });
-
     }
     else {
-        decisionTask.complete_workflow_execution("details of ending here ?", function (err) {
-        });    
+        decisionTask.stop({
+          result: "some workflow output data"
+        });
     }
     
-    
-    cb(true); // to continue polling
+    decisionTask.respondCompleted(decisionTask.decisions, function(err, result) {
+
+      if(err) {
+          console.log(err);
+          return;
+      }
+
+      console.log("responded with some data !");
+
+      myDecider.poll();
+    });
+
 });
+
+myDecider.on('poll', function(d) {
+    //console.log(_this.config.identity + ": polling for decision tasks...");
+    console.log("polling for tasks...", d);
+});
+
+// Start polling
+myDecider.poll();
+

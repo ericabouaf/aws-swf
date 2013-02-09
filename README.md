@@ -32,17 +32,33 @@ aws-swf provide classes to wrap higher-level concepts of the AWS SWF API :
 * WorkflowExecution
 
 
+### Global configuration
+
+Don't hardcode your Amazon credentials :
+
+If no config is passed to createClient (see below), aws-swf will walk up the directory hierarchy until it finds a *.aws-swf.json* file.
+
+    {
+        "accessKeyId": "xxxxxx",
+        "secretAccessKey": "xxxxxx",
+        "region": "us-east-1",
+        "defaultDomain": "aws-swf-test-domain",
+        "defaultTasklist": "aws-swf-tasklist"
+    }
+
+
 ### Creating an SWF client object
 
 ````javascript
 var swf = require("aws-swf");
 var swfClient = swf.createClient({
     accessKeyId: "... access key id here ...",
-    secretAccessKey: "... secret key here ..."
+    secretAccessKey: "... secret key here ...",
+    region: "us-east-1"
 });
 ````
 
-If no config is passed to createClient, aws-swf will walk up the directory hierarchy until it finds a *.aws-swf.json* file.
+or using the global configuration file :
 
 ````javascript
 var swf = require("aws-swf"),
@@ -195,6 +211,9 @@ var workflowExecution = workflow.start({ input: "{}"}, function (err, runId) {
 
 ## Examples
 
+Those examples should be executed in order :
+
+* [Simple register](https://github.com/neyric/aws-swf/blob/master/examples/simple-register.js)
 
 * [Simple activity worker example](https://github.com/neyric/aws-swf/blob/master/examples/simple-activity-worker.js)
 

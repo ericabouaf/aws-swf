@@ -19,7 +19,7 @@
         "url":"http://github.com/neyric/aws-swf.git"
     },
     "dependencies": {
-        "aws-sdk": "0.9.1-pre.3"
+        "aws-sdk": "0.9.3-pre.4"
     },
     "licenses" : [
         {
