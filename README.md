@@ -66,5 +66,5 @@ High-level classes to use [aws-swf as a library](https://github.com/neyric/aws-s
 
 ## License
 
-[GPL License](https://raw.github.com/neyric/aws-swf/master/LICENSE.txt)
+[MIT License](https://raw.github.com/neyric/aws-swf/master/LICENSE.txt)
 
