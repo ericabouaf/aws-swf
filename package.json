@@ -1,6 +1,6 @@
 {
     "name": "aws-swf",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "description": "A Node.js library for accessing Amazon SWF",
     "author": "Eric Abouaf <eric.abouaf@gmail.com>",
     "engines": {
@@ -19,7 +19,7 @@
         "url":"http://github.com/neyric/aws-swf.git"
     },
     "dependencies": {
-        "aws-sdk": "0.9.3-pre.4"
+        "aws-sdk": "1.6.0"
     },
     "licenses" : [
         {
