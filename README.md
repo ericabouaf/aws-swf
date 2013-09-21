@@ -240,6 +240,9 @@ Those examples should be executed in order :
 * to stop, or signal, or ...
 
 
+## API Documentation
+
+    jsdoc lib/*.js README.md
 
 ## License
 

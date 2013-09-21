@@ -1,3 +1,8 @@
+/**
+ * This simple worker example will respond to any incoming task
+ * on the 'my-workflow-tasklist, by setting the input parameters as the results of the task
+ */
+
 var swf = require('../index');
 
 var activityPoller = new swf.ActivityPoller({
@@ -31,4 +36,4 @@ activityPoller.on('poll', function(d) {
 
 
 // Start polling
-activityPoller.poll();
+activityPoller.start();

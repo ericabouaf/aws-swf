@@ -12,19 +12,19 @@ myDecider.on('decisionTask', function (decisionTask) {
 
     console.log("Got a new decision task !");
 
-    if(!decisionTask.scheduled('step1')) {
-        decisionTask.schedule({
+    if(!decisionTask.eventList.scheduled('step1')) {
+        decisionTask.response.schedule({
             name: 'step1',
             activity: 'simple-activity'
         });
     }
     else {
-        decisionTask.stop({
+        decisionTask.response.stop({
           result: "some workflow output data"
         });
     }
     
-    decisionTask.respondCompleted(decisionTask.decisions, function(err, result) {
+    decisionTask.response.respondCompleted(decisionTask.response.decisions, function(err, result) {
 
       if(err) {
           console.log(err);
@@ -44,5 +44,5 @@ myDecider.on('poll', function(d) {
 });
 
 // Start polling
-myDecider.poll();
+myDecider.start();
 

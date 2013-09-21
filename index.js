@@ -7,4 +7,6 @@ exports.ActivityPoller = require("./lib/activity-poller").ActivityPoller;
 exports.ActivityTask = require("./lib/activity-task").ActivityTask;
 exports.Decider =  require("./lib/decider").Decider;
 exports.DecisionTask =  require("./lib/decision-task").DecisionTask;
-
+exports.EventList = require("./lib/event-list").EventList;
+exports.DecisionResponse = require("./lib/decision-response").DecisionResponse;
+exports.Poller = require("./lib/poller").Poller;
