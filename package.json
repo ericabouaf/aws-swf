@@ -25,7 +25,8 @@
         "vows": "0.7.0"
     },
     "scripts": {
-        "test": "vows --spec tests/*"
+        "test": "vows --spec tests/*",
+        "doc": "jsdoc lib/*.js README.md"
     },
     "licenses" : [
         {
