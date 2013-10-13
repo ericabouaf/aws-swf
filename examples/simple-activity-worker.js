@@ -16,16 +16,13 @@ activityPoller.on('activityTask', function(task) {
     var output = task.input;
 
     task.respondCompleted(output, function (err) {
-        
+
         if(err) {
             console.log(err);
             return;
         }
 
         console.log("responded with some data !");
-
-        // We must poll again
-        activityPoller.poll();
     });
 });
 
