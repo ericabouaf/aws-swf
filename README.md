@@ -79,37 +79,36 @@ Example :
 
 ````javascript
 
-var swf = require("aws-swf");
+var swf = require('../index');
 
-var activityPoller = new swf.ActivityPoller(swfClient, {
-    
-   "domain": "test-domain",
-   "taskList": { "name": "test-taskList" },
-   "identity": "ActivityPoller-1"
-   
-}, function (activityTask, cb) {
-   
-   console.log('A new task is available !');
-   // Do something here...
-   
-   // sends "RespondActivityTaskCompleted" to SWF
-   // result: Maximum length of 32768.
-   activityTask.respondCompleted(result, function (err) {
-      cb(true); // free the poller for new activities
-   }); 
-   
-   // or :
-   
-   // sends "RespondActivityTaskFailed" to SWF
-   // parameters: 
-   // reason (string or undefined): Maximum length of 256
-   // details (string or undefined): Maximum length of 32768
-   activityTask.respondFailed(reason, details, function (err) {
-       cb(true); // free the poller for new activities
-   });
-   
+var activityPoller = new swf.ActivityPoller({
+    domain: 'test-domain',
+    taskList: { name: 'my-workflow-tasklist' },
+    identity: 'simple poller ' + process.pid
 });
 
+activityPoller.on('activityTask', function(task) {
+    console.log("Received new activity task !");
+    var output = task.input;
+
+    task.respondCompleted(output, function (err) {
+
+        if(err) {
+            console.log(err);
+            return;
+        }
+
+        console.log("responded with some data !");
+    });
+});
+
+
+activityPoller.on('poll', function(d) {
+    console.log("polling for activity tasks...", d);
+});
+
+
+// Start polling
 activityPoller.start();
 ````
 
@@ -133,27 +132,51 @@ A *Decider* will poll Amazon SWF for new decision tasks.
 A *DecisionTask* is instantiated by a *Decider* when it receives a decision task from SWF.
 
 ````javascript
-var swf = require("aws-swf");
+var swf = require('../index');
 
-var myDecider = new swf.Decider(swfClient, {
-    
+var myDecider = new swf.Decider({
    "domain": "test-domain",
    "taskList": {"name": "my-workflow-tasklist"},
    "identity": "Decider-01",
-   
    "maximumPageSize": 500,
    "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
-   
-}, function (decisionTask, cb) {
-    
-    // do something here and send decisions...
-    
-    decisionTask.complete_workflow_execution("details of ending here ?", function (err) {
-        
-    });
-    
-    cb(true); // to continue polling
 });
+
+myDecider.on('decisionTask', function (decisionTask) {
+
+    console.log("Got a new decision task !");
+
+    if(!decisionTask.eventList.scheduled('step1')) {
+        decisionTask.response.schedule({
+            name: 'step1',
+            activity: 'simple-activity'
+        });
+    }
+    else {
+        decisionTask.response.stop({
+          result: "some workflow output data"
+        });
+    }
+
+    decisionTask.response.respondCompleted(decisionTask.response.decisions, function(err, result) {
+
+      if(err) {
+          console.log(err);
+          return;
+      }
+
+      console.log("responded with some data !");
+    });
+
+});
+
+myDecider.on('poll', function(d) {
+    //console.log(_this.config.identity + ": polling for decision tasks...");
+    console.log("polling for tasks...", d);
+});
+
+// Start polling
+myDecider.start();
 ````
 
 
