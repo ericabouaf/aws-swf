@@ -79,7 +79,7 @@ Example :
 
 ````javascript
 
-var swf = require('../index');
+var swf = require('aws-swf');
 
 var activityPoller = new swf.ActivityPoller({
     domain: 'test-domain',
@@ -132,7 +132,7 @@ A *Decider* will poll Amazon SWF for new decision tasks.
 A *DecisionTask* is instantiated by a *Decider* when it receives a decision task from SWF.
 
 ````javascript
-var swf = require('../index');
+var swf = require('aws-swf');
 
 var myDecider = new swf.Decider({
    "domain": "test-domain",
