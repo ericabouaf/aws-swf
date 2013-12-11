@@ -171,7 +171,7 @@ myDecider.on('decisionTask', function (decisionTask) {
 });
 
 myDecider.on('poll', function(d) {
-    //console.log(_this.config.identity + ": polling for decision tasks...");
+    //console.log(this.config.identity + ": polling for decision tasks...");
     console.log("polling for tasks...", d);
 });
 
@@ -200,7 +200,7 @@ process.on('SIGINT', function () {
 
 var swf = require("aws-swf");
 
-var workflow = new swf.Workflow(swfClient, {
+var workflow = new swf.Workflow({
    "domain": "test-domain",
    "workflowType": {
       "name": name,
