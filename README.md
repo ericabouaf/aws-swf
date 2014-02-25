@@ -1,5 +1,6 @@
 # A Node.js library for accessing Amazon Simple Workflow (SWF)
 
+[![Build Status](https://travis-ci.org/neyric/aws-swf.png?branch=master)](https://travis-ci.org/neyric/aws-swf)
 [![NPM version](https://badge.fury.io/js/aws-swf.png)](http://badge.fury.io/js/aws-swf)
 
 ## Requirements
@@ -33,39 +34,9 @@ aws-swf provide classes to wrap higher-level concepts of the AWS SWF API :
 * WorkflowExecution
 
 
-### Global configuration
+### Setting AWS Credentials
 
-Don't hardcode your Amazon credentials :
-
-If no config is passed to createClient (see below), aws-swf will walk up the directory hierarchy until it finds a *.aws-swf.json* file.
-
-    {
-        "accessKeyId": "xxxxxx",
-        "secretAccessKey": "xxxxxx",
-        "region": "us-east-1",
-        "defaultDomain": "aws-swf-test-domain",
-        "defaultTasklist": "aws-swf-tasklist"
-    }
-
-
-### Creating an SWF client object
-
-````javascript
-var swf = require("aws-swf");
-var swfClient = swf.createClient({
-    accessKeyId: "... access key id here ...",
-    secretAccessKey: "... secret key here ...",
-    region: "us-east-1"
-});
-````
-
-or using the global configuration file :
-
-````javascript
-var swf = require("aws-swf"),
-    swfClient = swf.createClient();
-````
-
+Cf. http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Setting_AWS_Credentials
 
 ### Creating an ActivityPoller
 
@@ -264,7 +235,7 @@ Those examples should be executed in order :
 
 ## API Documentation
 
-    jsdoc lib/*.js README.md
+    jsdoc lib/*.js README.md -d apidoc
 
 ## License
 
