@@ -1,5 +1,6 @@
 # A Node.js library for accessing Amazon Simple Workflow (SWF)
 
+[![NPM version](https://badge.fury.io/js/aws-swf.png)](http://badge.fury.io/js/aws-swf)
 
 ## Requirements
 
@@ -243,8 +244,6 @@ Those examples should be executed in order :
 * [Simple decider worker example](https://github.com/neyric/aws-swf/blob/master/examples/simple-decider-worker.js)
 
 * [Starting a workflow](https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js)
-
-* [Express.js example](https://github.com/neyric/aws-swf/blob/master/examples/express-example.js)
 
 
 ## Decider API
