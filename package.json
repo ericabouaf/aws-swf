@@ -25,12 +25,12 @@
     "lodash": "~2.4.1"
   },
   "devDependencies": {
-    "vows": "0.7.0",
     "coveralls": "~2.8.0",
-    "istanbul": "~0.2.4"
+    "mocha": "~1.17.1",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "scripts": {
-    "test": "vows --spec tests/*",
+    "test": "mocha",
     "doc": "jsdoc lib/*.js README.md -d apidoc"
   },
   "licenses": [
