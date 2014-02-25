@@ -235,6 +235,8 @@ Those examples should be executed in order :
 
 ## API Documentation
 
+The API documentation is available online : http://neyric.github.io/aws-swf/apidoc/
+
     jsdoc lib/*.js README.md -d apidoc
 
 ## License
