@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Index</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Index</h1>
+    
+    
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1 id="a-node-js-library-for-accessing-amazon-simple-workflow-swf-">A Node.js library for accessing Amazon Simple Workflow (SWF)</h1>
+<p><a href="https://travis-ci.org/neyric/aws-swf"><img src="https://travis-ci.org/neyric/aws-swf.png?branch=master" alt="Build Status"></a>
+<a href="http://badge.fury.io/js/aws-swf"><img src="https://badge.fury.io/js/aws-swf.png" alt="NPM version"></a></p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>NodeJS &gt;= 0.8</li>
+<li>An active <a href="http://aws.amazon.com/">AWS account</a> with <a href="http://docs.amazonwebservices.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#AccessKeys">Access Keys</a></li>
+<li>Basic understanding of <a href="http://aws.amazon.com/en/documentation/swf/">AWS SimpleWorkflow</a> concepts</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<pre><code>npm install aws-swf</code></pre>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="https://github.com/neyric/aws-swf-toolkit">aws-swf-toolkit</a>: Node.js Framework for workflows on Amazon SWF</li>
+<li><a href="https://github.com/neyric/aws-swf-activities">aws-swf-activities</a>: A collection of Node.js activity workers for Amazon SWF</li>
+</ul>
+<h2 id="documentation">Documentation</h2>
+<p>aws-swf uses the official Node.js <a href="http://aws.amazon.com/documentation/sdkfornodejs/">aws-sdk</a> for the low-level API calls. You can find the full <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html">API reference here</a></p>
+<p>aws-swf provide classes to wrap higher-level concepts of the AWS SWF API :</p>
+<ul>
+<li>ActivityPoller</li>
+<li>ActivityTask</li>
+<li>Decider</li>
+<li>DecisionTask</li>
+<li>Workflow</li>
+<li>WorkflowExecution</li>
+</ul>
+<h3 id="setting-aws-credentials">Setting AWS Credentials</h3>
+<p>Cf. http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Setting_AWS_Credentials</p>
+<h3 id="creating-an-activitypoller">Creating an ActivityPoller</h3>
+<p>An <em>ActivityPoller</em> polls Amazon SWF for new tasks to be done.</p>
+<p>An <em>ActivityTask</em> is instantiated by an <em>ActivityPoller</em> when it receives a task from SWF.</p>
+<p>It is passed to your callback and adds the respondCompleted() and respondFailed() methods.</p>
+<p>Example :</p>
+<pre><code class="lang-javascript">
+var swf = require('aws-swf');
+
+var activityPoller = new swf.ActivityPoller({
+    domain: 'test-domain',
+    taskList: { name: 'my-workflow-tasklist' },
+    identity: 'simple poller ' + process.pid
+});
+
+activityPoller.on('activityTask', function(task) {
+    console.log(&quot;Received new activity task !&quot;);
+    var output = task.input;
+
+    task.respondCompleted(output, function (err) {
+
+        if(err) {
+            console.log(err);
+            return;
+        }
+
+        console.log(&quot;responded with some data !&quot;);
+    });
+});
+
+
+activityPoller.on('poll', function(d) {
+    console.log(&quot;polling for activity tasks...&quot;, d);
+});
+
+
+// Start polling
+activityPoller.start();</code></pre>
+<p>It is not recommanded to stop the poller in the middle of a long-polling request, because SWF might schedule an ActivityTask to this poller anyway, which will obviously timeout.
+The .stop() method will wait for the end of the current polling request, eventually wait for a last activity execution, then stop properly :</p>
+<pre><code class="lang-javascript">// on SIGINT event, close the poller properly
+process.on('SIGINT', function () {
+   console.log('Got SIGINT ! Stopping activity poller after this request...please wait...');
+   activityPoller.stop();
+});</code></pre>
+<h3 id="creating-a-decider">Creating a Decider</h3>
+<p>A <em>Decider</em> will poll Amazon SWF for new decision tasks.</p>
+<p>A <em>DecisionTask</em> is instantiated by a <em>Decider</em> when it receives a decision task from SWF.</p>
+<pre><code class="lang-javascript">var swf = require('aws-swf');
+
+var myDecider = new swf.Decider({
+   &quot;domain&quot;: &quot;test-domain&quot;,
+   &quot;taskList&quot;: {&quot;name&quot;: &quot;my-workflow-tasklist&quot;},
+   &quot;identity&quot;: &quot;Decider-01&quot;,
+   &quot;maximumPageSize&quot;: 100,
+   &quot;reverseOrder&quot;: false // IMPORTANT: must replay events in the right order, ie. from the start
+});
+
+myDecider.on('decisionTask', function (decisionTask) {
+
+    console.log(&quot;Got a new decision task !&quot;);
+
+    if(!decisionTask.eventList.scheduled('step1')) {
+        decisionTask.response.schedule({
+            name: 'step1',
+            activity: 'simple-activity'
+        });
+    }
+    else {
+        decisionTask.response.stop({
+          result: &quot;some workflow output data&quot;
+        });
+    }
+
+    decisionTask.response.respondCompleted(decisionTask.response.decisions, function(err, result) {
+
+      if(err) {
+          console.log(err);
+          return;
+      }
+
+      console.log(&quot;responded with some data !&quot;);
+    });
+
+});
+
+myDecider.on('poll', function(d) {
+    //console.log(this.config.identity + &quot;: polling for decision tasks...&quot;);
+    console.log(&quot;polling for tasks...&quot;, d);
+});
+
+// Start polling
+myDecider.start();</code></pre>
+<p>It is not recommanded to stop the poller in the middle of a long-polling request, because SWF might schedule an ActivityTask to this poller anyway, which will obviously timeout.
+The .stop() method will wait for the end of the current polling request, eventually wait for a last activity execution, then stop properly :</p>
+<pre><code class="lang-javascript">// on SIGINT event, close the poller properly
+process.on('SIGINT', function () {
+   console.log('Got SIGINT ! Stopping decider poller after this request...please wait...');
+   myDecider.stop();
+});</code></pre>
+<h3 id="starting-a-workflow">Starting a Workflow</h3>
+<pre><code class="lang-javascript">
+var swf = require(&quot;aws-swf&quot;);
+
+var workflow = new swf.Workflow({
+   &quot;domain&quot;: &quot;test-domain&quot;,
+   &quot;workflowType&quot;: {
+      &quot;name&quot;: name,
+      &quot;version&quot;: version
+   },
+   &quot;taskList&quot;: { &quot;name&quot;: &quot;my-workflow-tasklist&quot; },
+
+   &quot;executionStartToCloseTimeout&quot;: &quot;1800&quot;,
+   &quot;taskStartToCloseTimeout&quot;: &quot;1800&quot;,
+
+   &quot;tagList&quot;: [&quot;music purchase&quot;, &quot;digital&quot;],
+   &quot;childPolicy&quot;: &quot;TERMINATE&quot;
+});</code></pre>
+<p>To start a new <em>workflowExecution</em> :</p>
+<pre><code class="lang-javascript">var workflowExecution = workflow.start({ input: &quot;{}&quot;}, function (err, runId) {
+
+   if (err) {
+      console.log(&quot;Cannot start workflow : &quot;, err);
+      return;
+   }
+
+   console.log(&quot;Workflow started, runId: &quot; +runId);
+
+});</code></pre>
+<h2 id="examples">Examples</h2>
+<p>Those examples should be executed in order :</p>
+<ul>
+<li><p><a href="https://github.com/neyric/aws-swf/blob/master/examples/simple-register.js">Simple register</a></p>
+</li>
+<li><p><a href="https://github.com/neyric/aws-swf/blob/master/examples/simple-activity-worker.js">Simple activity worker example</a></p>
+</li>
+<li><p><a href="https://github.com/neyric/aws-swf/blob/master/examples/simple-decider-worker.js">Simple decider worker example</a></p>
+</li>
+<li><p><a href="https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js">Starting a workflow</a></p>
+</li>
+</ul>
+<h2 id="decider-api">Decider API</h2>
+<ul>
+<li><p>TODO: decider helper methods to make it easier to query the event history (dt.completed('step1'), dt.failed('step1'), dt.results('step1'))</p>
+<p>if (dt.failed()) {
+  ...
+  dt.scheduled()
+}</p>
+</li>
+<li><p>... to schedule tasks/timer/workflows etc...
+dt.schedule({
+...
+})</p>
+</li>
+<li>to stop, or signal, or ...</li>
+</ul>
+<h2 id="api-documentation">API Documentation</h2>
+<pre><code>jsdoc lib/*.js README.md -d apidoc</code></pre>
+<h2 id="license">License</h2>
+<p><a href="https://raw.github.com/neyric/aws-swf/master/LICENSE.txt">MIT License</a></p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Feb 25 2014 15:24:17 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
