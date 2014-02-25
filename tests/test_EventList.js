@@ -10,24 +10,6 @@ vows.describe('aws-swf EventList test suite').addBatch({
 
       topic: function() {
          return new EventList([
-         	{
-         		"decisionTaskStartedEventAttributes": {
-         			"identity": "Decider01",
-          			"scheduledEventId": 2
-          		},
-          		"eventId": 3,
-          		"eventTimestamp": 1326593394.566,
-          		"eventType": "DecisionTaskStarted"
-          	},
-          	{
-          		"decisionTaskScheduledEventAttributes": {
-          			"startToCloseTimeout": "600",
-          			"taskList": {"name": "specialTaskList"}
-          		},
-          		"eventId": 2,
-          		"eventTimestamp": 1326592619.474,
-          		"eventType": "DecisionTaskScheduled"
-          	},
           	{
           		"eventId": 1,
           		"eventTimestamp": 1326592619.474,
@@ -45,17 +27,38 @@ vows.describe('aws-swf EventList test suite').addBatch({
           				"version": "1.0"
           			}
           		}
-          	}
+          	},
+            {
+              "decisionTaskScheduledEventAttributes": {
+                "startToCloseTimeout": "600",
+                "taskList": {"name": "specialTaskList"}
+              },
+              "eventId": 2,
+              "eventTimestamp": 1326592619.474,
+              "eventType": "DecisionTaskScheduled"
+            },
+            {
+            "decisionTaskStartedEventAttributes": {
+              "identity": "Decider01",
+                "scheduledEventId": 2
+              },
+              "eventId": 3,
+              "eventTimestamp": 1326593394.566,
+              "eventType": "DecisionTaskStarted"
+            }
           ]);
       },
 
       'we get an event list': {
       	'is_activity_started': function (evl) {
          	assert.equal (false, evl.is_activity_started('test1') );
-     	},
-     	'workflow just started': function(evl) {
-			assert.equal (true, evl.has_workflow_just_started() );
-     	}
+     	  },
+     	  'workflow just started': function(evl) {
+			    assert.equal (true, evl.has_workflow_just_started() );
+     	  },
+        'has input': function(evl) {
+          assert.equal ("arbitrary-string-that-is-meaningful-to-the-workflow", evl.workflow_input() );
+        }
       }
    }
 
