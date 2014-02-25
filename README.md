@@ -139,7 +139,7 @@ var myDecider = new swf.Decider({
    "domain": "test-domain",
    "taskList": {"name": "my-workflow-tasklist"},
    "identity": "Decider-01",
-   "maximumPageSize": 500,
+   "maximumPageSize": 100,
    "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
 });
 

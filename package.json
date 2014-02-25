@@ -19,7 +19,8 @@
         "url":"http://github.com/neyric/aws-swf.git"
     },
     "dependencies": {
-        "aws-sdk": "1.6.0"
+        "aws-sdk": "2.0.0-rc9",
+        "lodash": "~2.4.1"
     },
     "devDependencies": {
         "vows": "0.7.0"
