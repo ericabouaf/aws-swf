@@ -93,7 +93,7 @@ Then open coverage/lcov-report/index.html
 
 To send the coverage to coveralls, I run locally (I don't know why travis-ci after-script doesn't work...):
 
-NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | COVERALLS_REPO_TOKEN=xxxx ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+    $ NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | COVERALLS_REPO_TOKEN=xxxx ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
 
 ## License
 

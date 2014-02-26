@@ -26,4 +26,101 @@ describe('EventList', function(){
     })
 
 
+    // has_schedule_activity_task_failed
+    it('#has_schedule_activity_task_failed', function() {
+        evl.has_schedule_activity_task_failed();
+    })
+
+
+    // timer_canceled
+    it('#timer_canceled', function() {
+        evl.timer_canceled('timerId');
+    })
+
+    // timer_fired
+    it('#timer_fired', function() {
+        evl.timer_fired('timerId');
+    })
+
+    // timer_scheduled
+    it('#timer_scheduled', function() {
+        evl.timer_scheduled('timerId');
+    })
+
+    // childworkflow_scheduled
+    it('#childworkflow_scheduled', function() {
+        evl.childworkflow_scheduled('my-childworkflow');
+    })
+
+    // childworkflow_completed
+    it('#childworkflow_completed', function() {
+        evl.childworkflow_completed('my-childworkflow');
+    })
+
+    // childworkflow_failed
+    it('#childworkflow_failed', function() {
+        evl.childworkflow_failed('my-childworkflow');
+    })
+
+    // has_activity_timedout
+    it('#has_activity_timedout', function() {
+        evl.has_activity_timedout('my-activity');
+    })
+
+    // has_activity_failed
+    it('#has_activity_failed', function() {
+        evl.has_activity_failed('my-activity');
+    })
+
+    // failed
+    it('#failed', function() {
+        evl.failed('my-activity');
+    })
+
+    // timed_out
+    it('#timed_out', function() {
+        evl.timed_out('my-activity');
+    })
+
+    // signal_arrived
+    it('#signal_arrived', function() {
+        evl.signal_arrived('my-signal');
+    })
+
+    // signal_input
+    it('#signal_input', function() {
+        evl.signal_input('my-signal');
+    })
+
+    // is_activity_canceled
+    it('#is_activity_canceled', function() {
+        evl.is_activity_canceled('my-activity');
+    })
+
+    // is_activity_scheduled
+    it('#is_activity_scheduled', function() {
+        evl.is_activity_scheduled('my-activity');
+    })
+
+    // scheduled
+    it('#scheduled', function() {
+        evl.scheduled('my-activity');
+    })
+
+    // has_activity_completed
+    it('#has_activity_completed', function() {
+        evl.has_activity_completed('my-activity');
+    })
+
+    // completed
+    it('#completed', function() {
+        evl.completed('my-activity');
+    })
+
+    // activityIdFor
+    // eventById
+    // results
+    // childworkflow_results
+    // get_last_marker_details
+
 })
