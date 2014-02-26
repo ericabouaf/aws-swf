@@ -44,3 +44,17 @@ myDecider.on('poll', function(d) {
 // Start polling
 myDecider.start();
 
+
+
+/**
+ * It is not recommanded to stop the poller in the middle of a long-polling request,
+ * because SWF might schedule an DecisionTask to this poller anyway, which will obviously timeout.
+ *
+ * The .stop() method will wait for the end of the current polling request, 
+ * eventually wait for a last decision execution, then stop properly :
+ */
+process.on('SIGINT', function () {
+   console.log('Got SIGINT ! Stopping decider poller after this request...please wait...');
+   myDecider.stop();
+});
+
