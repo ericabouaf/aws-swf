@@ -8,7 +8,6 @@ var EventList = swf.EventList;
 
 
 describe('EventList', function(){
-  describe('#indexOf()', function(){
 
     var fixtureFile = 'eventlist_noactivity.json';
     var fixtureData = JSON.parse(fs.readFileSync( path.join(__dirname , '..', 'fixtures', fixtureFile), 'utf8') );
@@ -27,5 +26,4 @@ describe('EventList', function(){
     })
 
 
-  })
 })

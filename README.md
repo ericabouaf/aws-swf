@@ -43,7 +43,7 @@ You can run the following example to register the objects used in the following 
 ### Step 2 : Create Activity Workers
 
 An **[ActivityPoller](http://neyric.github.io/aws-swf/apidoc/ActivityPoller.html)** will wait for new tasks from SWF, and emit an **activityTask** event.
-The event receives an instance of **ActivityTask**, which makes it easier to send the response to SWF.
+The event receives an instance of **[ActivityTask](http://neyric.github.io/aws-swf/apidoc/ActivityTask.html)**, which makes it easier to send the response to SWF.
 
 [This example](https://github.com/neyric/aws-swf/blob/master/examples/simple-activity-worker.js) starts an Activity Worker which completes immediatly.
 
@@ -63,8 +63,9 @@ The event receives an instance of **[DecisionTask](http://neyric.github.io/aws-s
 
 ### Step 4 : Start a workflow
 
-* [Starting a workflow](https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js) : start an instance of the simple workflow example.
+To start a workflow, call the *start* method on an [Workflow](http://neyric.github.io/aws-swf/apidoc/Workflow.html) instance. This call will return a [WorkflowExecution](http://neyric.github.io/aws-swf/apidoc/WorkflowExecution.html) instance, which you can use to signal or terminate a workflow.
 
+* [Starting a workflow](https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js) : start an instance of the simple workflow example.
 
 
 
