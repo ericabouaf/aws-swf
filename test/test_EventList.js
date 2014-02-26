@@ -18,7 +18,7 @@ describe('EventList', function(){
     })
 
     it('workflow just started', function() {
-          assert.equal (true, evl.has_workflow_just_started() );
+          assert.equal (true, evl.just_started() );
     })
 
     it('has input', function() {

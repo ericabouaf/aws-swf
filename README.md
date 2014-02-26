@@ -63,7 +63,7 @@ The event receives an instance of **[DecisionTask](http://neyric.github.io/aws-s
 
 ### Step 4 : Start a workflow
 
-To start a workflow, call the *start* method on an [Workflow](http://neyric.github.io/aws-swf/apidoc/Workflow.html) instance. This call will return a [WorkflowExecution](http://neyric.github.io/aws-swf/apidoc/WorkflowExecution.html) instance, which you can use to signal or terminate a workflow.
+To start a workflow, call the *start* method on an **[Workflow](http://neyric.github.io/aws-swf/apidoc/Workflow.html)** instance. This call will return a **[WorkflowExecution](http://neyric.github.io/aws-swf/apidoc/WorkflowExecution.html)** instance, which you can use to signal or terminate a workflow.
 
 * [Starting a workflow](https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js) : start an instance of the simple workflow example.
 
@@ -89,6 +89,11 @@ To get the coverage, run :
     $ ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha
 
 Then open coverage/lcov-report/index.html
+
+
+To send the coverage to coveralls, I run locally (I don't know why travis-ci after-script doesn't work...):
+
+NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | COVERALLS_REPO_TOKEN=xxxx ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
 
 ## License
 
