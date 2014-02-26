@@ -3,6 +3,7 @@
 [![NPM version](https://badge.fury.io/js/aws-swf.png)](http://badge.fury.io/js/aws-swf)
 [![Build Status](https://travis-ci.org/neyric/aws-swf.png?branch=master)](https://travis-ci.org/neyric/aws-swf)
 [![Coverage Status](https://coveralls.io/repos/neyric/aws-swf/badge.png?branch=master)](https://coveralls.io/r/neyric/aws-swf?branch=master)
+[![Code Climate](https://codeclimate.com/github/neyric/aws-swf.png)](https://codeclimate.com/github/neyric/aws-swf)
 
 ## Requirements
 
