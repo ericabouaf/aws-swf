@@ -35,6 +35,8 @@
       "eventTimestamp": 1326593394.566,
       "eventType": "DecisionTaskStarted"
    },
+
+
    {
       "eventId": 4,
       "eventType": "ActivityTaskScheduled",
@@ -44,10 +46,72 @@
    },
    {
       "eventId": 5,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-second-activity"
+      }
+   },
+   {
+      "eventId": 6,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-third-activity"
+      }
+   },
+   {
+      "eventId": 7,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-fourth-activity"
+      }
+   },
+
+
+
+   {
+      "eventId": 8,
       "eventType": "ActivityTaskCompleted",
       "activityTaskCompletedEventAttributes": {
          "scheduledEventId": 4,
          "result": "my-activity-results"
+      }
+   },
+   {
+      "eventId": 9,
+      "eventType": "ScheduleActivityTaskFailed",
+      "scheduleActivityTaskFailedEventAttributes": {
+         "scheduledEventId": 5
+      }
+   },
+   {
+      "eventId": 10,
+      "eventType": "ActivityTaskTimedOut",
+      "activityTaskTimedOutEventAttributes": {
+         "scheduledEventId": 6
+      }
+   },
+   {
+      "eventId": 11,
+      "eventType": "ActivityTaskFailed",
+      "activityTaskFailedEventAttributes": {
+         "scheduledEventId": 7
+      }
+   },
+
+
+   {
+      "eventId": 12,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-json-activity"
+      }
+   },
+   {
+      "eventId": 13,
+      "eventType": "ActivityTaskCompleted",
+      "activityTaskCompletedEventAttributes": {
+         "scheduledEventId": 12,
+         "result": "{\"foo\":\"my-activity-results\"}"
       }
    }
 ]

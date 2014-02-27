@@ -55,4 +55,13 @@ describe('ActivityPoller', function(){
       activityPoller.start();
     });
 
+    it('should insntaiate without swfClient', function() {
+      var activityPoller = new ActivityPoller({
+        domain: 'test-domain',
+        taskList: {
+          name: 'test-taskList'
+        }
+      });
+    });
+
 });

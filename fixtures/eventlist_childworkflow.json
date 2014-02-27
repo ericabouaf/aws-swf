@@ -6,7 +6,7 @@
       "workflowExecutionStartedEventAttributes": {
          "childPolicy": "TERMINATE",
          "executionStartToCloseTimeout": "3600",
-         "input": "arbitrary-string-that-is-meaningful-to-the-workflow",
+         "input": "{\"foo\":\"arbitrary-string-that-is-meaningful-to-the-workflow\"}",
          "parentInitiatedEventId": 0,
          "tagList": ["music purchase", "digital", "ricoh-the-dog"],
          "taskList": {"name": "specialTaskList"},
@@ -51,12 +51,44 @@
       }
    },
    {
-      "eventId": 5,
+      "eventId": 6,
       "eventTimestamp": 1326593394.566,
       "eventType": "ChildWorkflowExecutionCompleted",
       "childWorkflowExecutionCompletedEventAttributes": {
          "initiatedEventId": 5,
          "result": "my-childworkflow-result"
+      }
+   },
+   {
+      "eventId": 7,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "StartChildWorkflowExecutionInitiated",
+      "startChildWorkflowExecutionInitiatedEventAttributes": {
+         "control": "my-second-childworkflow" 
+      }
+   },
+   {
+      "eventId": 8,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "StartChildWorkflowExecutionFailed",
+      "startChildWorkflowExecutionFailedEventAttributes": {
+         "initiatedEventId": 7
+      }
+   },
+   {
+      "eventId": 9,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "StartChildWorkflowExecutionInitiated",
+      "startChildWorkflowExecutionInitiatedEventAttributes": {
+         "control": "my-third-childworkflow" 
+      }
+   },
+   {
+      "eventId": 10,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "ChildWorkflowExecutionFailed",
+      "childWorkflowExecutionFailedEventAttributes": {
+         "initiatedEventId": 9
       }
    }
 ]
