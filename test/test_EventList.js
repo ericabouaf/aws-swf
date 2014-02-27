@@ -26,9 +26,9 @@ describe('EventList', function(){
             assert.equal ("arbitrary-string-that-is-meaningful-to-the-workflow", evl.workflow_input() );
         })
 
-        it('#has_schedule_activity_task_failed', function() {
+        /*it('#has_schedule_activity_task_failed', function() {
             evl.has_schedule_activity_task_failed();
-        })
+        })*/
 
         it('#timer_canceled', function() {
             evl.timer_canceled('timerId');
@@ -167,9 +167,9 @@ describe('EventList', function(){
             assert.equal(false, evl.just_started() );
         })
 
-        it('#has_schedule_activity_task_failed()', function() {
+        /*it('#has_schedule_activity_task_failed()', function() {
             assert.notEqual(false, evl.has_schedule_activity_task_failed() ); // TODO: argument !
-        })
+        })*/
 
         it('#has_activity_timedout()', function() {
             assert.equal(true, evl.has_activity_timedout("my-third-activity") );
