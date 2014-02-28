@@ -27,7 +27,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>
 /**
- * This class provides methods to query the event list passed to the decision tasks
+ * Methods to query the EventList of DecisionTasks about the state of the workflow execution
  * @constructor
  */
 var EventList = exports.EventList = function (events) {
@@ -39,66 +39,137 @@ var EventList = exports.EventList = function (events) {
 EventList.prototype = {
 
    /**
-    * This method returns true if the eventType already occured for the given activityId
+    * Return the activityId given the scheduledEventId
+    * @param {String} scheduledEventId
+    * @returns {String} activityId - The activityId if found, false otherwise
     */
-   _has_eventType_for_activityId: function (activityId, eventType) {
-      var attributesKey = eventType.substr(0, 1).toLowerCase() + eventType.substr(1) + "EventAttributes";
-      return this._events.some(function (evt) {
-         if (evt.eventType === eventType) {
-            if (evt[attributesKey].activityId === activityId) {
-               return true;
-            }
-         }
-      });
-   },
-
-   /**
-    * TODO
-    */
-   has_schedule_activity_task_failed: function () {
-      // TODO: rewrite this !
+   activityIdFor: function (scheduledEventId) {
       var i;
       for (i = 0; i &lt; this._events.length; i++) {
          var evt = this._events[i];
-         var evtType = evt.eventType;
-         if (evtType === "ScheduleActivityTaskFailed") {
-            return evt;
+         if (evt.eventId === scheduledEventId) {
+            return evt.activityTaskScheduledEventAttributes.activityId;
          }
       }
       return false;
    },
 
    /**
+    * Return the activityId
+    * @param {Integer} eventId
+    * @returns {Object} evt - The event if found, false otherwise
+    */
+   eventById: function (eventId) {
+      var i;
+      for (i = 0; i &lt; this._events.length; i++) {
+         var evt = this._events[i];
+         if (evt.eventId === eventId) {
+            return evt;
+         }
+      }
+      return false;
+   },
+
+
+  /**
+   * Return the key of event attributes for the given event type
+   * @param {String} eventType
+   * @returns {String} attributesKey
+   */
+  _event_attributes_key: function(eventType) {
+    return eventType.substr(0, 1).toLowerCase() + eventType.substr(1) + 'EventAttributes';
+  },
+
+  /**
+   * Return the Event for the given type that has the given attribute value
+   * @param {String} eventType
+   * @param {String} attributeKey
+   * @param {String} attributeValue
+   * @returns {Object} evt - The event if found, null otherwise
+   */
+  _event_find: function(eventType, attributeKey, attributeValue) {
+    var attrsKey = this._event_attributes_key(eventType);
+    for(var i = 0; i &lt; this._events.length ; i++) {
+      var evt = this._events[i];
+      if ( (evt.eventType === eventType) &amp;&amp; (evt[attrsKey][attributeKey] === attributeValue) ) {
+        return evt;
+      }
+    }
+    return null;
+  },
+
+  /**
+   * Check the presence of an Event with the specified 
+   * @param {String} attributeKey
+   * @param {String} attributeValue
+   * @param {String} eventType
+   * @returns {Boolean}
+   */
+  _has_event_with_attribute_value: function(attributeKey, attributeValue, eventType) {
+    return !!this._event_find(eventType, attributeKey, attributeValue);
+  },
+
+   /**
+    * This method returns true if the eventType already occured for the given activityId
+    * @param {String} activityId
+    * @param {String} eventType
+    * @returns {Boolean}
+    */
+   _has_eventType_for_activityId: function (activityId, eventType) {
+      return this._has_event_with_attribute_value('activityId', activityId, eventType);
+   },
+
+
+   /**
+    * Search for an event with the corresponding type that matches the scheduled activityId
+    * @param {String} eventType
+    * @param {String} activityId
+    * @returns {Boolean}
+    */
+   _has_event_for_scheduledEventId: function(eventType, activityId) {
+      var attrsKey = this._event_attributes_key(eventType);
+      return this._events.some(function (evt) {
+          if (evt.eventType === eventType) {
+             if (this.activityIdFor(evt[attrsKey].scheduledEventId) === activityId) {
+                return true;
+             }
+          }
+       }, this);
+   },
+
+   /**
     * Return true if the timer with the given timerId has an event with the given eventType
+    * @param {String} timerId
+    * @param {String} eventType
+    * @returns {Boolean}
     */
    has_timer_event: function (timerId, eventType) {
-      var attributesKey = eventType.substr(0, 1).toLowerCase() + eventType.substr(1) + 'EventAttributes';
-      return this._events.some(function (evt) {
-        if (evt.eventType === eventType) {
-          if (evt[attributesKey].timerId === timerId) {
-            return true;
-          }
-        }
-      });
+      return this._has_event_with_attribute_value('timerId', timerId, eventType);
     },
 
    /**
     * Return true if the timer has been canceled
+    * @param {String} timerId
+    * @returns {Boolean}
     */
    timer_canceled: function (timerId) {
       return this.has_timer_event(timerId, 'TimerCanceled');
    },
 
    /**
-   * Return true if the timer has been canceled
-   */
+    * Return true if the timer has been canceled
+    * @param {String} timerId
+    * @returns {Boolean}
+    */
    timer_fired: function (timerId) {
       return this.has_timer_event(timerId, 'TimerFired');
    },
 
    /**
-   * Return true if the timer has been started
-   */
+    * Return true if the timer has been started
+    * @param {String} timerId
+    * @returns {Boolean}
+    */
    timer_scheduled: function (timerId) {
       return this.has_timer_event(timerId, 'TimerStarted');
    },
@@ -106,6 +177,8 @@ EventList.prototype = {
 
    /**
     * lookup for StartChildWorkflowExecutionInitiated
+    * @param {String} control
+    * @returns {Boolean}
     */
    childworkflow_scheduled: function(control) {
       return this._events.some(function (evt) {
@@ -119,6 +192,8 @@ EventList.prototype = {
 
    /**
     * Return true if the child workflow is completed
+    * @param {String} control
+    * @returns {Boolean}
     */
    childworkflow_completed: function(control) {
       return this._events.some(function (evt) {
@@ -135,6 +210,8 @@ EventList.prototype = {
 
    /**
     * Return true if the child workflow has failed
+    * @param {String} control
+    * @returns {Boolean}
     */
    childworkflow_failed: function(control) {
       var initiatedEventId, initiatedEvent;
@@ -157,6 +234,8 @@ EventList.prototype = {
 
    /**
     * returns true if the activityId started
+    * @param {String} activityId
+    * @returns {Boolean}
     */
    is_activity_started: function (activityId) {
       return this._has_eventType_for_activityId(activityId, "ActivityTaskStarted");
@@ -164,98 +243,86 @@ EventList.prototype = {
 
    /**
     * returns true if the activityId has timed out
+    * @param {String} activityId
+    * @returns {Boolean}
     */
    has_activity_timedout: function (activityId) {
-      return this._events.some(function (evt) {
-         if (evt.eventType === "ActivityTaskTimedOut") {
-            if (this.activityIdFor(evt.activityTaskTimedOutEventAttributes.scheduledEventId) === activityId) {
-               return true;
-            }
-         }
-      }, this);
+      return this._has_event_for_scheduledEventId('ActivityTaskTimedOut', activityId);
    },
 
    /**
     * returns true if the activityId has failed
+    * @param {String} activityId
+    * @returns {Boolean}
     */
    has_activity_failed: function (activityId) {
-      return this._events.some(function (evt) {
-         if (evt.eventType === "ActivityTaskFailed") {
-            if (this.activityIdFor(evt.activityTaskFailedEventAttributes.scheduledEventId) === activityId) {
-               return true;
-            }
-         }
-      }, this);
+      return this._has_event_for_scheduledEventId('ActivityTaskFailed', activityId);
    },
+
+   /**
+    * Check if one of the ScheduleActivityTask failed
+    * @param {String} activityId
+    * @returns {Boolean}
+    */
+   has_schedule_activity_task_failed: function (activityId) {
+      return this._has_event_for_scheduledEventId('ScheduleActivityTaskFailed', activityId);
+   },
+
 
    /**
     * Returns true if the arguments failed
+    * @param {String} activityId
+    * @returns {Boolean}
     */
-   failed: function () {
-      var i;
-      for (i = 0; i &lt; arguments.length; i++) {
-         if (!this.has_activity_failed(arguments[i]) &amp;&amp; !this.has_schedule_activity_task_failed(arguments[i])) {
-            return false;
-         }
-      }
-      return true;
+   failed: function (activityId) {
+      return this.has_activity_failed(activityId) || 
+             this.has_schedule_activity_task_failed(activityId);
    },
 
    /**
-    * Returns true if the arguments timed out
+    * Returns true if the activityId timed out
+    * @param {String} activityId
+    * @returns {Boolean}
     */
-   timed_out: function () {
-      var i;
-      for (i = 0; i &lt; arguments.length; i++) {
-         if (!this.has_activity_timedout(arguments[i])) {
-            return false;
-         }
-      }
-      return true;
+   timed_out: function (activityId) {
+      return this.has_activity_timedout(activityId);
    },
 
    /**
     * Returns true if the signal has arrived
+    * @param {String} signalName
+    * @returns {Boolean}
     */
    signal_arrived: function (signalName) {
-      var attributesKey = 'workflowExecutionSignaledEventAttributes';
-      var eventType = 'WorkflowExecutionSignaled';
-      return this._events.some(function (evt) {
-        if (evt.eventType === eventType) {
-          if (evt[attributesKey].signalName === signalName) {
-            return true;
-          }
-        }
-      });
+      return this._has_event_with_attribute_value('signalName', signalName, 'WorkflowExecutionSignaled')
     },
 
     /**
     * Returns the signal input or null if the signal is not found or doesn't have JSON input
+    * @param {String} signalName
+    * @returns {Mixed}
     */
-   signal_input: function (signalName, options) {
-      var i;
-      for (i = 0; i &lt; this._events.length; i++) {
-         var evt = this._events[i];
+   signal_input: function (signalName) {
 
-         var attributesKey = 'workflowExecutionSignaledEventAttributes';
-         if (evt.eventType === 'WorkflowExecutionSignaled') {
-            if (evt[attributesKey].signalName === signalName) {
-               var signalInput = evt[attributesKey].input;
-               try {
-                  var d = JSON.parse(signalInput);
-                  return d;
-               } catch (ex) {
-                  return signalInput;
-               }
-            }
-         }
+      var evt = this._event_find('WorkflowExecutionSignaled', 'signalName', signalName);
+      if(!evt) {
+        return null;
       }
-      return null;
+
+      var signalInput = evt.workflowExecutionSignaledEventAttributes.input;
+      try {
+        var d = JSON.parse(signalInput);
+        return d;
+      } catch (ex) {
+        return signalInput;
+      }
    },
 
 
    /**
     * returns true if the activityId is canceled
+    * @param {String} activityId
+    * @returns {Boolean}
     */
    is_activity_canceled: function (activityId) {
       return this._has_eventType_for_activityId(activityId, "ActivityTaskCanceled");
@@ -263,6 +330,8 @@ EventList.prototype = {
 
    /**
     * returns true if the activityId is scheduled
+    * @param {String} activityId
+    * @returns {Boolean}
     */
    is_activity_scheduled: function (activityId) {
       return this._has_eventType_for_activityId(activityId, "ActivityTaskScheduled");
@@ -271,6 +340,8 @@ EventList.prototype = {
 
    /**
     * Return true if the arguments are all scheduled
+    * @param {String} [...]
+    * @returns {Boolean}
     */
    scheduled: function () {
       var i;
@@ -284,6 +355,7 @@ EventList.prototype = {
 
    /**
     * returns true if no Activity has been scheduled yet...
+    * @returns {Boolean}
     */
    has_workflow_just_started: function () {
       var i;
@@ -299,6 +371,7 @@ EventList.prototype = {
 
    /**
     * alias for has_workflow_just_started
+    * @returns {Boolean}
     */
    just_started: function () {
       return this.has_workflow_just_started();
@@ -306,19 +379,17 @@ EventList.prototype = {
 
    /**
     * returns true if we have a Completed event for the given activityId
+    * @param {String} activityId
+    * @returns {Boolean}
     */
    has_activity_completed: function (activityId) {
-      return this._events.some(function (evt) {
-         if (evt.eventType === "ActivityTaskCompleted") {
-               if (this.activityIdFor(evt.activityTaskCompletedEventAttributes.scheduledEventId) === activityId) {
-                  return true;
-               }
-            }
-      }, this);
+      return this._has_event_for_scheduledEventId('ActivityTaskCompleted', activityId);
    },
 
    /**
     * Return true if all the arguments are completed
+    * @param {String} [...]
+    * @returns {Boolean}
     */
    completed: function () {
       var i;
@@ -331,37 +402,8 @@ EventList.prototype = {
    },
 
    /**
-    * Return the activityId given the scheduledEventId
-    */
-   activityIdFor: function (scheduledEventId) {
-      var i;
-      for (i = 0; i &lt; this._events.length; i++) {
-         var evt = this._events[i];
-         if (evt.eventId === scheduledEventId) {
-            return evt.activityTaskScheduledEventAttributes.activityId;
-         }
-      }
-      return false;
-   },
-
-
-   /**
-    * Return the activityId
-    */
-   eventById: function (eventId) {
-      var i;
-      for (i = 0; i &lt; this._events.length; i++) {
-         var evt = this._events[i];
-         if (evt.eventId === eventId) {
-            return evt;
-         }
-      }
-      return false;
-   },
-
-
-   /**
     * Get the input parameters of the workflow
+    * @returns {Mixed}
     */
    workflow_input: function () {
 
@@ -378,8 +420,10 @@ EventList.prototype = {
 
    /**
     * Get the results for the given activityId
+    * @param {String} activityId
+    * @returns {Mixed}
     */
-   results: function (activityId, options) {
+   results: function (activityId) {
       var i;
       for (i = 0; i &lt; this._events.length; i++) {
          var evt = this._events[i];
@@ -388,10 +432,6 @@ EventList.prototype = {
             if (this.activityIdFor(evt.activityTaskCompletedEventAttributes.scheduledEventId) === activityId) {
 
                var result = evt.activityTaskCompletedEventAttributes.result;
-
-               if (!!options &amp;&amp; !!options.format &amp;&amp; options.format === "json") {
-                  result = JSON.parse(result);
-               }
 
                try {
                   var d = JSON.parse(result);
@@ -410,6 +450,8 @@ EventList.prototype = {
 
    /**
     * Get the results of a completed child workflow
+    * @param {String} control
+    * @returns {Mixed}
     */
    childworkflow_results: function(control) {
 
@@ -441,6 +483,8 @@ EventList.prototype = {
 
    /**
     * Get the details of the last marker with the given name
+    * @param {String} markerName
+    * @returns {Mixed}
     */
    get_last_marker_details: function (markerName) {
       var i, finalDetail;
@@ -470,13 +514,13 @@ EventList.prototype = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Events</h3><ul><li><a href="ActivityPoller.html#event:activityTask">activityTask</a></li><li><a href="ActivityPoller.html#event:error">error</a></li><li><a href="ActivityPoller.html#event:poll">poll</a></li><li><a href="Decider.html#event:decisionTask">decisionTask</a></li><li><a href="Decider.html#event:error">error</a></li><li><a href="Decider.html#event:poll">poll</a></li><li><a href="Poller.html#event:error">error</a></li><li><a href="Poller.html#event:poll">poll</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Feb 25 2014 15:24:17 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Feb 28 2014 16:54:55 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

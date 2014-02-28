@@ -39,7 +39,7 @@
     
         
 <dt>
-    <h4 class="name" id="Workflow"><span class="type-signature"></span>new Workflow<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Workflow"><span class="type-signature"></span>new Workflow<span class="signature">(config, <span class="optional">swfClient</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -55,6 +55,97 @@
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>swfClient</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -80,7 +171,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="workflow.js.html">workflow.js</a>, <a href="workflow.js.html#line9">line 9</a>
+        <a href="workflow.js.html">workflow.js</a>, <a href="workflow.js.html#line11">line 11</a>
     </li></ul></dd>
     
     
@@ -126,7 +217,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="register"><span class="type-signature"></span>register<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="register"><span class="type-signature"></span>register<span class="signature">(<span class="optional">cb</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -142,6 +233,66 @@
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -167,7 +318,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="workflow.js.html">workflow.js</a>, <a href="workflow.js.html#line28">line 28</a>
+        <a href="workflow.js.html">workflow.js</a>, <a href="workflow.js.html#line34">line 34</a>
     </li></ul></dd>
     
     
@@ -195,7 +346,7 @@
         
             
 <dt>
-    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">(config, <span class="optional">cb</span>)</span><span class="type-signature"> &rarr; {<a href="WorkflowExecution.html">WorkflowExecution</a>}</span></h4>
     
     
 </dt>
@@ -211,6 +362,97 @@
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">called once the workflow execution started</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -236,7 +478,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="workflow.js.html">workflow.js</a>, <a href="workflow.js.html#line19">line 19</a>
+        <a href="workflow.js.html">workflow.js</a>, <a href="workflow.js.html#line24">line 24</a>
     </li></ul></dd>
     
     
@@ -257,6 +499,28 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    workflowExecution - The new instance of the workflow execution
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="WorkflowExecution.html">WorkflowExecution</a></span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -277,13 +541,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Events</h3><ul><li><a href="ActivityPoller.html#event:activityTask">activityTask</a></li><li><a href="ActivityPoller.html#event:error">error</a></li><li><a href="ActivityPoller.html#event:poll">poll</a></li><li><a href="Decider.html#event:decisionTask">decisionTask</a></li><li><a href="Decider.html#event:error">error</a></li><li><a href="Decider.html#event:poll">poll</a></li><li><a href="Poller.html#event:error">error</a></li><li><a href="Poller.html#event:poll">poll</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Feb 25 2014 15:24:17 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Feb 28 2014 16:54:55 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

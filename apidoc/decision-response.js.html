@@ -25,15 +25,17 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>
-var createClient = require('./swf').createClient;
+            <pre class="prettyprint source linenums"><code>var createClient = require('./swf').createClient;
 
 /**
- * This class makes it easier to build decision responses.
+ * This class makes it easier to build decision responses.&lt;br />
  * http://docs.aws.amazon.com/amazonswf/latest/apireference/API_Decision.html
  * @constructor
+ * @param {Object} swfClient
+ * @param {String} taskToken
+ * @param {String} defaultTaskList
  */
-var DecisionResponse = exports.DecisionResponse = function (swfClient, taskToken, defaultTaskList) {
+var DecisionResponse = function (swfClient, taskToken, defaultTaskList) {
 
    this.swfClient = swfClient || createClient();
    this.taskToken = taskToken;
@@ -45,16 +47,22 @@ var DecisionResponse = exports.DecisionResponse = function (swfClient, taskToken
 
 };
 
+exports.DecisionResponse = DecisionResponse;
 
 DecisionResponse.prototype = {
 
-
+  /**
+   * Send the stored decisions to SWF
+   * @param {Function} cb - callback
+   */
   send: function(cb) {
     this.respondCompleted(this.decisions, cb);
   },
 
    /**
-    * sends the decision response to SWF
+    * Sends the decision response to SWF
+    * @param {Array} decisions - the decisions to send
+    * @param {Function} cb - callback
     */
    respondCompleted: function (decisions, cb) {
 
@@ -77,6 +85,7 @@ DecisionResponse.prototype = {
 
    /**
     * Add a decision
+    * @param {Object} decision - decision to add to the response 
     */
    addDecision: function(decision) {
 
@@ -88,9 +97,10 @@ DecisionResponse.prototype = {
    },
 
 
+   /**
+    * Sets the local decisions to an empty array. Call this method if no decisions can be made.&lt;br />
+    */
    wait: function() {
-
-      // TODO: check arguments to see if the tasks waiting for are not failed or not started...
 
       if (!this.decisions) {
          this.decisions = [];
@@ -100,7 +110,9 @@ DecisionResponse.prototype = {
 
 
    /**
-    * Add a "CompleteWorkflowExecution" decision
+    * Add a "CompleteWorkflowExecution" decision to the response
+    * @param {Object} stopAttributes - object containing a 'result' attribute. The result value can be a function (which will get evaluated), a string, or a json object.
+    * @param {Object} [swfAttributes] - Additionnal attributes for 'completeWorkflowExecutionDecisionAttributes'
     */
    stop: function (stopAttributes, swfAttributes) {
 
@@ -128,6 +140,9 @@ DecisionResponse.prototype = {
 
    /**
     * Add a "FailWorkflowExecution" decision
+    * @param {String} reason
+    * @param {String} [details]
+    * @param {Function} cb - callback
     */
    fail_workflow_execution: function (reason, details, cb) {
 
@@ -152,7 +167,10 @@ DecisionResponse.prototype = {
 
 
    /**
-    * alias for fail_workflow_execution
+    * Alias for fail_workflow_execution
+    * @param {String} reason
+    * @param {String} [details]
+    * @param {Function} cb - callback
     */
    fail: function (reason, details, cb) {
       this.fail_workflow_execution(reason, details, cb);
@@ -161,6 +179,8 @@ DecisionResponse.prototype = {
 
    /**
     * Add a new ScheduleActivityTask decision
+    * @param {Object} scheduleAttributes
+    * @param {Object} [swfAttributes] - Additionnal attributes for 'scheduleActivityTaskDecisionAttributes'
     */
     schedule: function (scheduleAttributes, swfAttributes) {
 
@@ -202,10 +222,18 @@ DecisionResponse.prototype = {
       }
 
       // TODO: we should be able to override these defaults :
-      if (!ta.scheduleToStartTimeout) { ta.scheduleToStartTimeout = "60"; }
-      if (!ta.scheduleToCloseTimeout) { ta.scheduleToCloseTimeout = "360"; }
-      if (!ta.startToCloseTimeout) { ta.startToCloseTimeout = "300"; }
-      if (!ta.heartbeatTimeout) { ta.heartbeatTimeout = "60"; }
+      if (!ta.scheduleToStartTimeout) {
+        ta.scheduleToStartTimeout = scheduleAttributes.scheduleToStartTimeout || "60";
+      }
+      if (!ta.scheduleToCloseTimeout) {
+        ta.scheduleToCloseTimeout = scheduleAttributes.scheduleToCloseTimeout || "360";
+      }
+      if (!ta.startToCloseTimeout) {
+        ta.startToCloseTimeout = scheduleAttributes.startToCloseTimeout || "300";
+      }
+      if (!ta.heartbeatTimeout) {
+        ta.heartbeatTimeout = scheduleAttributes.heartbeatTimeout || "60";
+      }
 
       this.addDecision({
          "decisionType": "ScheduleActivityTask",
@@ -215,6 +243,8 @@ DecisionResponse.prototype = {
 
    /**
     * Add a RecordMarker decision
+    * @param {String} markerName
+    * @param {String} [details]
     */
     add_marker: function (markerName, details) {
 
@@ -238,6 +268,8 @@ DecisionResponse.prototype = {
 
    /**
     * Add a StartChildWorkflowExecution decision
+    * @param {Object} startAttributes
+    * @param {Object} [swfAttributes] - Additionnal attributes for 'startChildWorkflowExecutionDecisionAttributes'
     */
    start_childworkflow: function(startAttributes, swfAttributes) {
 
@@ -278,6 +310,8 @@ DecisionResponse.prototype = {
 
    /**
     * Add a new StartTimer decision
+    * @param {Object} startAttributes
+    * @param {Object} [swfAttributes] - Additionnal attributes for 'startTimerDecisionAttributes'
     */
    start_timer: function(startAttributes, swfAttributes) {
 
@@ -305,6 +339,7 @@ DecisionResponse.prototype = {
 
    /**
     * Cancel a Timer
+    * @param {String} timerId
     */
    cancel_timer: function(timerId) {
       this.addDecision({
@@ -317,6 +352,7 @@ DecisionResponse.prototype = {
 
    /**
     * Cancel an activity task
+    * @param {String} activityId
     */
    request_cancel_activity_task: function (activityId) {
       this.addDecision({
@@ -329,6 +365,7 @@ DecisionResponse.prototype = {
 
    /**
     * Signal a workflow execution
+    * @param {Object} [swfAttributes] - Additionnal attributes for 'signalExternalWorkflowExecutionDecisionAttributes'
     */
    signal_external_workflow: function (swfAttributes) {
       var sa = swfAttributes || {};
@@ -339,10 +376,12 @@ DecisionResponse.prototype = {
     },
 
     /**
-    * Send a RequestCancelExternalWorkflowExecution
-    */
+     * Send a RequestCancelExternalWorkflowExecution
+     * @param {String} workflowId
+     * @param {String} runId
+     * @param {String} control
+     */
     request_cancel_external_workflow: function (workflowId, runId, control) {
-      var sa = swfAttributes || {};
       this.addDecision({
         "decisionType": "RequestCancelExternalWorkflowExecution",
         "requestCancelExternalWorkflowExecutionDecisionAttributes": {
@@ -354,10 +393,10 @@ DecisionResponse.prototype = {
     },
 
     /**
-    * Cancel a workflow execution
-    */
+     * Cancel a workflow execution
+     * @param {String} details
+     */
     cancel_workflow: function (details) {
-        var sa = swfAttributes || {};
         this.addDecision({
           "decisionType": "CancelWorkflowExecution",
           "cancelWorkflowExecutionDecisionAttributes": {
@@ -367,15 +406,16 @@ DecisionResponse.prototype = {
     },
 
     /**
-    * Continue as a new workflow execution
-    */
+     * Continue as a new workflow execution
+     * @param {Object} [swfAttributes] - Additionnal attributes for 'continueAsNewWorkflowExecutionDecisionAttributes'
+     */
     continue_as_new_workflow: function (swfAttributes) {
       var sa = swfAttributes || {};
       this.addDecision({
         'decisionType': 'ContinueAsNewWorkflowExecution',
         'continueAsNewWorkflowExecutionDecisionAttributes': sa
       });
-    },
+    }
 
 
 };
@@ -389,13 +429,13 @@ DecisionResponse.prototype = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Events</h3><ul><li><a href="ActivityPoller.html#event:activityTask">activityTask</a></li><li><a href="ActivityPoller.html#event:error">error</a></li><li><a href="ActivityPoller.html#event:poll">poll</a></li><li><a href="Decider.html#event:decisionTask">decisionTask</a></li><li><a href="Decider.html#event:error">error</a></li><li><a href="Decider.html#event:poll">poll</a></li><li><a href="Poller.html#event:error">error</a></li><li><a href="Poller.html#event:poll">poll</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Feb 25 2014 15:24:17 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Feb 28 2014 16:54:55 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

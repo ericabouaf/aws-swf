@@ -47,7 +47,7 @@
     
     
     <div class="description">
-        This class provides methods to query the event list passed to the decision tasks
+        Methods to query the EventList of DecisionTasks about the state of the workflow execution
     </div>
     
 
@@ -126,7 +126,670 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="_has_eventType_for_activityId"><span class="type-signature"></span>_has_eventType_for_activityId<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_event_attributes_key"><span class="type-signature"></span>_event_attributes_key<span class="signature">(eventType)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Return the key of event attributes for the given event type
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>eventType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    attributesKey
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">String</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_event_find"><span class="type-signature"></span>_event_find<span class="signature">(eventType, attributeKey, attributeValue)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Return the Event for the given type that has the given attribute value
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>eventType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>attributeKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>attributeValue</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    evt - The event if found, null otherwise
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_has_event_for_scheduledEventId"><span class="type-signature"></span>_has_event_for_scheduledEventId<span class="signature">(eventType, activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Search for an event with the corresponding type that matches the scheduled activityId
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>eventType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line102">line 102</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_has_event_with_attribute_value"><span class="type-signature"></span>_has_event_with_attribute_value<span class="signature">(attributeKey, attributeValue, eventType)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Check the presence of an Event with the specified
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>attributeKey</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>attributeValue</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>eventType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_has_eventType_for_activityId"><span class="type-signature"></span>_has_eventType_for_activityId<span class="signature">(activityId, eventType)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -143,6 +806,77 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>eventType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -167,7 +901,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line17">line 17</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line91">line 91</a>
     </li></ul></dd>
     
     
@@ -188,6 +922,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -195,7 +947,7 @@
         
             
 <dt>
-    <h4 class="name" id="activityIdFor"><span class="type-signature"></span>activityIdFor<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="activityIdFor"><span class="type-signature"></span>activityIdFor<span class="signature">(scheduledEventId)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
     
 </dt>
@@ -212,6 +964,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>scheduledEventId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -236,7 +1036,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line309">line 309</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line19">line 19</a>
     </li></ul></dd>
     
     
@@ -257,6 +1057,28 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    activityId - The activityId if found, false otherwise
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">String</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -264,7 +1086,7 @@
         
             
 <dt>
-    <h4 class="name" id="childworkflow_completed"><span class="type-signature"></span>childworkflow_completed<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="childworkflow_completed"><span class="type-signature"></span>childworkflow_completed<span class="signature">(control)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -281,6 +1103,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>control</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -305,7 +1175,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line96">line 96</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line171">line 171</a>
     </li></ul></dd>
     
     
@@ -326,6 +1196,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -333,7 +1221,7 @@
         
             
 <dt>
-    <h4 class="name" id="childworkflow_failed"><span class="type-signature"></span>childworkflow_failed<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="childworkflow_failed"><span class="type-signature"></span>childworkflow_failed<span class="signature">(control)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -350,6 +1238,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>control</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -374,7 +1310,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line112">line 112</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line189">line 189</a>
     </li></ul></dd>
     
     
@@ -395,6 +1331,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -402,7 +1356,7 @@
         
             
 <dt>
-    <h4 class="name" id="childworkflow_results"><span class="type-signature"></span>childworkflow_results<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="childworkflow_results"><span class="type-signature"></span>childworkflow_results<span class="signature">(control)</span><span class="type-signature"> &rarr; {Mixed}</span></h4>
     
     
 </dt>
@@ -419,6 +1373,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>control</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -443,7 +1445,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line387">line 387</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line429">line 429</a>
     </li></ul></dd>
     
     
@@ -464,6 +1466,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Mixed</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -471,7 +1491,7 @@
         
             
 <dt>
-    <h4 class="name" id="childworkflow_scheduled"><span class="type-signature"></span>childworkflow_scheduled<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="childworkflow_scheduled"><span class="type-signature"></span>childworkflow_scheduled<span class="signature">(control)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -488,6 +1508,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>control</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -512,7 +1580,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line83">line 83</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line156">line 156</a>
     </li></ul></dd>
     
     
@@ -533,6 +1601,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -540,7 +1626,7 @@
         
             
 <dt>
-    <h4 class="name" id="completed"><span class="type-signature"></span>completed<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="completed"><span class="type-signature"></span>completed<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -557,6 +1643,66 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>...</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -581,7 +1727,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line296">line 296</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line367">line 367</a>
     </li></ul></dd>
     
     
@@ -602,6 +1748,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -609,7 +1773,7 @@
         
             
 <dt>
-    <h4 class="name" id="eventById"><span class="type-signature"></span>eventById<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="eventById"><span class="type-signature"></span>eventById<span class="signature">(eventId)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
 </dt>
@@ -626,6 +1790,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>eventId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -650,7 +1862,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line324">line 324</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line35">line 35</a>
     </li></ul></dd>
     
     
@@ -671,6 +1883,28 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    evt - The event if found, false otherwise
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -678,7 +1912,7 @@
         
             
 <dt>
-    <h4 class="name" id="failed"><span class="type-signature"></span>failed<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="failed"><span class="type-signature"></span>failed<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -695,6 +1929,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -719,7 +2001,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line167">line 167</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line250">line 250</a>
     </li></ul></dd>
     
     
@@ -740,6 +2022,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -747,7 +2047,7 @@
         
             
 <dt>
-    <h4 class="name" id="get_last_marker_details"><span class="type-signature"></span>get_last_marker_details<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="get_last_marker_details"><span class="type-signature"></span>get_last_marker_details<span class="signature">(markerName)</span><span class="type-signature"> &rarr; {Mixed}</span></h4>
     
     
 </dt>
@@ -764,6 +2064,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>markerName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -788,7 +2136,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line418">line 418</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line462">line 462</a>
     </li></ul></dd>
     
     
@@ -809,6 +2157,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Mixed</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -816,7 +2182,7 @@
         
             
 <dt>
-    <h4 class="name" id="has_activity_completed"><span class="type-signature"></span>has_activity_completed<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="has_activity_completed"><span class="type-signature"></span>has_activity_completed<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -833,6 +2199,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -857,7 +2271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line283">line 283</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line358">line 358</a>
     </li></ul></dd>
     
     
@@ -878,6 +2292,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -885,7 +2317,7 @@
         
             
 <dt>
-    <h4 class="name" id="has_activity_failed"><span class="type-signature"></span>has_activity_failed<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="has_activity_failed"><span class="type-signature"></span>has_activity_failed<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -902,6 +2334,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -926,7 +2406,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line154">line 154</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line231">line 231</a>
     </li></ul></dd>
     
     
@@ -947,6 +2427,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -954,7 +2452,7 @@
         
             
 <dt>
-    <h4 class="name" id="has_activity_timedout"><span class="type-signature"></span>has_activity_timedout<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="has_activity_timedout"><span class="type-signature"></span>has_activity_timedout<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -971,143 +2469,53 @@
     
     
     
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line141">line 141</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
             
-<dt>
-    <h4 class="name" id="has_schedule_activity_task_failed"><span class="type-signature"></span>has_schedule_activity_task_failed<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        TODO
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
+                <td class="name"><code>activityId</code></td>
             
-<dt>
-    <h4 class="name" id="has_timer_event"><span class="type-signature"></span>has_timer_event<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Return true if the timer with the given timerId has an event with the given eventType
-    </div>
-    
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-    
-    
-    
-    
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -1133,7 +2541,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line47">line 47</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line222">line 222</a>
     </li></ul></dd>
     
     
@@ -1154,75 +2562,24 @@
     
     
     
+    <h5>Returns:</h5>
     
-    
-</dd>
-
-        
             
-<dt>
-    <h4 class="name" id="has_workflow_just_started"><span class="type-signature"></span>has_workflow_just_started<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        returns true if no Activity has been scheduled yet...
-    </div>
-    
 
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line261">line 261</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
 </dl>
 
-    
-    
-
-    
-
-    
-    
-    
-    
-    
+        
     
     
 </dd>
@@ -1230,7 +2587,7 @@
         
             
 <dt>
-    <h4 class="name" id="is_activity_canceled"><span class="type-signature"></span>is_activity_canceled<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="has_schedule_activity_task_failed"><span class="type-signature"></span>has_schedule_activity_task_failed<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1238,7 +2595,7 @@
     
     
     <div class="description">
-        returns true if the activityId is canceled
+        Check if one of the ScheduleActivityTask failed
     </div>
     
 
@@ -1247,74 +2604,53 @@
     
     
     
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line233">line 233</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
             
-<dt>
-    <h4 class="name" id="is_activity_scheduled"><span class="type-signature"></span>is_activity_scheduled<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        returns true if the activityId is scheduled
-    </div>
-    
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
-    
-    
-    
-    
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -1361,6 +2697,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1368,7 +2722,7 @@
         
             
 <dt>
-    <h4 class="name" id="is_activity_started"><span class="type-signature"></span>is_activity_started<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="has_timer_event"><span class="type-signature"></span>has_timer_event<span class="signature">(timerId, eventType)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1376,7 +2730,165 @@
     
     
     <div class="description">
-        returns true if the activityId started
+        Return true if the timer with the given timerId has an event with the given eventType
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>timerId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>eventType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="has_workflow_just_started"><span class="type-signature"></span>has_workflow_just_started<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        returns true if no Activity has been scheduled yet...
     </div>
     
 
@@ -1409,7 +2921,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line134">line 134</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line333">line 333</a>
     </li></ul></dd>
     
     
@@ -1430,6 +2942,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1437,7 +2967,412 @@
         
             
 <dt>
-    <h4 class="name" id="just_started"><span class="type-signature"></span>just_started<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="is_activity_canceled"><span class="type-signature"></span>is_activity_canceled<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        returns true if the activityId is canceled
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line300">line 300</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="is_activity_scheduled"><span class="type-signature"></span>is_activity_scheduled<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        returns true if the activityId is scheduled
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line309">line 309</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="is_activity_started"><span class="type-signature"></span>is_activity_started<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        returns true if the activityId started
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line213">line 213</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="just_started"><span class="type-signature"></span>just_started<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1478,7 +3413,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line276">line 276</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line349">line 349</a>
     </li></ul></dd>
     
     
@@ -1499,6 +3434,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1506,7 +3459,7 @@
         
             
 <dt>
-    <h4 class="name" id="results"><span class="type-signature"></span>results<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="results"><span class="type-signature"></span>results<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Mixed}</span></h4>
     
     
 </dt>
@@ -1523,6 +3476,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -1547,7 +3548,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line355">line 355</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line399">line 399</a>
     </li></ul></dd>
     
     
@@ -1568,6 +3569,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Mixed</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1575,7 +3594,7 @@
         
             
 <dt>
-    <h4 class="name" id="scheduled"><span class="type-signature"></span>scheduled<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="scheduled"><span class="type-signature"></span>scheduled<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1592,6 +3611,66 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>...</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -1616,7 +3695,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line248">line 248</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line319">line 319</a>
     </li></ul></dd>
     
     
@@ -1637,6 +3716,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1644,7 +3741,7 @@
         
             
 <dt>
-    <h4 class="name" id="signal_arrived"><span class="type-signature"></span>signal_arrived<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="signal_arrived"><span class="type-signature"></span>signal_arrived<span class="signature">(signalName)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1661,6 +3758,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>signalName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -1685,7 +3830,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line193">line 193</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line269">line 269</a>
     </li></ul></dd>
     
     
@@ -1706,6 +3851,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1713,7 +3876,7 @@
         
             
 <dt>
-    <h4 class="name" id="signal_input"><span class="type-signature"></span>signal_input<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="signal_input"><span class="type-signature"></span>signal_input<span class="signature">(signalName)</span><span class="type-signature"> &rarr; {Mixed}</span></h4>
     
     
 </dt>
@@ -1730,6 +3893,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>signalName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -1754,7 +3965,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line208">line 208</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line278">line 278</a>
     </li></ul></dd>
     
     
@@ -1775,6 +3986,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Mixed</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1782,7 +4011,7 @@
         
             
 <dt>
-    <h4 class="name" id="timed_out"><span class="type-signature"></span>timed_out<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="timed_out"><span class="type-signature"></span>timed_out<span class="signature">(activityId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1790,7 +4019,7 @@
     
     
     <div class="description">
-        Returns true if the arguments timed out
+        Returns true if the activityId timed out
     </div>
     
 
@@ -1799,6 +4028,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>activityId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -1823,7 +4100,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line180">line 180</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line260">line 260</a>
     </li></ul></dd>
     
     
@@ -1844,6 +4121,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1851,7 +4146,7 @@
         
             
 <dt>
-    <h4 class="name" id="timer_canceled"><span class="type-signature"></span>timer_canceled<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="timer_canceled"><span class="type-signature"></span>timer_canceled<span class="signature">(timerId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1868,6 +4163,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>timerId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -1892,7 +4235,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line61">line 61</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line128">line 128</a>
     </li></ul></dd>
     
     
@@ -1913,6 +4256,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1920,7 +4281,7 @@
         
             
 <dt>
-    <h4 class="name" id="timer_fired"><span class="type-signature"></span>timer_fired<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="timer_fired"><span class="type-signature"></span>timer_fired<span class="signature">(timerId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -1937,6 +4298,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>timerId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -1961,7 +4370,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line68">line 68</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line137">line 137</a>
     </li></ul></dd>
     
     
@@ -1982,6 +4391,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -1989,7 +4416,7 @@
         
             
 <dt>
-    <h4 class="name" id="timer_scheduled"><span class="type-signature"></span>timer_scheduled<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="timer_scheduled"><span class="type-signature"></span>timer_scheduled<span class="signature">(timerId)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
     
 </dt>
@@ -2006,6 +4433,54 @@
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>timerId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
     
     
 <dl class="details">
@@ -2030,7 +4505,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line75">line 75</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line146">line 146</a>
     </li></ul></dd>
     
     
@@ -2051,6 +4526,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -2058,7 +4551,7 @@
         
             
 <dt>
-    <h4 class="name" id="workflow_input"><span class="type-signature"></span>workflow_input<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="workflow_input"><span class="type-signature"></span>workflow_input<span class="signature">()</span><span class="type-signature"> &rarr; {Mixed}</span></h4>
     
     
 </dt>
@@ -2099,7 +4592,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line339">line 339</a>
+        <a href="event-list.js.html">event-list.js</a>, <a href="event-list.js.html#line381">line 381</a>
     </li></ul></dd>
     
     
@@ -2120,6 +4613,24 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Mixed</span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -2140,13 +4651,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Events</h3><ul><li><a href="ActivityPoller.html#event:activityTask">activityTask</a></li><li><a href="ActivityPoller.html#event:error">error</a></li><li><a href="ActivityPoller.html#event:poll">poll</a></li><li><a href="Decider.html#event:decisionTask">decisionTask</a></li><li><a href="Decider.html#event:error">error</a></li><li><a href="Decider.html#event:poll">poll</a></li><li><a href="Poller.html#event:error">error</a></li><li><a href="Poller.html#event:poll">poll</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Feb 25 2014 15:24:17 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Feb 28 2014 16:54:55 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

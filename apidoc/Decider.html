@@ -39,7 +39,7 @@
     
         
 <dt>
-    <h4 class="name" id="Decider"><span class="type-signature"></span>new Decider<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Decider"><span class="type-signature"></span>new Decider<span class="signature">(config, <span class="optional">swfClient</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -47,315 +47,7 @@
     
     
     <div class="description">
-        Decider - Polls Amazon SWF for new Decision Tasks
-emits event :
- - 'decisionTask' (decisionTask)
- - 'error' (err)
- - 'poll' ({identity: 'identity', taskList: 'taskList'})
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="decider.js.html">decider.js</a>, <a href="decider.js.html#line15">line 15</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-    
-    </div>
-    
-    
-        <h3 class="subsection-title">Extends</h3>
-        
-        <ul>
-            <li><a href="Poller.html">Poller</a></li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :Object</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Configuration object for the poller
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Poller.html#config">Poller#config</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line20">line 20</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="pollMethod"><span class="type-signature">&lt;abstract> </span>pollMethod<span class="type-signature"> :string</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Name of the polling method to call on the swfClient
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Poller.html#pollMethod">Poller#pollMethod</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="swfClient"><span class="type-signature"></span>swfClient<span class="type-signature"> :AWS.SimpleWorkflow</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Client Instance to access Simple Workflow (from aws-sdk)
-    </div>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">AWS.SimpleWorkflow</span>
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Poller.html#swfClient">Poller#swfClient</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line26">line 26</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="_onNewTask"><span class="type-signature"></span>_onNewTask<span class="signature">(<span class="optional">originalResult</span>)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Callback for incoming tasks
+        Decider polls Amazon SWF for new Decision Tasks
     </div>
     
 
@@ -391,7 +83,38 @@ emits event :
 	
         <tr>
             
-                <td class="name"><code>originalResult</code></td>
+                <td class="name"><code>config</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Ex: { domain: "my-domain", taskList: {name: "my-taskList"} }</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>swfClient</code></td>
             
             
             <td class="type">
@@ -417,7 +140,7 @@ emits event :
             
             
             
-            <td class="description last">configuration object for the task</td>
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -448,7 +171,7 @@ emits event :
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="decider.js.html">decider.js</a>, <a href="decider.js.html#line33">line 33</a>
+        <a href="decider.js.html">decider.js</a>, <a href="decider.js.html#line16">line 16</a>
     </li></ul></dd>
     
     
@@ -460,6 +183,15 @@ emits event :
 </dl>
 
     
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="Decider.html#event:decisionTask">Decider#event:decisionTask</a></li>
+    
+        <li><a href="Poller.html#event:poll">Poller#event:poll</a></li>
+    
+        <li><a href="Poller.html#event:error">Poller#event:error</a></li>
+    </ul>
     
 
     
@@ -473,41 +205,15 @@ emits event :
     
 </dd>
 
-        
-            
-<dt>
-    <h4 class="name" id="poll"><span class="type-signature"></span>poll<span class="signature">()</span><span class="type-signature"></span></h4>
     
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Poll Amazon WebService for new tasks in a loop.
-When a new task is received, will emit a 'activityTask' event.
     </div>
     
-
     
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
+        <h3 class="subsection-title">Extends</h3>
         
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Poller.html#poll">Poller#poll</a>
-    </li></dd>
+        <ul>
+            <li><a href="Poller.html">Poller</a></li>
+        </ul>
     
     
     
@@ -521,34 +227,9 @@ When a new task is received, will emit a 'activityTask' event.
     
     
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
+        <h3 class="subsection-title">Methods</h3>
         
+        <dl>
             
 <dt>
     <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">()</span><span class="type-signature"></span></h4>
@@ -597,7 +278,7 @@ When a new task is received, will emit a 'activityTask' event.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line41">line 41</a>
+        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line46">line 46</a>
     </li></ul></dd>
     
     
@@ -633,8 +314,8 @@ When a new task is received, will emit a 'activityTask' event.
     
     
     <div class="description">
-        Stops the poller
-IMPORTANT: the poller won't be stopped immediately !
+        Stops the poller<br />
+IMPORTANT: the poller won't be stopped immediately !<br />
 It will wait for the end of the long query poll before leaving, so that no ActivityTask gets "lost".
     </div>
     
@@ -673,7 +354,7 @@ It will wait for the end of the long query poll before leaving, so that no Activ
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line51">line 51</a>
+        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line56">line 56</a>
     </li></ul></dd>
     
     
@@ -704,6 +385,380 @@ It will wait for the end of the long query poll before leaving, so that no Activ
     
     
     
+        <h3 class="subsection-title">Events</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="event:decisionTask">decisionTask</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Emitted for every decision task received from Amazon SWF
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>decisionTask</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DecisionTask.html">DecisionTask</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="decider.js.html">decider.js</a>, <a href="decider.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:error">error</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Emitted if an error occured during polling
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The error</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Poller.html#event:error">Poller#event:error</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:poll">poll</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Emitted when the poller start polling on SWF
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>pollerDetails</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Identity and taskList of the poller</td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Poller.html#event:poll">Poller#event:poll</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="poller.js.html">poller.js</a>, <a href="poller.js.html#line72">line 72</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
 </article>
 
 </section>  
@@ -714,13 +769,13 @@ It will wait for the end of the long query poll before leaving, so that no Activ
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ActivityPoller.html">ActivityPoller</a></li><li><a href="ActivityTask.html">ActivityTask</a></li><li><a href="Decider.html">Decider</a></li><li><a href="DecisionResponse.html">DecisionResponse</a></li><li><a href="DecisionTask.html">DecisionTask</a></li><li><a href="EventList.html">EventList</a></li><li><a href="Poller.html">Poller</a></li><li><a href="Workflow.html">Workflow</a></li><li><a href="WorkflowExecution.html">WorkflowExecution</a></li></ul><h3>Events</h3><ul><li><a href="ActivityPoller.html#event:activityTask">activityTask</a></li><li><a href="ActivityPoller.html#event:error">error</a></li><li><a href="ActivityPoller.html#event:poll">poll</a></li><li><a href="Decider.html#event:decisionTask">decisionTask</a></li><li><a href="Decider.html#event:error">error</a></li><li><a href="Decider.html#event:poll">poll</a></li><li><a href="Poller.html#event:error">error</a></li><li><a href="Poller.html#event:poll">poll</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createClient">createClient</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Feb 25 2014 15:24:17 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Feb 28 2014 16:54:55 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
