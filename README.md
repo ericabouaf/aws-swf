@@ -63,7 +63,7 @@ The event receives an instance of **[DecisionTask](http://neyric.github.io/aws-s
 
 ### Step 4 : Start a workflow
 
-To start a workflow, call the *start* method on an **[Workflow](http://neyric.github.io/aws-swf/apidoc/Workflow.html)** instance. This call will return a **[WorkflowExecution](http://neyric.github.io/aws-swf/apidoc/WorkflowExecution.html)** instance, which you can use to signal or terminate a workflow.
+To start a workflow, call the *start* method on a **[Workflow](http://neyric.github.io/aws-swf/apidoc/Workflow.html)** instance. This call will return a **[WorkflowExecution](http://neyric.github.io/aws-swf/apidoc/WorkflowExecution.html)** instance, which you can use to signal or terminate a workflow.
 
 * [Starting a workflow](https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js) : start an instance of the simple workflow example.
 
