@@ -1,0 +1,117 @@
+[
+   {
+      "eventId": 1,
+      "eventTimestamp": 1326592619.474,
+      "eventType": "WorkflowExecutionStarted",
+      "workflowExecutionStartedEventAttributes": {
+         "childPolicy": "TERMINATE",
+         "executionStartToCloseTimeout": "3600",
+         "input": "arbitrary-string-that-is-meaningful-to-the-workflow",
+         "parentInitiatedEventId": 0,
+         "tagList": ["music purchase", "digital", "ricoh-the-dog"],
+         "taskList": {"name": "specialTaskList"},
+         "taskStartToCloseTimeout": "600",
+         "workflowType": {
+            "name": "customerOrderWorkflow",
+            "version": "1.0"
+         }
+      }
+   },
+   {
+      "decisionTaskScheduledEventAttributes": {
+         "startToCloseTimeout": "600",
+         "taskList": {"name": "specialTaskList"}
+      },
+      "eventId": 2,
+      "eventTimestamp": 1326592619.474,
+      "eventType": "DecisionTaskScheduled"
+   },
+   {
+      "decisionTaskStartedEventAttributes": {
+         "identity": "Decider01",
+         "scheduledEventId": 2
+      },
+      "eventId": 3,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "DecisionTaskStarted"
+   },
+
+
+   {
+      "eventId": 4,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-activity"
+      }
+   },
+   {
+      "eventId": 5,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-second-activity"
+      }
+   },
+   {
+      "eventId": 6,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-third-activity"
+      }
+   },
+   {
+      "eventId": 7,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-fourth-activity"
+      }
+   },
+
+
+
+   {
+      "eventId": 8,
+      "eventType": "ActivityTaskCompleted",
+      "activityTaskCompletedEventAttributes": {
+         "scheduledEventId": 4,
+         "result": "my-activity-results"
+      }
+   },
+   {
+      "eventId": 9,
+      "eventType": "ScheduleActivityTaskFailed",
+      "scheduleActivityTaskFailedEventAttributes": {
+         "scheduledEventId": 5
+      }
+   },
+   {
+      "eventId": 10,
+      "eventType": "ActivityTaskTimedOut",
+      "activityTaskTimedOutEventAttributes": {
+         "scheduledEventId": 6
+      }
+   },
+   {
+      "eventId": 11,
+      "eventType": "ActivityTaskFailed",
+      "activityTaskFailedEventAttributes": {
+         "scheduledEventId": 7
+      }
+   },
+
+
+   {
+      "eventId": 12,
+      "eventType": "ActivityTaskScheduled",
+      "activityTaskScheduledEventAttributes": {
+         "activityId": "my-json-activity"
+      }
+   },
+   {
+      "eventId": 13,
+      "eventType": "ActivityTaskCompleted",
+      "activityTaskCompletedEventAttributes": {
+         "scheduledEventId": 12,
+         "result": "{\"foo\":\"my-activity-results\"}"
+      }
+   }
+]

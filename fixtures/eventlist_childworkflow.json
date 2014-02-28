@@ -1,0 +1,94 @@
+[
+   {
+      "eventId": 1,
+      "eventTimestamp": 1326592619.474,
+      "eventType": "WorkflowExecutionStarted",
+      "workflowExecutionStartedEventAttributes": {
+         "childPolicy": "TERMINATE",
+         "executionStartToCloseTimeout": "3600",
+         "input": "{\"foo\":\"arbitrary-string-that-is-meaningful-to-the-workflow\"}",
+         "parentInitiatedEventId": 0,
+         "tagList": ["music purchase", "digital", "ricoh-the-dog"],
+         "taskList": {"name": "specialTaskList"},
+         "taskStartToCloseTimeout": "600",
+         "workflowType": {
+            "name": "customerOrderWorkflow",
+            "version": "1.0"
+         }
+      }
+   },
+   {
+      "decisionTaskScheduledEventAttributes": {
+         "startToCloseTimeout": "600",
+         "taskList": {"name": "specialTaskList"}
+      },
+      "eventId": 2,
+      "eventTimestamp": 1326592619.474,
+      "eventType": "DecisionTaskScheduled"
+   },
+   {
+      "decisionTaskStartedEventAttributes": {
+         "identity": "Decider01",
+         "scheduledEventId": 2
+      },
+      "eventId": 3,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "DecisionTaskStarted"
+   },
+   {
+      "eventId": 4,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "DecisionTaskCompleted",
+      "decisionTaskCompletedEventAttributes": {
+      }
+   },
+   {
+      "eventId": 5,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "StartChildWorkflowExecutionInitiated",
+      "startChildWorkflowExecutionInitiatedEventAttributes": {
+         "control": "my-childworkflow" 
+      }
+   },
+   {
+      "eventId": 6,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "ChildWorkflowExecutionCompleted",
+      "childWorkflowExecutionCompletedEventAttributes": {
+         "initiatedEventId": 5,
+         "result": "my-childworkflow-result"
+      }
+   },
+   {
+      "eventId": 7,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "StartChildWorkflowExecutionInitiated",
+      "startChildWorkflowExecutionInitiatedEventAttributes": {
+         "control": "my-second-childworkflow" 
+      }
+   },
+   {
+      "eventId": 8,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "StartChildWorkflowExecutionFailed",
+      "startChildWorkflowExecutionFailedEventAttributes": {
+         "initiatedEventId": 7
+      }
+   },
+   {
+      "eventId": 9,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "StartChildWorkflowExecutionInitiated",
+      "startChildWorkflowExecutionInitiatedEventAttributes": {
+         "control": "my-third-childworkflow" 
+      }
+   },
+   {
+      "eventId": 10,
+      "eventTimestamp": 1326593394.566,
+      "eventType": "ChildWorkflowExecutionFailed",
+      "childWorkflowExecutionFailedEventAttributes": {
+         "initiatedEventId": 9
+      }
+   }
+]

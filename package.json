@@ -1,38 +1,42 @@
 {
-    "name": "aws-swf",
-    "version": "4.0.0",
-    "description": "A Node.js library for accessing Amazon SWF",
-    "author": "Eric Abouaf <eric.abouaf@gmail.com>",
-    "engines": {
-        "node" : ">=0.8.0"
-    },
-    "keywords": [
-        "amazon",
-        "aws",
-        "swf",
-        "workflow"
-    ],
-    "main" : "index.js",
-    "directories" : { "lib" : "./lib" },
-    "repository": {
-        "type":"git",
-        "url":"http://github.com/neyric/aws-swf.git"
-    },
-    "dependencies": {
-        "aws-sdk": "2.0.0-rc9",
-        "lodash": "~2.4.1"
-    },
-    "devDependencies": {
-        "vows": "0.7.0"
-    },
-    "scripts": {
-        "test": "vows --spec tests/*",
-        "doc": "jsdoc lib/*.js README.md"
-    },
-    "licenses" : [
-        {
-            "type" : "MIT",
-            "url" : "https://raw.github.com/neyric/aws-swf/master/LICENSE.txt"
-        }
-    ]
+  "name": "aws-swf",
+  "version": "4.0.0",
+  "description": "A Node.js library for accessing Amazon SWF",
+  "author": "Eric Abouaf <eric.abouaf@gmail.com>",
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "keywords": [
+    "amazon",
+    "aws",
+    "swf",
+    "workflow"
+  ],
+  "main": "index.js",
+  "directories": {
+    "lib": "./lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/neyric/aws-swf.git"
+  },
+  "dependencies": {
+    "aws-sdk": "2.0.0-rc9",
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "coveralls": "~2.8.0",
+    "mocha": "~1.17.1",
+    "mocha-lcov-reporter": "0.0.1"
+  },
+  "scripts": {
+    "test": "mocha",
+    "doc": "jsdoc lib/*.js README.md -d apidoc"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/neyric/aws-swf/master/LICENSE.txt"
+    }
+  ]
 }

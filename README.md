@@ -1,11 +1,18 @@
 # A Node.js library for accessing Amazon Simple Workflow (SWF)
 
-[![Build Status](https://travis-ci.org/neyric/aws-swf.png?branch=master)](https://travis-ci.org/neyric/aws-swf)
 [![NPM version](https://badge.fury.io/js/aws-swf.png)](http://badge.fury.io/js/aws-swf)
+[![Build Status](https://travis-ci.org/neyric/aws-swf.png?branch=master)](https://travis-ci.org/neyric/aws-swf)
+[![Coverage Status](https://coveralls.io/repos/neyric/aws-swf/badge.png?branch=master)](https://coveralls.io/r/neyric/aws-swf?branch=master)
+[![Code Climate](https://codeclimate.com/github/neyric/aws-swf.png)](https://codeclimate.com/github/neyric/aws-swf)
+
+**aws-swf** provides high-level classes to build Amazon Simple Workflows using Node.js.
+
+It is built on top of the official Node.js [aws-sdk](http://aws.amazon.com/documentation/sdkfornodejs/) for low-level API calls. You can find the full [API reference here](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html).
+
 
 ## Requirements
 
- * NodeJS >= 0.8
+ * [node.js](http://nodejs.org/) >= 0.8
  * An active [AWS account](http://aws.amazon.com/) with [Access Keys](http://docs.amazonwebservices.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#AccessKeys)
  * Basic understanding of [AWS SimpleWorkflow](http://aws.amazon.com/en/documentation/swf/) concepts
 
@@ -14,229 +21,87 @@
     npm install aws-swf
 
 
+### Setting AWS Credentials
+
+Cf. http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Setting_AWS_Credentials
+
+
+## Usage
+
+
+### Step 1 : Register Domains, ActivityTypes, WorkflowTypes
+
+The AWS SDK is sufficient to register SWF objects, since those are just direct API calls.
+(You can also register them through the [AWS console](https://console.aws.amazon.com/swf/home).)
+
+You can run the following example to register the objects used in the following examples :
+
+[Example to register "test-domain", "simple-activity" and "simple-workflow"](https://github.com/neyric/aws-swf/blob/master/examples/simple-register.js)
+
+
+
+### Step 2 : Create Activity Workers
+
+An **[ActivityPoller](http://neyric.github.io/aws-swf/apidoc/ActivityPoller.html)** will wait for new tasks from SWF, and emit an **activityTask** event.
+The event receives an instance of **[ActivityTask](http://neyric.github.io/aws-swf/apidoc/ActivityTask.html)**, which makes it easier to send the response to SWF.
+
+[This example](https://github.com/neyric/aws-swf/blob/master/examples/simple-activity-worker.js) starts an Activity Worker which completes immediatly.
+
+
+
+### Step 3 : Create Workflow Deciders
+
+The **[Decider](http://neyric.github.io/aws-swf/apidoc/Decider.html)** class will wait for new decision tasks from SWF, and emit a **decisionTask** event.
+The event receives an instance of **[DecisionTask](http://neyric.github.io/aws-swf/apidoc/DecisionTask.html)**, composed of :
+
+ * an **[EventList](http://neyric.github.io/aws-swf/apidoc/EventList.html)** instance, to query the state of the workflow
+ * a **[DecisionResponse](http://neyric.github.io/aws-swf/apidoc/DecisionResponse.html)** instance, to prepare the decider response with decisions
+
+[Simple decider worker example](https://github.com/neyric/aws-swf/blob/master/examples/simple-decider-worker.js) : decision worker, which schedules an activity task, then stop the workflow.
+
+
+
+### Step 4 : Start a workflow
+
+To start a workflow, call the *start* method on a **[Workflow](http://neyric.github.io/aws-swf/apidoc/Workflow.html)** instance. This call will return a **[WorkflowExecution](http://neyric.github.io/aws-swf/apidoc/WorkflowExecution.html)** instance, which you can use to signal or terminate a workflow.
+
+* [Starting a workflow](https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js) : start an instance of the simple workflow example.
+
+
+
+## API Documentation
+
+The API documentation is available online at http://neyric.github.io/aws-swf/apidoc/
+
+To rebuild the documentation, install jsdoc, then :
+
+    jsdoc lib/*.js README.md -d apidoc
+
+
+## Test
+
+Tests can be executed with Mocha :
+
+    $ mocha
+
+To get the coverage, run :
+
+    $ ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha
+
+Then open coverage/lcov-report/index.html
+
+
+To send the coverage to coveralls, I run locally (I don't know why travis-ci after-script doesn't work...):
+
+    $ NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | COVERALLS_REPO_TOKEN=xxxx ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+
+## License
+
+[MIT License](https://raw.github.com/neyric/aws-swf/master/LICENSE.txt)
+
+
 ## See also
 
 * [aws-swf-toolkit](https://github.com/neyric/aws-swf-toolkit): Node.js Framework for workflows on Amazon SWF
 * [aws-swf-activities](https://github.com/neyric/aws-swf-activities): A collection of Node.js activity workers for Amazon SWF
 
-
-## Documentation
-
-aws-swf uses the official Node.js [aws-sdk](http://aws.amazon.com/documentation/sdkfornodejs/) for the low-level API calls. You can find the full [API reference here](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html)
-
-aws-swf provide classes to wrap higher-level concepts of the AWS SWF API :
-
-* ActivityPoller
-* ActivityTask
-* Decider
-* DecisionTask
-* Workflow
-* WorkflowExecution
-
-
-### Setting AWS Credentials
-
-Cf. http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Setting_AWS_Credentials
-
-### Creating an ActivityPoller
-
-An *ActivityPoller* polls Amazon SWF for new tasks to be done.
-
-An *ActivityTask* is instantiated by an *ActivityPoller* when it receives a task from SWF.
-
-It is passed to your callback and adds the respondCompleted() and respondFailed() methods.
-
-Example :
-
-
-````javascript
-
-var swf = require('aws-swf');
-
-var activityPoller = new swf.ActivityPoller({
-    domain: 'test-domain',
-    taskList: { name: 'my-workflow-tasklist' },
-    identity: 'simple poller ' + process.pid
-});
-
-activityPoller.on('activityTask', function(task) {
-    console.log("Received new activity task !");
-    var output = task.input;
-
-    task.respondCompleted(output, function (err) {
-
-        if(err) {
-            console.log(err);
-            return;
-        }
-
-        console.log("responded with some data !");
-    });
-});
-
-
-activityPoller.on('poll', function(d) {
-    console.log("polling for activity tasks...", d);
-});
-
-
-// Start polling
-activityPoller.start();
-````
-
-
-It is not recommanded to stop the poller in the middle of a long-polling request, because SWF might schedule an ActivityTask to this poller anyway, which will obviously timeout.
-The .stop() method will wait for the end of the current polling request, eventually wait for a last activity execution, then stop properly :
-
-````javascript
-// on SIGINT event, close the poller properly
-process.on('SIGINT', function () {
-   console.log('Got SIGINT ! Stopping activity poller after this request...please wait...');
-   activityPoller.stop();
-});
-````
-
-
-### Creating a Decider
-
-A *Decider* will poll Amazon SWF for new decision tasks.
-
-A *DecisionTask* is instantiated by a *Decider* when it receives a decision task from SWF.
-
-````javascript
-var swf = require('aws-swf');
-
-var myDecider = new swf.Decider({
-   "domain": "test-domain",
-   "taskList": {"name": "my-workflow-tasklist"},
-   "identity": "Decider-01",
-   "maximumPageSize": 100,
-   "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
-});
-
-myDecider.on('decisionTask', function (decisionTask) {
-
-    console.log("Got a new decision task !");
-
-    if(!decisionTask.eventList.scheduled('step1')) {
-        decisionTask.response.schedule({
-            name: 'step1',
-            activity: 'simple-activity'
-        });
-    }
-    else {
-        decisionTask.response.stop({
-          result: "some workflow output data"
-        });
-    }
-
-    decisionTask.response.respondCompleted(decisionTask.response.decisions, function(err, result) {
-
-      if(err) {
-          console.log(err);
-          return;
-      }
-
-      console.log("responded with some data !");
-    });
-
-});
-
-myDecider.on('poll', function(d) {
-    //console.log(this.config.identity + ": polling for decision tasks...");
-    console.log("polling for tasks...", d);
-});
-
-// Start polling
-myDecider.start();
-````
-
-
-It is not recommanded to stop the poller in the middle of a long-polling request, because SWF might schedule an ActivityTask to this poller anyway, which will obviously timeout.
-The .stop() method will wait for the end of the current polling request, eventually wait for a last activity execution, then stop properly :
-
-
-````javascript
-// on SIGINT event, close the poller properly
-process.on('SIGINT', function () {
-   console.log('Got SIGINT ! Stopping decider poller after this request...please wait...');
-   myDecider.stop();
-});
-````
-
-
-
-### Starting a Workflow
-
-````javascript
-
-var swf = require("aws-swf");
-
-var workflow = new swf.Workflow({
-   "domain": "test-domain",
-   "workflowType": {
-      "name": name,
-      "version": version
-   },
-   "taskList": { "name": "my-workflow-tasklist" },
-
-   "executionStartToCloseTimeout": "1800",
-   "taskStartToCloseTimeout": "1800",
-
-   "tagList": ["music purchase", "digital"],
-   "childPolicy": "TERMINATE"
-});
-````
-
-To start a new *workflowExecution* :
-
-````javascript
-var workflowExecution = workflow.start({ input: "{}"}, function (err, runId) {
-
-   if (err) {
-      console.log("Cannot start workflow : ", err);
-      return;
-   }
-
-   console.log("Workflow started, runId: " +runId);
-
-});
-````
-
-
-## Examples
-
-Those examples should be executed in order :
-
-* [Simple register](https://github.com/neyric/aws-swf/blob/master/examples/simple-register.js)
-
-* [Simple activity worker example](https://github.com/neyric/aws-swf/blob/master/examples/simple-activity-worker.js)
-
-* [Simple decider worker example](https://github.com/neyric/aws-swf/blob/master/examples/simple-decider-worker.js)
-
-* [Starting a workflow](https://github.com/neyric/aws-swf/blob/master/examples/simple-start.js)
-
-
-## Decider API
-
-* TODO: decider helper methods to make it easier to query the event history (dt.completed('step1'), dt.failed('step1'), dt.results('step1'))
-
-  if (dt.failed()) {
-    ...
-    dt.scheduled()
-  }
-
-* ... to schedule tasks/timer/workflows etc...
-  dt.schedule({
-  ...
-  })
-* to stop, or signal, or ...
-
-
-## API Documentation
-
-    jsdoc lib/*.js README.md -d apidoc
-
-## License
-
-[MIT License](https://raw.github.com/neyric/aws-swf/master/LICENSE.txt)
