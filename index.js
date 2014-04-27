@@ -1,4 +1,4 @@
-
+exports.AWS = require('aws-sdk');
 exports.createClient = require("./lib/swf").createClient;
 
 exports.Workflow = require("./lib/workflow").Workflow;
