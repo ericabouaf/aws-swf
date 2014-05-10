@@ -69,6 +69,38 @@ To start a workflow, call the *start* method on a **[Workflow](http://neyric.git
 
 
 
+## AWS Options
+
+Sometimes you may want to configure the AWS SDK instance. A possible reason is
+to set a specific region for `aws-swf`. Because Node.js allows multiple
+instances of the same package for maximal compatibility among libraries, you
+would need to do something similar to:
+
+```js
+var AWS = require('./node_modules/aws-swf/node_modules/aws-sdk/lib/aws');
+```
+
+Instead, you simlpy need to do:
+
+```js
+var AWS = require('aws-swf').AWS;
+```
+
+An example use case would be:
+
+```js
+var AWS = require('aws-swf').AWS;
+
+AWS.config = new AWS.Config({
+  region: process.env.AWS_REGION || 'us-west-2',
+  apiVersions: {
+    swf: '2012-01-25'
+  }
+});
+```
+
+
+
 ## API Documentation
 
 The API documentation is available online at http://neyric.github.io/aws-swf/apidoc/
