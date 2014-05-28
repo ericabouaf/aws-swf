@@ -9,8 +9,10 @@ var mockSwfClient = {
   client: {
 
     startWorkflowExecution: function(p, cb) {
-      cb(null, {
-        runId: '12345678'
+      process.nextTick(function () {
+          cb(null, {
+              runId: '12345678'
+          });
       });
     },
 
@@ -39,6 +41,45 @@ describe('Workflow', function(){
     })
   });
 
+  describe('#startCb()', function() {
+    it('adds runId to returned workflow', function(done) {
+      var erroringSwfClient = Object.create(mockSwfClient);
+      var w = new Workflow({}, erroringSwfClient);
+      w.startCb({
+        input: "Some input Data"
+      }, function (err, workflowExecution) {
+        if (err) {
+          done(err);
+          return;
+        }
+        
+        assert.equal(workflowExecution.runId, '12345678');
+        done();
+      });
+    })
+
+    it('should handle immediate errors gracefully', function(done) {
+      var erroringSwfClient = Object.create(mockSwfClient);
+      erroringSwfClient.client = Object.create(mockSwfClient.client);
+      erroringSwfClient.client.startWorkflowExecution = function (p, cb) {
+          // Intentionally do not wait for the next tick to report the error
+          cb(new Error('Unexpected failure'));
+      };
+
+      var w = new Workflow({}, erroringSwfClient);
+      w.startCb({
+        input: "Some input Data"
+      }, function (err, workflowExecution) {
+        if (err) {
+          assert.equal(err.message, "Unexpected failure");
+          done();
+          return;
+        } else {
+          throw new Error('A failure was expected');
+        }
+      });
+    })
+  });
 
   describe('#register()', function() {
     var w = new Workflow({
