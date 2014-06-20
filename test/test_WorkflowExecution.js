@@ -6,28 +6,23 @@ var WorkflowExecution = swf.WorkflowExecution;
 
 var mockSwfClient = {
 
-  client: {
-
-    startWorkflowExecution: function(p, cb) {
-      cb(null, {
-        runId: '12345678'
-      });
-    },
-
-    signalWorkflowExecution: function(p, cb) {
-      cb();
-    },
-
-    getWorkflowExecutionHistory: function(p, cb) {
-      cb();
-    },
-
-    terminateWorkflowExecution: function(p, cb) {
-      cb();
-    }
-
+  startWorkflowExecution: function(p, cb) {
+    cb(null, {
+      runId: '12345678'
+    });
+  },
+    
+  signalWorkflowExecution: function(p, cb) {
+    cb();
+  },
+    
+  getWorkflowExecutionHistory: function(p, cb) {
+    cb();
+  },
+    
+  terminateWorkflowExecution: function(p, cb) {
+    cb();
   }
-
 };
 
 describe('WorkflowExecution', function(){

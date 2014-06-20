@@ -6,22 +6,18 @@ var ActivityTask = swf.ActivityTask;
 
 var mockSwfClient = {
 
-  client: {
-
     respondActivityTaskCompleted: function(p, cb) {
-      cb();
+        cb();
     },
-
+    
     respondActivityTaskFailed: function(p, cb) {
-      cb();
+        cb();
     },
-
+    
     recordActivityTaskHeartbeat: function(p, cb) {
-      cb();
+        cb();
     }
-
-  }
-
+    
 };
 
 describe('ActivityTask', function(){

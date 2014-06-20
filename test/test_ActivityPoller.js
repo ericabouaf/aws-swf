@@ -7,17 +7,15 @@ var ActivityPoller = swf.ActivityPoller;
 
 var pollForActivityTaskCallCount = 0;
 var swfClientMock = {
-  client: {
     pollForActivityTask: function(p, cb) {
-      pollForActivityTaskCallCount += 1;
-
-      setTimeout(function() {
-        cb(null, {
-          taskToken: (pollForActivityTaskCallCount == 2) ? '12345' : undefined
-        });
-      }, 10);
+        pollForActivityTaskCallCount += 1;
+        
+        setTimeout(function() {
+            cb(null, {
+                taskToken: (pollForActivityTaskCallCount == 2) ? '12345' : undefined
+            });
+        }, 10);
     }
-  }
 };
 
 describe('ActivityPoller', function(){

@@ -6,10 +6,8 @@ var DecisionResponse = swf.DecisionResponse;
 
 
 var swfClientMock = {
-  client: {
-    respondDecisionTaskCompleted: function(p, cb) {
-      cb();
-    }
+  respondDecisionTaskCompleted: function(p, cb) {
+    cb();
   }
 };
 

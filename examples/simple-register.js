@@ -11,7 +11,7 @@ var awsswf = require('../index'),
 /**
  * Register the domain "test-domain"
  */
-swf.client.registerDomain({
+swf.registerDomain({
     name: "test-domain",
     description: "this is a just a test domain",
     workflowExecutionRetentionPeriodInDays: "1"
@@ -27,7 +27,7 @@ swf.client.registerDomain({
     /**
      * Register the WorkflowType "simple-workflow"
      */
-    swf.client.registerWorkflowType({
+    swf.registerWorkflowType({
         domain: "test-domain",
         name: "simple-workflow",
         version: "1.0"
@@ -42,7 +42,7 @@ swf.client.registerDomain({
         /**
          * Register the ActivityType "simple-activity"
          */
-        swf.client.registerActivityType({
+        swf.registerActivityType({
             domain: "test-domain",
             name: "simple-activity",
             version: "1.0"
