@@ -7,37 +7,35 @@ var Decider = swf.Decider;
 
 var pollForDecisionTaskCallCount = 0;
 var swfClientMock = {
-  client: {
-    pollForDecisionTask: function(p, cb) {
-      pollForDecisionTaskCallCount += 1;
+  pollForDecisionTask: function(p, cb) {
+    pollForDecisionTaskCallCount += 1;
 
-      setTimeout(function() {
-        cb(null, {
-          taskToken: '12345',
-          events: /*(pollForDecisionTaskCallCount == 1) ?*/ [
-            {
-              "eventId": 1,
-              "eventTimestamp": 1326592619.474,
-              "eventType": "WorkflowExecutionStarted",
-              "workflowExecutionStartedEventAttributes": {
-                 "childPolicy": "TERMINATE",
-                 "executionStartToCloseTimeout": "3600",
-                 "input": "arbitrary-string-that-is-meaningful-to-the-workflow",
-                 "parentInitiatedEventId": 0,
-                 "tagList": ["music purchase", "digital", "ricoh-the-dog"],
-                 "taskList": {"name": "specialTaskList"},
-                 "taskStartToCloseTimeout": "600",
-                 "workflowType": {
-                    "name": "customerOrderWorkflow",
-                    "version": "1.0"
-                 }
-              }
-           }
-          ] /*: []*//*,
-          nextPageToken: (pollForDecisionTaskCallCount == 1) ? 'THENEXTPAGET' : undefined*/
-        });
-      }, 10);
-    }
+    setTimeout(function() {
+      cb(null, {
+        taskToken: '12345',
+        events: /*(pollForDecisionTaskCallCount == 1) ?*/ [
+          {
+            "eventId": 1,
+            "eventTimestamp": 1326592619.474,
+            "eventType": "WorkflowExecutionStarted",
+            "workflowExecutionStartedEventAttributes": {
+               "childPolicy": "TERMINATE",
+               "executionStartToCloseTimeout": "3600",
+               "input": "arbitrary-string-that-is-meaningful-to-the-workflow",
+               "parentInitiatedEventId": 0,
+               "tagList": ["music purchase", "digital", "ricoh-the-dog"],
+               "taskList": {"name": "specialTaskList"},
+               "taskStartToCloseTimeout": "600",
+               "workflowType": {
+                  "name": "customerOrderWorkflow",
+                  "version": "1.0"
+               }
+            }
+         }
+        ] /*: []*//*,
+        nextPageToken: (pollForDecisionTaskCallCount == 1) ? 'THENEXTPAGET' : undefined*/
+      });
+    }, 10);
   }
 };
 

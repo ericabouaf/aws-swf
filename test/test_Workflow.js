@@ -5,21 +5,16 @@ var swf = require('../index');
 var Workflow = swf.Workflow;
 
 var mockSwfClient = {
-
-  client: {
-
-    startWorkflowExecution: function(p, cb) {
-      process.nextTick(function () {
-          cb(null, {
-              runId: '12345678'
-          });
+  startWorkflowExecution: function(p, cb) {
+    process.nextTick(function () {
+        cb(null, {
+            runId: '12345678'
+        });
       });
     },
 
-    registerWorkflowType: function(p, cb) {
-      cb();
-    }
-
+  registerWorkflowType: function(p, cb) {
+    cb();
   }
 
 };
@@ -60,8 +55,8 @@ describe('Workflow', function(){
 
     it('should handle immediate errors gracefully', function(done) {
       var erroringSwfClient = Object.create(mockSwfClient);
-      erroringSwfClient.client = Object.create(mockSwfClient.client);
-      erroringSwfClient.client.startWorkflowExecution = function (p, cb) {
+      erroringSwfClient = Object.create(mockSwfClient);
+      erroringSwfClient.startWorkflowExecution = function (p, cb) {
           // Intentionally do not wait for the next tick to report the error
           cb(new Error('Unexpected failure'));
       };
