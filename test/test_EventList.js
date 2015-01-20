@@ -99,6 +99,9 @@ describe('EventList', function(){
             assert.equal(null, evl.results('does-not-exist'));
         });
 
+        it('#get_history', function () {
+            assert.equal(fixtureData, evl.get_history());
+        });
     })
 
     describe('childworkflow', function() {
