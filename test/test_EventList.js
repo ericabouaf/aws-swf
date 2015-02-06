@@ -99,6 +99,9 @@ describe('EventList', function(){
             assert.equal(null, evl.results('does-not-exist'));
         });
 
+        it('#get_history', function () {
+            assert.equal(fixtureData, evl.get_history());
+        });
     })
 
     describe('childworkflow', function() {
@@ -107,7 +110,7 @@ describe('EventList', function(){
         var fixtureData = JSON.parse(fs.readFileSync( path.join(__dirname , '..', 'fixtures', fixtureFile), 'utf8') );
         var evl = new EventList(fixtureData);
 
-    
+
         it('has json input', function() {
             assert.deepEqual ({ foo: "arbitrary-string-that-is-meaningful-to-the-workflow"}, evl.workflow_input() );
         })
@@ -179,7 +182,7 @@ describe('EventList', function(){
         it('#failed()', function() {
             assert.equal(true, evl.failed("my-fourth-activity") );
         })
-        
+
 
     })
 
@@ -208,8 +211,8 @@ describe('EventList', function(){
         })
 
         it('#signal_input()', function() {
-            assert.equal("my-signal-input", evl.signal_input('my-signal') );  
-            assert.deepEqual({foo: "my-signal-input"}, evl.signal_input('json-signal') );  
+            assert.equal("my-signal-input", evl.signal_input('my-signal') );
+            assert.deepEqual({foo: "my-signal-input"}, evl.signal_input('json-signal') );
         })
 
     })
