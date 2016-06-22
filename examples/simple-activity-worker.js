@@ -13,7 +13,7 @@ var activityPoller = new swf.ActivityPoller({
 
 activityPoller.on('activityTask', function(task) {
     console.log("Received new activity task !");
-    var output = task.input;
+    var output = task.config.input;
 
     task.respondCompleted(output, function (err) {
 
