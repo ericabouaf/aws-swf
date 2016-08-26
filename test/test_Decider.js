@@ -57,7 +57,7 @@ describe('Decider', function(){
     });
 
     it('should start, emit DecisionTask, and stop', function(done) {
-
+      var doneCalled = false;
       var decider = new Decider({
         domain: 'test-domain',
         taskList: {
@@ -68,7 +68,10 @@ describe('Decider', function(){
 
       decider.on('decisionTask', function(decisionTask) {
         decider.stop();
-        done();
+        if (!doneCalled) {
+          doneCalled = true;
+          done();
+        }
       });
 
       decider.start();

@@ -26,6 +26,7 @@ describe('DecisionResponse', function(){
 
     it('#send()', function(done) {
       var dr = new DecisionResponse(swfClientMock, '12345', 'my-tasklist');
+      dr.onDone = function() {};
       dr.stop({
         result: "some results"
       });
@@ -51,6 +52,7 @@ describe('DecisionResponse', function(){
 
     it('#fail()', function(done) {
       var dr = new DecisionResponse(swfClientMock, '12345', 'my-tasklist');
+      dr.onDone = function() {};
       dr.fail("", "", done);
     });
 

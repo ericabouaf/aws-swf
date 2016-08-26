@@ -17,7 +17,13 @@ var mockSwfClient = {
     recordActivityTaskHeartbeat: function(p, cb) {
         cb();
     }
-    
+
+}
+
+var getActivityTask = function(config, client) {
+  var t = new ActivityTask(config, client);
+  t.onDone = function() {};
+  return t;
 };
 
 describe('ActivityTask', function(){
@@ -30,7 +36,7 @@ describe('ActivityTask', function(){
 
   describe('#respondCompleted()', function() {
 
-    var t = new ActivityTask({}, mockSwfClient);
+    var t = getActivityTask({}, mockSwfClient);
 
     it('with string data', function(done) {
       t.respondCompleted("some result data...", done);
@@ -49,7 +55,7 @@ describe('ActivityTask', function(){
 
   describe('#respondFailed()', function() {
 
-    var t = new ActivityTask({}, mockSwfClient);
+    var t = getActivityTask({}, mockSwfClient);
 
     it('with string data', function(done) {
       t.respondFailed("some reason", "details here", done);
@@ -63,7 +69,7 @@ describe('ActivityTask', function(){
 
   describe('#recordHeartbeat()', function() {
 
-    var t = new ActivityTask({}, mockSwfClient);
+    var t = getActivityTask({}, mockSwfClient);
 
     it('with string details', function(done) {
       t.recordHeartbeat("some reason", done);

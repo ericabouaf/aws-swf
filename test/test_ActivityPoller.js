@@ -53,12 +53,44 @@ describe('ActivityPoller', function(){
       activityPoller.start();
     });
 
-    it('should insntaiate without swfClient', function() {
+    it('should insantaiate without swfClient', function() {
       var activityPoller = new ActivityPoller({
         domain: 'test-domain',
         taskList: {
           name: 'test-taskList'
         }
+      });
+    });
+
+    describe('polling errors', function() {
+      var swfClientMock = {
+        pollForActivityTask: function(p, cb) {
+            setTimeout(function() {
+                cb(new Error('polling failure'), null);
+            }, 1);
+        }
+      };
+
+      it('retries up to the retry limit then emits fatal', function(done) {
+        var errorCount = 0;
+        var activityPoller = new ActivityPoller({
+          errorRetryDelay: 1,
+          errorRetryLimit: 10,
+          domain: 'test-domain',
+          taskList: {
+            name: 'test-taskList'
+          }
+        }, swfClientMock);
+
+        activityPoller.on('error', function() {
+          errorCount += 1;
+        });
+        activityPoller.on('fatal', function() {
+          activityPoller.stop();
+          assert.equal(errorCount, 10);
+          done();
+        });
+        activityPoller.start();
       });
     });
 
