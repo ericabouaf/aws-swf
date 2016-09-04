@@ -12,8 +12,8 @@ var swfClientMock = {
 
     setTimeout(function() {
       cb(null, {
-        taskToken: '12345',
-        events: /*(pollForDecisionTaskCallCount == 1) ?*/ [
+        taskToken: (pollForDecisionTaskCallCount == 1) ? '12345' : '',
+        events: (pollForDecisionTaskCallCount == 1) ? [
           {
             "eventId": 1,
             "eventTimestamp": 1326592619.474,
@@ -32,8 +32,8 @@ var swfClientMock = {
                }
             }
          }
-        ] /*: []*//*,
-        nextPageToken: (pollForDecisionTaskCallCount == 1) ? 'THENEXTPAGET' : undefined*/
+       ] : [],
+        nextPageToken: (pollForDecisionTaskCallCount == 1) ? 'THENEXTPAGET' : undefined
       });
     }, 10);
   }
