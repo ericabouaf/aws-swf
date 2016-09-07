@@ -17,6 +17,7 @@ var swfClientMock = {
         }, 10);
     }
 };
+var nullLogger = { info: function() {} };
 
 describe('ActivityPoller', function(){
 
@@ -41,7 +42,8 @@ describe('ActivityPoller', function(){
         domain: 'test-domain',
         taskList: {
           name: 'test-taskList'
-        }
+        },
+        logger: nullLogger
       }, swfClientMock);
 
 
