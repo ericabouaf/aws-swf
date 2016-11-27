@@ -49,6 +49,14 @@ describe('DecisionResponse', function(){
       });
     });
 
+    it('#schedule_lambda()', function() {
+      var dr = new DecisionResponse(swfClientMock, '12345', 'my-tasklist');
+      dr.schedule_lambda({
+        /*name: 'my-lambda-function',
+         workflow: 'my-child-workflow'*/
+      });
+    });
+
     it('#fail()', function(done) {
       var dr = new DecisionResponse(swfClientMock, '12345', 'my-tasklist');
       dr.fail("", "", done);
