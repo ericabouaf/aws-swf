@@ -82,10 +82,25 @@ describe('EventList', function(){
             evl.has_activity_completed('my-activity');
         })
 
+        it('#lambda_scheduled', function() {
+            evl.lambda_scheduled('my-lambda');
+        })
+
+        it('#has_lambda_started', function() {
+            evl.has_lambda_started('my-lambda');
+        })
+
+        it('#has_lambda_failed', function() {
+            evl.has_lambda_failed('my-lambda');
+        })
+
+        it('#has_lambda_completed', function() {
+            evl.has_lambda_completed('my-lambda');
+        })
+
         it('#completed', function() {
             evl.completed('my-activity');
         })
-
 
         it('#activityIdFor', function() {
             assert.equal(false, evl.activityIdFor(0) );
