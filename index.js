@@ -10,3 +10,4 @@ exports.DecisionTask =  require("./lib/decision-task").DecisionTask;
 exports.EventList = require("./lib/event-list").EventList;
 exports.DecisionResponse = require("./lib/decision-response").DecisionResponse;
 exports.Poller = require("./lib/poller").Poller;
+exports.version = require("./package.json").version
