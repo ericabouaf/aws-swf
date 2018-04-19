@@ -1,8 +1,9 @@
 var swf = require('../index');
+swf.AWS.config.update({'region': 'us-east-1'})
 
 var myDecider = new swf.Decider({
-   "domain": "test-domain",
-   "taskList": {"name": "my-workflow-tasklist"},
+   "domain": "dev-mediastream-vms",
+   "taskList": {"name": "dev-us-BackupS3-v1.0"},
    "identity": "Decider-01",
    "maximumPageSize": 100,
    "reverseOrder": false // IMPORTANT: must replay events in the right order, ie. from the start
