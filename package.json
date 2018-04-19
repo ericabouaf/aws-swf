@@ -1,6 +1,6 @@
 {
   "name": "aws-swf",
-  "version": "4.1.15",
+  "version": "4.1.16",
   "description": "A Node.js library for accessing Amazon SWF",
   "author": "Eric Abouaf <eric.abouaf@gmail.com>",
   "engines": {
